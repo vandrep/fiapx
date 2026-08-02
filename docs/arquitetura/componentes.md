@@ -1,299 +1,255 @@
 ---
-context_id: CTX-CMP-001
+context_id: CTX-CMP-002
 context_type: component_model
 status: em_analise
-recorded_at: 2026-08-01
-valid_from: 2026-08-01
+recorded_at: 2026-08-02
+valid_from: 2026-08-02
 entities:
-  - CMP-01
-  - CMP-02
-  - CMP-03
-  - CMP-04
+  - CMP-05
+  - CMP-06
+  - CMP-07
+  - CMP-08
+  - CMP-09
+  - CMP-10
+  - CMP-11
+  - CMP-12
+  - CMP-13
+  - CMP-14
+  - CMP-15
+  - CMP-16
+  - CMP-17
 relations:
   - type: derived_from
     target: CTX-REQ-001
   - type: informed_by
     target: CTX-DOM-001
   - type: informed_by
+    target: CTX-DOM-002
+  - type: informed_by
     target: CTX-CHAR-001
   - type: informed_by
-    target: CTX-DOM-002
+    target: https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch08.html
+  - type: supersedes
+    target: CTX-CMP-001
   - type: governed_by
     target: CTX-GOV-001
 ---
 
-# Fluxo de identificação e refinamento de componentes
+# Identificação e refatoração de componentes modulares
 
-## Escopo, evidências e premissas
+## Escopo e lente
 
-Este ciclo cobre as histórias descritas em [histórias de usuário](../requisitos/historias.md), usa o [glossário do domínio](../requisitos/glossario.md) e é orientado pelas [características arquiteturais prioritárias](caracteristicas.md). Foram usadas estas evidências:
+Este modelo sucede o [`CTX-CMP-001`](componentes-macro.md), que permanece como evidência do refinamento macro anterior. Aqui, componente significa manifestação modular de comportamento: um pacote, módulo ou biblioteca com responsabilidade e dependências controladas. Componente não significa serviço, processo, banco, bounded context ou quantum.
 
-- `Declarada`: o [enunciado](../enunciado.md) exige autenticação, concorrência, ausência de perda durante picos, status por usuário, notificação, persistência, escala e testes.
-- `Observada`: o [código-base](../referencia/projeto-original/main.go#L30) concentra HTTP, arquivos, processamento, ZIP, status e frontend em um processo e um arquivo.
-- `Observada`: [`handleVideoUpload`](../referencia/projeto-original/main.go#L75) salva o arquivo e chama [`processVideo`](../referencia/projeto-original/main.go#L126) de forma síncrona; [`handleStatus`](../referencia/projeto-original/main.go#L253) deriva o estado dos ZIPs presentes em disco.
-- `Observada`: o [timestamp do upload](../referencia/projeto-original/main.go#L94), o [diretório temporário](../referencia/projeto-original/main.go#L129) e o [resultado](../referencia/projeto-original/main.go#L160) usam precisão de um segundo, criando colisão possível em execuções concorrentes.
-- `Inferida; em validação`: o [Event Storming](../requisitos/event-storming.md) ordena autenticação, aceitação, solicitação e tentativa de processamento, registro do resultado, consulta, download e eventual notificação sem impor topologia.
-- `Preferência`: Java com Quarkus favorece viabilidade pela familiaridade, mas não define componentes nem unidades de implantação.
+O ciclo segue a ordem `identificar → atribuir histórias → analisar responsabilidades → analisar características do sistema → refatorar → repetir e verificar`. Nenhuma quantidade desejada de componentes ou unidades de implantação orienta a descoberta.
 
-As histórias e os critérios inferidos permanecem `em_analise`. Este documento descreve componentes lógicos; não decide quantidade de aplicações, microsserviços, repositórios, bancos, filas ou containers.
-
-## Hipótese preliminar de escopo e quanta
-
-O [agrupamento preliminar das características](caracteristicas.md#agrupamento-preliminar-por-escopo) produz duas alternativas que orientam a análise sem decidir a topologia:
-
-| Alternativa | Composição candidata | Benefício procurado | Custo e condição |
-|---|---|---|---|
-| Quantum único | Os quatro componentes em um monólito modular; identidade ou canal ainda podem ser integrações externas | Menor custo operacional e ausência de falhas de rede internas | Processamento e interação escalam e são implantados juntos; reavaliar se a carga exigir capacidade independente |
-| Processamento destacável | Núcleo com Identidade e Acesso, Trabalhos de Vídeo e Notificações; Processamento de Mídia em outro quantum | Escalar e isolar a execução intensiva sem transferir a autoridade sobre o trabalho | Exige entrega e relato duráveis, idempotência, referências opacas de artefatos e ausência de chamada síncrona obrigatória entre os limites |
-
-A hipótese de processamento destacável deixa de representar dois quanta independentes se núcleo e processamento precisarem ser implantados juntos, compartilharem esquema de dados mutável ou dependerem de comunicação síncrona para aceitar e concluir cada trabalho. Nenhuma alternativa está aceita; volume, semântica de aceitação e medições ainda faltam.
-
-## Estratégia inicial de descoberta e particionamento
-
-Foi escolhido particionamento inicial por capacidade de negócio porque as mudanças relevantes ocorrem em ritmos diferentes: identidade, ciclo de vida dos trabalhos, processamento intensivo e comunicação externa. Um particionamento puramente técnico (`API`, `service`, `repository`) facilitaria mapear frameworks, mas esconderia autoridade sobre estados e dados e reproduziria o acoplamento do protótipo.
-
-A técnica principal foi `Workflow`, usando o fluxo feliz e as ramificações de falha do Event Storming. `Actor/Action` foi considerada, mas não acrescentou fronteiras: há um ator humano principal e as ações internas do sistema já aparecem no fluxo. Cada passo não virou automaticamente um componente.
-
-| Trecho do workflow | Candidato inicial | Resultado após atribuir histórias e responsabilidades |
+| Estado do ciclo | Evidência | Alteração do inventário permitida? |
 |---|---|---|
-| Autenticar e recusar acesso inválido | Identidade e Acesso | Mantido como capacidade condicional, realizável internamente ou por provedor |
-| Receber, aceitar, consultar e autorizar resultado | Recebimento; Acompanhamento; Entrega | Unificado em Trabalhos de Vídeo por compartilhar identidade, estado, propriedade e invariantes |
-| Solicitar, executar e relatar processamento | Processamento de Mídia | Execução mantida separada; a solicitação e a transição do trabalho permanecem com Trabalhos de Vídeo |
-| Solicitar e entregar aviso de falha | Notificações | Mantido provisoriamente; pode ser reduzido a adaptador se não surgirem regras próprias |
+| Componentes identificados | Técnica e inventário inicial | Sim, somente para formar a hipótese inicial |
+| Histórias atribuídas | Cada `US-*` possui um responsável principal | Não |
+| Responsabilidades analisadas | Papéis, conhecimento, coesão e acoplamento registrados | Não |
+| Características analisadas | Pressões sistêmicas registradas | Não |
+| Refatorado | Toda mudança cita um achado anterior | Sim |
+| Verificado | Nova atribuição, análises e convergência | Não |
 
-### Verificação do Entity Trap
+## Iteração 1 — Componentes identificados
 
-| Candidato corrente | Sinal inspecionado | Conclusão |
+### Técnica de descoberta
+
+A técnica principal foi `Workflow`, complementada por `Actor/Actions`. O [Event Storming validado](../requisitos/event-storming.md#fluxo-principal-candidato) distingue autenticar, receber um vídeo, acompanhar o trabalho, processar mídia, fornecer resultado e comunicar falha. `Entity Trap` será verificado nas análises; não se criou um componente por tabela, tecnologia ou passo mecânico.
+
+### Inventário inicial congelado
+
+| Componente inicial | Papel derivado do fluxo | Evidência principal |
 |---|---|---|
-| Identidade e Acesso | Nome de capacidade e responsabilidade sobre identidade | Não representa CRUD de usuário; permanece coeso |
-| Trabalhos de Vídeo | Nome coincide com uma entidade e concentra várias operações | Sinal presente, mas não configura o antipadrão no modelo corrente: aceitação, propriedade, estado, consulta e autorização compartilham a mesma autoridade e invariantes; reabrir se a responsabilidade crescer sem essa coesão |
-| Processamento de Mídia | Nome de transformação e uso de executor externo | Representa comportamento, não uma entidade nem o mecanismo `ffmpeg` |
-| Notificações | Nome amplo e regras ainda incompletas | Não é depósito atual, mas sua justificativa é provisória; reduzir a adaptador se canal, preferência e retentativa não formarem responsabilidade própria |
+| Identidade e Acesso | Estabelecer quem realiza uma operação protegida | [`US-01`](../requisitos/historias.md#us-01) |
+| Recebimento de Vídeo | Receber, validar e aceitar o envio | [`US-02`](../requisitos/historias.md#us-02) |
+| Acompanhamento de Trabalhos | Preservar trabalho, estado, ciclos, tentativas e consulta | [`US-04`](../requisitos/historias.md#us-04) e [`US-05`](../requisitos/historias.md#us-05) |
+| Processamento de Mídia | Executar processamento concorrente e produzir o resultado | [`US-03`](../requisitos/historias.md#us-03) |
+| Entrega de Resultados | Autorizar e fornecer o resultado | [`US-06`](../requisitos/historias.md#us-06) |
+| Notificações | Comunicar uma falha já registrada | [`US-07`](../requisitos/historias.md#us-07) |
 
-## Diagrama lógico do modelo corrente
+Este inventário permanece inalterado até a etapa explícita de refatoração.
 
-O diagrama resume o modelo lógico mantido após a iteração 3. Ele mostra responsabilidades e contratos lógicos, não microsserviços, quanta, processos, bancos ou unidades de implantação.
-
-```mermaid
-flowchart LR
-    usuario([Usuário])
-
-    subgraph fiapx["FIAP X — componentes lógicos"]
-        direction LR
-        identidade["Identidade e Acesso<br/>autenticar e fornecer identidade"]
-        trabalhos["Trabalhos de Vídeo<br/>aceitar, possuir estado e autorizar resultado"]
-        processamento["Processamento de Mídia<br/>extrair frames, gerar ZIP e relatar resultado"]
-        notificacoes["Notificações<br/>comunicar falha por canal externo"]
-    end
-
-    subgraph mecanismos["Portas e adaptadores candidatos — tecnologia não escolhida"]
-        direction TB
-        provedor["Provedor de identidade"]
-        repositorio["Repositório de trabalhos"]
-        entrega["Entrega durável de trabalho"]
-        artefatos["Armazenamento de vídeos e resultados"]
-        extrator["Executor de extração de frames"]
-        canal["Canal de notificação"]
-    end
-
-    usuario -->|"credenciais"| identidade
-    identidade -->|"identidade autenticada"| trabalhos
-    usuario -->|"enviar, consultar e baixar"| trabalhos
-
-    trabalhos -.->|"solicitar processamento"| entrega
-    entrega -.->|"trabalho correlacionado"| processamento
-    processamento -.->|"relatar conclusão ou falha"| trabalhos
-    trabalhos -.->|"solicitar aviso de falha"| notificacoes
-    notificacoes -->|"avisar"| usuario
-
-    identidade -.->|"pode delegar autenticação"| provedor
-    trabalhos -.->|"preservar e consultar estado"| repositorio
-    trabalhos -.->|"guardar origem e autorizar resultado"| artefatos
-    processamento -.->|"ler origem e guardar resultado"| artefatos
-    processamento -.->|"extrair frames"| extrator
-    notificacoes -.->|"entregar mensagem"| canal
-
-    classDef ator fill:#fff7ed,stroke:#c2410c,stroke-width:2px,color:#431407
-    classDef componente fill:#eff6ff,stroke:#1d4ed8,stroke-width:2px,color:#172554
-    classDef adaptador fill:#f8fafc,stroke:#64748b,stroke-width:1px,stroke-dasharray:5 5,color:#0f172a
-    class usuario ator
-    class identidade,trabalhos,processamento,notificacoes componente
-    class provedor,repositorio,entrega,artefatos,extrator,canal adaptador
-```
-
-Legenda:
-
-- azul: componente lógico com responsabilidade de negócio;
-- cinza tracejado: porta ou adaptador candidato, ainda sem tecnologia definida;
-- seta contínua: interação com o usuário ou fornecimento de identidade;
-- seta tracejada: colaboração por contrato; o diagrama não decide se o transporte será local, síncrono, assíncrono ou distribuído.
-
-`Trabalhos de Vídeo` continua sendo a autoridade sobre proprietário e estado. `Processamento de Mídia` não altera esses dados livremente: ele relata um resultado correlacionado para que o primeiro componente valide a transição. As hipóteses de quantum único e processamento destacável agrupam esses elementos de maneiras diferentes sem modificar automaticamente suas responsabilidades lógicas.
-
-## Iteração 1 — Inventário inicial
-
-| Componente candidato | Finalidade inicial | Evidência |
-|---|---|---|
-| Identidade e Acesso | Estabelecer a identidade e proteger operações | US-01 e proteção por usuário e senha |
-| Recebimento de Vídeo | Validar e aceitar um upload | US-02 e `handleVideoUpload` |
-| Acompanhamento de Trabalhos | Manter propriedade e estados consultáveis | US-04 e US-05 |
-| Processamento de Mídia | Extrair frames e produzir o ZIP | US-03 e `processVideo` |
-| Entrega de Resultados | Autorizar e entregar o ZIP | US-06 e `handleDownload` |
-| Notificações | Comunicar falhas por canal externo | US-07 |
-
-### Primeira atribuição das histórias
+## Iteração 1 — Histórias atribuídas
 
 | História | Responsável principal | Colaboradores | Observações |
 |---|---|---|---|
-| US-01 — Autenticar-se | Identidade e Acesso | — | Provisionamento de contas ainda indefinido |
-| US-02 — Enviar um vídeo | Recebimento de Vídeo | Identidade e Acesso; Acompanhamento de Trabalhos | Recebimento e acompanhamento disputam a criação do trabalho |
-| US-03 — Processar concorrentemente | Processamento de Mídia | Acompanhamento de Trabalhos | Requer isolamento e limite de concorrência |
-| US-04 — Preservar trabalhos | Acompanhamento de Trabalhos | Recebimento de Vídeo; Processamento de Mídia | Ponto de aceitação atravessa dois candidatos |
-| US-05 — Consultar trabalhos | Acompanhamento de Trabalhos | Identidade e Acesso | Estado e propriedade pertencem ao mesmo limite |
-| US-06 — Baixar resultado | Entrega de Resultados | Identidade e Acesso; Acompanhamento de Trabalhos | Autorização e disponibilidade dependem do trabalho |
-| US-07 — Notificar falha | Notificações | Acompanhamento de Trabalhos | Canal e garantias ainda indefinidos |
+| `US-01` | Identidade e Acesso | — | Provisionamento continua pendente |
+| `US-02` | Recebimento de Vídeo | Identidade e Acesso; Acompanhamento de Trabalhos | A história inteira pertence ao recebimento nesta iteração |
+| `US-03` | Processamento de Mídia | Acompanhamento de Trabalhos | Concorrência e isolamento fazem parte do comportamento atribuído |
+| `US-04` | Acompanhamento de Trabalhos | Recebimento; Processamento | Preservação, falha e novas tentativas atravessam colaboradores |
+| `US-05` | Acompanhamento de Trabalhos | Identidade e Acesso | Consulta não altera o estado |
+| `US-06` | Entrega de Resultados | Identidade; Acompanhamento; Processamento | Autorização depende do trabalho e do artefato |
+| `US-07` | Notificações | Acompanhamento de Trabalhos | A falha já deve estar registrada |
 
-### Problemas encontrados
+Cada história possui exatamente um responsável. Colaboradores fornecem contratos e não compartilham a responsabilidade principal.
 
-1. `Recebimento de Vídeo` e `Acompanhamento de Trabalhos` compartilham a autoridade sobre criação, propriedade, aceitação e estado. Separá-los exigiria uma transação ou contrato antes de haver um motivo de escala independente.
-2. `Entrega de Resultados` possui pouca regra própria neste escopo. Disponibilidade, propriedade e expiração são aspectos do trabalho; o transporte do arquivo pode ser um adaptador.
-3. O processamento não deve ser autoridade concorrente sobre o estado persistente. Ele executa uma tentativa e relata fatos; o ciclo do trabalho valida as transições.
-4. Fila, banco, armazenamento de objetos, REST e `ffmpeg` são mecanismos ou adaptadores. Promovê-los a componentes agora confundiria arquitetura lógica com tecnologia.
+## Iteração 1 — Papéis e responsabilidades analisados
 
-## Impacto das características prioritárias
+O inventário continua congelado nesta análise.
 
-| Característica | Impacto nas fronteiras |
-|---|---|
-| Confiabilidade e recuperabilidade | Um componente deve possuir a aceitação e a máquina de estados; processamento precisa ser idempotente e relatar resultados por contrato |
-| Segurança | A identidade deve chegar aos casos de uso, e a autoridade sobre o trabalho deve aplicar propriedade antes de listar ou entregar artefatos |
-| Escalabilidade do processamento | A execução de mídia deve poder variar sua capacidade sem transferir a autoridade sobre usuários e trabalhos |
-
-## Reestruturação da iteração 1
-
-| Alteração | Justificativa | Consequência |
+| Componente inicial | Achado de responsabilidade ou acoplamento | Sinal para refatoração posterior |
 |---|---|---|
-| Unir Recebimento de Vídeo e Acompanhamento de Trabalhos em `Trabalhos de Vídeo` | Ambos participam da mesma aceitação, propriedade e máquina de estados | Um único componente passa a possuir o registro durável e o contrato de submissão/consulta |
-| Incorporar a regra de entrega em `Trabalhos de Vídeo` | O direito e a disponibilidade do download decorrem do estado e da propriedade do trabalho | O armazenamento e o transporte do ZIP permanecem portas/adaptadores substituíveis |
-| Manter `Processamento de Mídia` separado | Consome recursos, escala de forma diferente e pode falhar ou repetir independentemente | Exige contrato idempotente de trabalho e de relato de resultado |
-| Manter `Notificações` separado provisoriamente | Integração externa, retentativas e falhas não devem alterar o estado do processamento | Pode ser reduzido a um adaptador se não surgirem regras de canal, preferência ou entrega |
-| Manter `Identidade e Acesso` separado e condicional | Possui responsabilidade distinta, mas pode ser realizado por provedor externo | O componente lógico não implica serviço próprio nem armazenamento interno de credenciais |
+| Identidade e Acesso | Papel distinto e pouco conhecimento do domínio de vídeo | Preservar a separação; autogestão futura não integra este ciclo |
+| Recebimento de Vídeo | Concentra condução da transferência, decisão de admissão e aceitação durável | `Envio recebido`, `Envio rejeitado` e `Trabalho aceito` possuem regras e resultados diferentes |
+| Acompanhamento de Trabalhos | Reúne consulta, política de ciclos, entrega ao processamento e aplicação de desfechos | Compartilhar `Trabalho` não torna esses comportamentos coesos nem lhes dá a mesma razão de mudança |
+| Processamento de Mídia | Mistura consumo idempotente, concorrência, extração e empacotamento | Controle da tentativa e transformação possuem conhecimento e falhas diferentes |
+| Entrega de Resultados | Possui decisão própria de autorização por identidade, propriedade, estado e artefato | Manter como comportamento modular, sem transformar storage em componente |
+| Notificações | Mistura política e canal, mas consentimento e garantias ainda estão pendentes | Manter coeso até existir evidência para outra divisão |
 
-## Iteração 2 — Inventário refinado, mantido na iteração 3
+Riscos registrados sem alteração: dependência circular entre acompanhamento e processamento, atualização livre do mesmo estado, vazamento de caminhos físicos e componentes anêmicos que apenas encaminhem chamadas.
 
-| ID | Componente | Papel | Responsabilidades | Fora do escopo | Autoridade e contratos/dependências |
-|---|---|---|---|---|---|
-| `CMP-01` | Identidade e Acesso | Estabelecer quem realiza uma operação | Autenticar credenciais; fornecer identidade confiável | Upload, estado do trabalho, processamento e armazenamento de vídeo | Autoridade sobre identidade/credenciais somente se interno; fornece `IdentidadeAutenticada`; pode depender de provedor externo |
-| `CMP-02` | Trabalhos de Vídeo | Possuir o ciclo de vida de uma solicitação de processamento | Aceitar submissão; gerar identidade única; associar proprietário; validar transições; listar trabalhos; autorizar resultado; aplicar retenção quando definida | Extrair frames, executar `ffmpeg`, implementar banco/fila/storage, entregar notificação | Autoridade sobre trabalho, proprietário, estado, datas e referências opacas dos artefatos; consome `IdentidadeAutenticada`; solicita `ProcessarTrabalho`; aceita `ResultadoDoProcessamento`; solicita `NotificarFalha` |
-| `CMP-03` | Processamento de Mídia | Transformar um vídeo aceito em um resultado reproduzível | Consumir uma solicitação; isolar tentativa; extrair frames; gerar ZIP; preservar o resultado; relatar sucesso ou falha; tolerar repetição | Autenticar usuário, aceitar upload, decidir propriedade, listar status, escolher a transição persistente do trabalho | Autoridade sobre execução transitória e política de extração; consome `ProcessarTrabalho`; fornece `ResultadoDoProcessamento` correlacionado; depende de referências opacas de artefato e processador externo |
-| `CMP-04` | Notificações | Comunicar eventos relevantes sem interferir no resultado do trabalho | Receber solicitação de notificação; formatar mensagem segura; selecionar canal quando definido; controlar tentativas conforme política futura | Alterar o estado do trabalho, expor diagnóstico interno, processar vídeo | Autoridade sobre tentativas de notificação; consome `NotificarFalha`; depende de contato autorizado e adaptador de canal |
+## Iteração 1 — Características do sistema analisadas
 
-### Atribuição após o refinamento
+As características permanecem propriedades do sistema. Esta etapa registra impactos, sem criar, remover, unir ou dividir componentes.
 
-| História | Responsável principal | Colaboradores | Contrato principal |
+| Característica sistêmica | Escopo observado | Pressão registrada para a refatoração |
+|---|---|---|
+| Confiabilidade e recuperabilidade | Da aceitação até o estado terminal e resultado disponível | Distinguir aceitação durável, despacho idempotente e aplicação do desfecho |
+| Segurança | Identidade, entrada não confiável, propriedade, download e mensagem externa | Separar validação da entrada da autorização de trabalho e resultado |
+| Escalabilidade do processamento | Backlog, tentativas e transformação intensiva | Separar controle da tentativa da transformação e impedir concorrência ilimitada |
+
+Nenhuma característica foi atribuída a um componente nem determinou quantidade de quanta.
+
+## Iteração 1 — Refatoração motivada
+
+| Componente inicial | Achado motivador registrado | Alteração aplicada | Componentes resultantes |
 |---|---|---|---|
-| US-01 | Identidade e Acesso | — | Autenticar e fornecer identidade |
-| US-02 | Trabalhos de Vídeo | Identidade e Acesso; adaptador de artefatos | Submeter vídeo e devolver ID aceito |
-| US-03 | Processamento de Mídia | Trabalhos de Vídeo; adaptadores de artefatos e processador | Processar trabalho correlacionado e relatar resultado |
-| US-04 | Trabalhos de Vídeo | Processamento de Mídia; mecanismo durável de entrega | Preservar trabalho e controlar transições idempotentes |
-| US-05 | Trabalhos de Vídeo | Identidade e Acesso | Listar trabalhos do proprietário |
-| US-06 | Trabalhos de Vídeo | Identidade e Acesso; adaptador de artefatos | Autorizar e fornecer acesso ao resultado disponível |
-| US-07 | Notificações | Trabalhos de Vídeo; adaptador de canal | Solicitar e tentar entrega de notificação segura |
+| Identidade e Acesso | Papel já distinto e coeso | Preservar comportamento com nova identidade no modelo sucessor | [`CMP-05`](#cmp-05) Identidade e Acesso |
+| Recebimento de Vídeo | Transferência, admissão e aceitação possuem decisões e falhas distintas | Manter coordenador da história e extrair duas responsabilidades | [`CMP-06`](#cmp-06) Submissão; [`CMP-07`](#cmp-07) Admissão; [`CMP-08`](#cmp-08) Aceitação |
+| Acompanhamento de Trabalhos | Consulta, ciclos, despacho e desfecho mudam por motivos diferentes | Dividir comportamento sem duplicar transições | [`CMP-09`](#cmp-09) Consulta; [`CMP-10`](#cmp-10) Política de Tentativas; [`CMP-11`](#cmp-11) Despacho; [`CMP-15`](#cmp-15) Registro de Desfecho |
+| Processamento de Mídia | Controle concorrente, transformação e pacote possuem conhecimento distinto | Separar execução das duas etapas comportamentais do resultado | [`CMP-12`](#cmp-12) Execução; [`CMP-13`](#cmp-13) Extração; [`CMP-14`](#cmp-14) Empacotamento |
+| Entrega de Resultados | Decisão própria de autorização confirmada pela análise | Renomear para explicitar comportamento, sem mudar sua finalidade | [`CMP-16`](#cmp-16) Acesso a Resultados |
+| Notificações | Não há evidência para separar política e canal | Manter coeso e restringir à falha | [`CMP-17`](#cmp-17) Comunicação de Falhas |
 
-## Iteração 3 — Acoplamento, tempo e conhecimento
+O total de treze componentes é resultado desta tabela, não uma meta usada na identificação.
 
-Esta iteração reaplica o ciclo com dependências direcionadas, acoplamento temporal e Lei de Deméter. Usuário, portas e adaptadores também são analisados quando alteram a fronteira, mas não são promovidos a componentes.
+## Iteração 2 — Componentes identificados
 
-### Acoplamento estático candidato
+| ID | Componente | Papel e autoridade comportamental | Fora do escopo | Contratos principais |
+|---|---|---|---|---|
+| <a id="cmp-05"></a>`CMP-05` | Identidade e Acesso | Estabelecer identidade autenticada | Vídeos, trabalhos e resultados | fornece `IdentidadeAutenticada` ou recusa |
+| <a id="cmp-06"></a>`CMP-06` | Submissão de Vídeos | Coordenar o envio e devolver rejeição ou trabalho aceito | Regras de validação e estado persistente | `EnviarVideo`; consome Admissão e Aceitação |
+| <a id="cmp-07"></a>`CMP-07` | Admissão de Vídeos | Avaliar formato, tamanho e conteúdo; consolidar problemas | Criar ou alterar trabalho | fornece `SubmissaoAdmitida` ou `EnvioRejeitado` |
+| <a id="cmp-08"></a>`CMP-08` | Aceitação de Trabalhos | Criar ID, proprietário, estado inicial e referência recuperável | Processar mídia, consultar ou reprocessar | fornece `TrabalhoAceito` |
+| <a id="cmp-09"></a>`CMP-09` | Consulta de Trabalhos | Servir lista, detalhe, estado e histórico do proprietário | Alterar estado | fornece consultas autorizadas |
+| <a id="cmp-10"></a>`CMP-10` | Política de Tentativas | Decidir ciclo inicial, reprocessamento, retentativa, duplicidade e encerramento | Executar mídia ou persistir desfecho livremente | fornece `TentativaAutorizada` |
+| <a id="cmp-11"></a>`CMP-11` | Despacho de Processamento | Entregar duravelmente uma tentativa autorizada | Decidir política ou executar transformação | fornece `ProcessarTentativa` |
+| <a id="cmp-12"></a>`CMP-12` | Execução de Tentativas | Deduplicar reentrega, controlar concorrência e isolar recursos | Conhecer usuário ou escolher estado do trabalho | fornece fatos correlacionados da tentativa |
+| <a id="cmp-13"></a>`CMP-13` | Extração de Imagens | Transformar a origem em imagens conforme parâmetros | Ciclos, ZIP, usuário ou trabalho | fornece `ImagensExtraidas` ou falha classificada |
+| <a id="cmp-14"></a>`CMP-14` | Empacotamento de Resultados | Validar imagens, gerar pacote e preservar referência utilizável | Autorizar download ou concluir trabalho | fornece `ResultadoProduzido` ou falha classificada |
+| <a id="cmp-15"></a>`CMP-15` | Registro de Desfecho | Aplicar estados de tentativa, conclusão ou falha e preservar histórico | Decidir nova tentativa ou executar mídia | fornece `TrabalhoConcluido` ou `TrabalhoFalhou` |
+| <a id="cmp-16"></a>`CMP-16` | Acesso a Resultados | Autorizar e fornecer resultado por identidade, propriedade, estado e existência | Empacotar ou publicar diretório físico | fornece resultado ou `DownloadRecusado` |
+| <a id="cmp-17"></a>`CMP-17` | Comunicação de Falhas | Decidir e tentar comunicação segura depois da falha registrada | Alterar trabalho ou interpretar diagnóstico interno | consome `TrabalhoFalhou`; relata entrega |
 
-Ainda não é possível calcular `CA` e `CE` como métricas estáticas: a propriedade dos contratos, os namespaces e a direção das dependências de código não foram escolhidos. Contar setas do fluxo como acoplamento de implementação produziria falsa precisão. O inventário abaixo registra apenas relações lógicas candidatas para orientar essa decisão futura.
+Controllers HTTP, repositórios genéricos, banco, broker, outbox, storage, `ffmpeg`, biblioteca ZIP, WebSocket, SSE, observabilidade, CI/CD e containers permanecem portas, adaptadores, bibliotecas ou infraestrutura.
 
-| Componente | Dependentes candidatos (`fan-in`) | Dependências candidatas (`fan-out`) | Estado de CA/CE | Leitura |
-|---|---:|---:|---|---|
-| Identidade e Acesso | 1 | 0 | A medir após definir contratos físicos | Fornece identidade ao ciclo do trabalho e não conhece o domínio de vídeo |
-| Trabalhos de Vídeo | 1 | 3 | A medir após definir contratos físicos | Recebe relato do processamento e coordena identidade, processamento e eventual notificação |
-| Processamento de Mídia | 1 | 1 | A medir após definir contratos físicos | Recebe solicitação e devolve relato correlacionado sem possuir o estado do trabalho |
-| Notificações | 1 | 0 | A medir após definir contratos físicos | Recebe solicitação autossuficiente e não coordena o fluxo principal |
+## Iteração 2 — Histórias atribuídas
 
-As três dependências candidatas de Trabalhos de Vídeo são o principal sinal de revisão pela Lei de Deméter. Elas não justificam divisão automática: decorrem da autoridade sobre o ciclo de vida. Tornam-se problema se o componente precisar conhecer executor, transporte, tentativas de canal ou detalhes de armazenamento para coordenar os colaboradores.
+| História | Responsável principal | Colaboradores | Observações |
+|---|---|---|---|
+| `US-01` | [`CMP-05`](#cmp-05) | — | A história permanece integralmente com identidade |
+| `US-02` | [`CMP-06`](#cmp-06) | [`CMP-07`](#cmp-07), [`CMP-08`](#cmp-08), identidade | Submissão coordena, mas não absorve regras ou estado |
+| `US-03` | [`CMP-12`](#cmp-12) | [`CMP-11`](#cmp-11), [`CMP-13`](#cmp-13), [`CMP-14`](#cmp-14), [`CMP-15`](#cmp-15) | Execução possui concorrência e isolamento |
+| `US-04` | [`CMP-10`](#cmp-10) | [`CMP-08`](#cmp-08), [`CMP-11`](#cmp-11), [`CMP-12`](#cmp-12), [`CMP-15`](#cmp-15) | Política decide novas tentativas; colaboradores executam e registram |
+| `US-05` | [`CMP-09`](#cmp-09) | identidade; publicadores de fatos do trabalho | Consulta permanece somente leitura |
+| `US-06` | [`CMP-16`](#cmp-16) | identidade, [`CMP-09`](#cmp-09), [`CMP-14`](#cmp-14) | Acesso decide autorização e disponibilidade |
+| `US-07` | [`CMP-17`](#cmp-17) | [`CMP-15`](#cmp-15) | Comunicação ocorre depois do desfecho persistido |
 
-### Matriz de dependências e acoplamento temporal
+## Iteração 2 — Papéis e responsabilidades analisados
 
-| Origem | Destino | Tipo estático/temporal | CA/CE | Conhecimento permitido | Contrato conceitual | Impacto e tratamento |
-|---|---|---|---|---|---|---|
-| Trabalhos de Vídeo | Identidade e Acesso | Temporal; dependência estática a confirmar | A medir | Identificador e capacidades da identidade, não credencial ou mecanismo de sessão | `IdentidadeAutenticada` | Identidade precede operação protegida; pode ser fornecida pela borda síncrona ou por provedor externo |
-| Trabalhos de Vídeo | Processamento de Mídia | Temporal; dependência estática a confirmar | A medir | ID do trabalho, ID da tentativa, referência da origem e parâmetros de extração; não executor nem quantidade de consumidores | `ProcessarTrabalho` | Trabalho aceito e origem preservada precedem a tentativa; chamada síncrona obrigatória propagaria falhas e uniria os quanta |
-| Processamento de Mídia | Trabalhos de Vídeo | Temporal; dependência estática a confirmar | A medir | Correlação, referência do resultado ou falha classificada; não máquina de estados, proprietário ou política de notificação | `ResultadoDoProcessamento` | Resultado ou falha preservados precedem a transição; evitar ciclo de implementação por porta ou fato de integração idempotente |
-| Trabalhos de Vídeo | Notificações | Temporal; dependência estática a confirmar | A medir | Destinatário autorizado e conteúdo mínimo; não canal concreto nem política interna de tentativas | `NotificarFalha` | Falha registrada precede solicitação; execução pode ser assíncrona e falha do canal não reverte o trabalho |
+O inventário refinado permanece congelado nesta análise.
 
-Há ainda acoplamento indireto pelo armazenamento de artefatos. Trabalhos de Vídeo deve conhecer apenas referências e regras de autorização; Processamento de Mídia lê a origem e grava o resultado por contratos próprios. Caminhos, esquema físico ou transação compartilhada entre os dois seriam acoplamento acidental e enfraqueceriam a hipótese de processamento destacável.
+| Questão | Resultado da análise |
+|---|---|
+| Histórias sem responsável ou com responsabilidade dupla | Nenhuma; cada `US-*` possui exatamente um responsável principal |
+| Entity Trap | Vários componentes tratam `Trabalho`, mas cada um possui comportamento ou transição específica; nenhum representa CRUD genérico |
+| Autoridade concorrente | Aceitação cria; Política autoriza tentativas; Registro aplica desfechos; Consulta lê; Acesso autoriza entrega |
+| Acoplamento temporal | Submissão precede Aceitação; Despacho precede Execução; referência do resultado precede Conclusão |
+| Dependência circular | Fluxo de retorno usa fatos correlacionados; worker não chama componentes internos do núcleo para alterar estado |
+| Componentes anêmicos | Despacho e Admissão possuem política verificável; reavaliar se a implementação apenas encaminhar chamadas |
+| Conhecimento excessivo | Extração e Empacotamento não conhecem identidade, ciclos ou estados; Comunicação recebe fato autossuficiente |
 
-### Lei de Deméter
+## Iteração 2 — Características do sistema analisadas
 
-- Identidade e Acesso não conhece trabalhos, vídeos nem processamento.
-- Processamento de Mídia não escolhe transições persistentes, não autentica usuários e não dispara notificações.
-- Notificações não consulta a máquina de estados nem interpreta diagnósticos internos; recebe uma solicitação autossuficiente.
-- Trabalhos de Vídeo conhece a necessidade de solicitar processamento e, após uma falha registrada, de avaliar uma notificação. Essa coordenação é conhecimento de domínio justificado; conhecer os próximos colaboradores de cada etapa interna seria conhecimento excessivo.
+O inventário continua congelado. A repetição mostrou:
 
-### Reestruturação da iteração 3
-
-| Alteração | Justificativa | Consequência |
+| Característica sistêmica | Evidência no inventário refinado | Pendência |
 |---|---|---|
-| Manter os quatro componentes e seus IDs | Workflow, histórias, coesão e Entity Trap não revelaram nova responsabilidade autônoma nem duplicada | Preserva o modelo corrente sem fabricar serviços ou componentes para cada passo |
-| Tornar os três contratos entre componentes explícitos | Expõe direção, informação mínima e dependências temporais | Permite testar idempotência e substituir transporte sem transferir autoridade |
-| Limitar o conhecimento de Processamento e Notificações | Aplicação da Lei de Deméter | Trabalhos de Vídeo continua coordenador do ciclo, mas detalhes operacionais ficam encapsulados |
-| Registrar quantum único e processamento destacável antes de escolher implantação | Os escopos das características diferem, mas faltam carga e semântica de falha | A topologia permanece reversível e pode ser confrontada por experimento |
+| Confiabilidade e recuperabilidade | Aceitação, Despacho e Registro expõem pontos duráveis testáveis | Atomicidade e reconciliação ainda precisam de decisão e experimento |
+| Segurança | Admissão isola entrada não confiável; Consulta e Acesso explicitam propriedade | Limites numéricos e estratégia de identidade continuam abertos |
+| Escalabilidade do processamento | Execução, Extração e Empacotamento podem variar capacidade sem possuir o trabalho | Carga, throughput e concorrência-alvo ainda não foram medidos |
 
-## Portas e adaptadores candidatos
+Nenhuma nova divisão foi aplicada durante esta análise.
 
-Os itens abaixo são necessidades de contrato, não tecnologias escolhidas:
-
-- repositório de trabalhos;
-- armazenamento de vídeos e resultados;
-- entrega durável de solicitações de processamento;
-- executor de extração de frames;
-- canal de notificação;
-- transporte HTTP ou outra interface de entrada.
-
-Banco relacional, mensageria, armazenamento local ou de objetos e `ffmpeg` devem ser avaliados quando os contratos e cenários forem implementados. Nenhum deles cria, por si só, uma fronteira de componente.
-
-## Verificação de convergência
+## Iteração 2 — Verificação de convergência
 
 | Critério | Resultado |
 |---|---|
-| Toda história possui um responsável principal | Atendido no modelo corrente |
-| Papéis distintos e sem responsabilidade duplicada | Atendido após unir recebimento, acompanhamento e regra de entrega |
-| Descoberta por workflow e Entity Trap verificados | Atendido; nenhuma nova fronteira foi justificada |
-| Dependências lógicas e contratos relevantes explícitos | Atendido em nível conceitual; propriedade física e formatos ainda não definidos |
-| Acoplamento temporal explícito | Parcialmente atendido; ordens críticas foram registradas, mas atomicidade, retentativa e entrega continuam `A confirmar` |
-| CA/CE e direção das dependências estáticas | Não atendido; depende da organização dos contratos e do código |
-| Conhecimento excessivo reduzido ou justificado | Atendido provisoriamente; o fan-out lógico de Trabalhos de Vídeo permanece sinal de revisão |
-| Características prioritárias verificáveis | Parcialmente atendido; cenários existem, valores-alvo faltam |
-| Todo componente justificado | Atendido provisoriamente; Notificações e Identidade podem ser externalizados ou reduzidos conforme as decisões pendentes |
+| Toda história possui um responsável principal | Atendido |
+| Todo componente refinado possui achado motivador | Atendido pela tabela de refatoração |
+| Papéis distintos e comportamentos não duplicados | Atendido provisoriamente |
+| Contratos e ordens relevantes explícitos | Atendido em nível conceitual |
+| Mecanismos não confundidos com componentes de negócio | Atendido |
+| CA/CE estático | Ainda não mensurável sem namespaces e código |
+| Características verificáveis | Cenários existem; valores-alvo permanecem pendentes |
 
-O ciclo produziu um modelo lógico corrente e hipóteses de quanta suficientes para orientar experimentos, mas não convergiu para uma topologia. Seu estado permanece `em_analise` enquanto as dependências estáticas, a semântica temporal e as medidas de carga não forem verificadas.
+O inventário modular converge como hipótese para orientar código e Threat Modeling. Ele permanece `em_analise` até que dependências físicas e testes confrontem os limites.
 
-## Riscos, lacunas e sinais para novo refinamento
+## Dependências e contratos conceituais
 
-| Risco ou lacuna | Efeito possível | Menor forma de obter evidência |
-|---|---|---|
-| Semântica de "não perder" indefinida | Escolha inadequada do ponto de aceitação e da entrega | Definir cenários de falha aceitos e executar spike de reinício/duplicidade |
-| Volume e concorrência desconhecidos | Granularidade ou infraestrutura superdimensionada | Definir uma carga de demonstração e medir `ffmpeg` com vídeos sintéticos |
-| Retenção indefinida | Responsabilidade de artefatos pouco clara e custo imprevisível | Escolher prazo e comportamento de expiração |
-| Identidade sem estratégia | Componente interno pode ser criado sem necessidade | Comparar provedor externo, mecanismo do framework e implementação própria contra o escopo acadêmico |
-| Notificação pouco especificada | Componente pode ser prematuro | Definir canal, opt-in e necessidade de retentativa |
-| Ordem aceitar/processar/concluir sem atomicidade definida | Confirmação prematura, trabalho órfão ou resultado marcado sem artefato | Testar falhas em cada transição e definir os pontos duráveis |
-| Fan-out lógico concentrado em Trabalhos de Vídeo | Coordenador pode conhecer detalhes demais e criar mudanças em cascata | Testar contratos autossuficientes e revisar pela Lei de Deméter |
-| Topologia ainda aberta | Componentes podem ser confundidos com microsserviços | Comparar monólito modular com processamento destacável e alternativas distribuídas após definir cenários |
+```mermaid
+flowchart LR
+    auth["CMP-05 Identidade"] --> submit["CMP-06 Submissão"]
+    submit --> admission["CMP-07 Admissão"]
+    submit --> acceptance["CMP-08 Aceitação"]
+    acceptance --> policy["CMP-10 Política de Tentativas"]
+    policy --> dispatch["CMP-11 Despacho"]
+    dispatch --> execution["CMP-12 Execução"]
+    execution --> extraction["CMP-13 Extração"]
+    extraction --> packaging["CMP-14 Empacotamento"]
+    execution --> outcome["CMP-15 Registro de Desfecho"]
+    packaging --> outcome
+    outcome --> query["CMP-09 Consulta"]
+    outcome --> policy
+    outcome --> access["CMP-16 Acesso a Resultados"]
+    outcome --> notification["CMP-17 Comunicação de Falhas"]
+```
 
-Reabra este refinamento quando uma questão acima for respondida, quando a implementação revelar um contrato inadequado ou quando uma característica atravessar as fronteiras de modo diferente do previsto.
+| Origem | Destino | Contrato | Restrição |
+|---|---|---|---|
+| Submissão | Admissão | `AvaliarSubmissao` | Admissão não acessa trabalho |
+| Submissão | Aceitação | `AceitarTrabalho` | Somente depois de `SubmissaoAdmitida` e origem recuperável |
+| Política | Despacho | `TentativaAutorizada` | Reentrega técnica não cria nova tentativa |
+| Despacho | Execução | `ProcessarTentativa` | Contrato durável e correlacionado |
+| Execução | Extração | `ExtrairImagens` | Sem identidade ou estado do trabalho |
+| Execução | Empacotamento | `EmpacotarResultado` | Recebe somente referências das imagens |
+| Execução/Empacotamento | Registro | Fatos de tentativa e `ResultadoProduzido` | Worker não escreve livremente no núcleo |
+| Registro | Consulta/Acesso/Política/Comunicação | Fatos do trabalho | Consumidores não reinterpretam diagnóstico interno |
 
-## Menor próximo incremento verificável
+## Agrupamentos candidatos de quanta
 
-Antes de implementar todos os componentes, defina e registre:
+Estes quatro agrupamentos são hipóteses futuras sem IDs próprios e não representam topologia aceita. Eles foram avaliados somente depois da verificação do inventário modular.
 
-1. o que significa aceitar um trabalho e quais falhas ele deve sobreviver;
-2. a carga mínima da demonstração;
-3. a escolha de Java com Quarkus e o estilo inicial de implantação;
-4. o contrato conceitual `submeter -> preservar -> solicitar processamento -> relatar resultado -> consultar`.
+| Agrupamento candidato | Componentes candidatos | Motivação a verificar | Risco pendente |
+|---|---|---|---|
+| **Interação e acesso** | [`CMP-05`](#cmp-05), [`CMP-06`](#cmp-06), [`CMP-07`](#cmp-07), [`CMP-09`](#cmp-09), [`CMP-16`](#cmp-16) | Segurança na borda e perfil de interação do usuário | Separação pode ampliar coordenação com Aceitação |
+| **Controle do ciclo** | [`CMP-08`](#cmp-08), [`CMP-10`](#cmp-10), [`CMP-11`](#cmp-11), [`CMP-15`](#cmp-15) | Transições, confiabilidade e recuperação do trabalho | Aceitação distribuída exige prova de durabilidade |
+| **Execução de mídia** | [`CMP-12`](#cmp-12), [`CMP-13`](#cmp-13), [`CMP-14`](#cmp-14) | CPU, I/O, concorrência e escala diferenciada | Contrato e medição de carga ainda ausentes |
+| **Comunicação** | [`CMP-17`](#cmp-17) | Isolar canal e tentativas externas se regras próprias surgirem | Pode não justificar unidade independente |
 
-Em seguida, construa uma fatia de risco que aceite um trabalho sintético, preserve seu ID e estado, simule entrega repetida e reinício, e permita consultá-lo. Essa prova valida a fronteira entre `Trabalhos de Vídeo` e `Processamento de Mídia` antes de acrescentar todo o fluxo de arquivos, autenticação e notificação.
+Identidade pode ser fornecida externamente, e Comunicação pode permanecer junto a outro agrupamento. A quantidade e a topologia serão decididas somente depois de riscos, contratos físicos e medições.
+
+## Riscos, fitness functions e próximo incremento
+
+| Risco | Verificação futura |
+|---|---|
+| Dependências cíclicas entre pacotes | Regra estática que imponha a direção documentada |
+| Acesso irrestrito ao mesmo esquema | Portas específicas por comportamento e teste de dependência |
+| Componente anêmico | Unir somente quando não houver política, contrato ou razão de mudança própria |
+| Perda após aceitação | Reiniciar depois do aceite e consultar o mesmo trabalho |
+| Duplicidade de tentativa | Reentregar o mesmo comando e observar um único desfecho visível |
+| Conclusão antes do artefato | Falhar entre empacotamento e registro e executar reconciliação |
+
+O próximo incremento é o Threat Modeling de [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial). Depois das decisões necessárias, a primeira estrutura Java deverá representar estes limites como pacotes ou módulos e aplicar fitness functions de dependência, preferencialmente com ArchUnit.

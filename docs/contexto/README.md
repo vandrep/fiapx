@@ -39,7 +39,7 @@ Campos:
 | Campo | Significado |
 |---|---|
 | `context_id` | Identificador estável e único. Nunca deve ser reutilizado para outro significado |
-| `context_type` | Tipo do nó, como `decision`, `evidence`, `assumption`, `requirement_set`, `component_model`, `policy`, `context_router`, `roadmap` ou `outcome_log` |
+| `context_type` | Tipo do nó, como `decision`, `evidence`, `assumption`, `requirement_set`, `requirement_change`, `component_model`, `policy`, `context_router`, `roadmap` ou `outcome_log` |
 | `status` | Estado atual dentro do fluxo específico daquele tipo de nó |
 | `recorded_at` | Data em que o nó foi registrado; não muda quando sua validade muda |
 | `valid_from` | Data a partir da qual o nó ou esta versão contextual passa a ser aplicável |
@@ -105,20 +105,34 @@ Outros tipos podem possuir fluxos próprios, como `em_refinamento` para históri
 |---|---|---|
 | `CTX-GOV-001` | Política | Este documento |
 | `CTX-GOV-002` | Política | `docs/contexto/meta-pdca.md` |
+| `CTX-GOV-003` | Política | [`docs/contexto/rastreabilidade-refinamentos.md`](rastreabilidade-refinamentos.md) |
 | `CTX-ROUTE-001` | Roteador de contexto | `docs/contexto/roteador.md` |
 | `CTX-PRJ-001` | Contexto do projeto | `docs/contexto-projeto.md` |
 | `CTX-DOM-001` | Vocabulário do domínio | `docs/requisitos/glossario.md` |
 | `CTX-DOM-002` | Descoberta do domínio | `docs/requisitos/event-storming.md` |
 | `CTX-REQ-001` | Conjunto de requisitos | `docs/requisitos/historias.md` |
 | `CTX-CHAR-001` | Características arquiteturais | `docs/arquitetura/caracteristicas.md` |
-| `CTX-CMP-001` | Modelo de componentes | `docs/arquitetura/componentes.md` |
+| `CTX-CMP-001` | Modelo histórico de componentes macro | `docs/arquitetura/componentes-macro.md` |
+| `CTX-CMP-002` | Modelo corrente de componentes modulares | `docs/arquitetura/componentes.md` |
+| `DEC-0001` | Decisão sobre granularidade e ciclo de componentes | `docs/arquitetura/decisoes/0001-refinamento-de-componentes.md` |
 | `CTX-ROADMAP-001` | Roadmap ativo | `docs/acompanhamento/roadmap.md` |
 | `CTX-OUTCOME-001` | Registro de realizações | `docs/acompanhamento/realizacoes.md` |
-| `WORK-001` a `WORK-015` | Itens de trabalho | Roadmap ou registro de realizações, conforme o estado |
-| `CMP-01` | Componente lógico | Identidade e Acesso |
-| `CMP-02` | Componente lógico | Trabalhos de Vídeo |
-| `CMP-03` | Componente lógico | Processamento de Mídia |
-| `CMP-04` | Componente lógico | Notificações |
+| `WORK-001` a `WORK-016` | Itens de trabalho | Roadmap ou registro de realizações, conforme o estado |
+| `REQ-CHG-0001` e `REQ-CHG-0002` | Mudanças de requisitos | `docs/requisitos/refinamentos/` |
+| `CMP-01` a `CMP-04` | Componentes lógicos históricos | Inventário macro de `CTX-CMP-001` |
+| `CMP-05` | Componente lógico | Identidade e Acesso |
+| `CMP-06` | Componente lógico | Submissão de Vídeos |
+| `CMP-07` | Componente lógico | Admissão de Vídeos |
+| `CMP-08` | Componente lógico | Aceitação de Trabalhos |
+| `CMP-09` | Componente lógico | Consulta de Trabalhos |
+| `CMP-10` | Componente lógico | Política de Tentativas |
+| `CMP-11` | Componente lógico | Despacho de Processamento |
+| `CMP-12` | Componente lógico | Execução de Tentativas |
+| `CMP-13` | Componente lógico | Extração de Imagens |
+| `CMP-14` | Componente lógico | Empacotamento de Resultados |
+| `CMP-15` | Componente lógico | Registro de Desfecho |
+| `CMP-16` | Componente lógico | Acesso a Resultados |
+| `CMP-17` | Componente lógico | Comunicação de Falhas |
 
 Adicione novos IDs quando novos nós surgirem. Se uma fronteira for dividida, unida ou mudar de significado, crie novos IDs e conecte-os aos anteriores; não recicle a identidade antiga.
 
@@ -126,4 +140,4 @@ Itens de trabalho preservam o ID quando migram do roadmap para o registro de rea
 
 ## Validação
 
-Execute `scripts/validar-contexto.sh` depois de alterar metadados. A verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução. Ela é uma fitness function estrutural inicial e não avalia a qualidade do raciocínio registrado.
+Execute `scripts/validar-contexto.sh` depois de alterar metadados. A verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução. Para o modelo corrente de componentes, ela também chama `scripts/validar-componentes.sh`, que verifica a ordem do ciclo, a atribuição única das histórias, a motivação da refatoração e o caráter apenas candidato dos agrupamentos de quanta. Essas são fitness functions estruturais e não substituem a revisão do raciocínio registrado.

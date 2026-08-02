@@ -11,6 +11,34 @@ Este documento registra os agentes existentes e candidatos. Uma ideia permanece 
 - **Operação:** consultiva e somente leitura.
 - **Configuração:** `.codex/agents/arquiteto.toml`.
 
+<a id="analista-negocio"></a>
+
+### Analista de Negócio
+
+- **Status:** ativo.
+- **Papel:** preparar refinamentos de histórias e vocabulário, explicitar ambiguidades, classificar a procedência e formular as decisões que dependem do responsável pelo produto.
+- **Operação:** consultiva e somente leitura.
+- **Gatilho:** antes de uma alteração semântica em histórias de usuário ou no glossário do domínio.
+- **Entradas:** solicitação atual, histórias ou termos afetados, fontes diretamente relacionadas e histórico de refinamentos aplicável.
+- **Fora do escopo:** validar hipóteses, definir prioridade, aceitar histórias, decidir arquitetura ou editar artefatos.
+- **Entrega esperada:** IDs afetados, alteração proposta, classificação anterior e resultante, fontes, ambiguidades, perguntas e confirmação necessária.
+- **Configuração:** `.codex/agents/analista-negocio.toml`.
+
+<a id="atores-refinamento"></a>
+
+## Atores de refinamento
+
+Os registros de refinamento usam identificadores de papel para separar análise, materialização e autoridade de negócio sem expor dados pessoais:
+
+| Identificador | Responsabilidade |
+|---|---|
+| `analista_negocio` | Prepara o refinamento e explicita decisões pendentes |
+| `agente_principal` | Integra a análise e registra a alteração nos artefatos |
+| `responsavel_produto` | Confirma necessidades, regras e critérios de negócio |
+| `nao_registrado` | Autoria histórica que não pode ser determinada sem inventar precisão |
+
+`nao_registrado` é permitido somente ao reconstruir registros anteriores à política de rastreabilidade.
+
 ## Agentes candidatos
 
 ### Especialista Java e Quarkus

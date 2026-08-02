@@ -22,12 +22,16 @@ relations:
     target: docs/enunciado.md
   - type: informed_by
     target: CTX-DOM-001
+  - type: informed_by
+    target: CTX-DOM-002
   - type: informs
     target: CTX-CHAR-001
   - type: informs
-    target: CTX-CMP-001
+    target: CTX-CMP-002
   - type: governed_by
     target: CTX-GOV-001
+  - type: governed_by
+    target: CTX-GOV-003
 ---
 
 # Histórias de usuário
@@ -37,14 +41,19 @@ relations:
 Estas histórias traduzem o [enunciado](../enunciado.md) para unidades que possam ser atribuídas a componentes lógicos. O [glossário](glossario.md) define o vocabulário do domínio, o [contexto do projeto](../contexto-projeto.md) registra a classificação das evidências, e o [código-base](../referencia/projeto-original/main.go#L30) demonstra apenas o comportamento atual.
 
 - `Declarada`: a necessidade consta do enunciado.
+- `Validada na descoberta`: a regra foi confirmada pelo responsável durante o Event Storming.
 - `Inferida`: a formulação ou o critério foi deduzido de uma necessidade declarada e ainda pode ser corrigido.
 - `A confirmar`: falta uma decisão que altera o comportamento esperado.
 
-O ator principal é denominado `Usuário`. Cadastro, recuperação de senha e administração de contas não foram incluídos porque o enunciado exige proteção por usuário e senha, mas não descreve como as contas são provisionadas.
+O ator principal é denominado `Usuário`. Cadastro, recuperação de senha e administração de contas não integram as histórias deste primeiro incremento porque o enunciado exige proteção por usuário e senha, mas não descreve como as contas são provisionadas. A autogestão de credenciais e dados pessoais foi validada como direção futura; seu primeiro recorte e o provisionamento das contas da demonstração continuam `A confirmar`.
 
 ## Histórias do primeiro ciclo
 
+<a id="us-01"></a>
+
 ### US-01 — Autenticar-se
+
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
 
 **Classificação:** Declarada.
 
@@ -57,20 +66,30 @@ Critérios candidatos:
 - uma requisição não autenticada a uma operação protegida é recusada;
 - o mecanismo de sessão ou token e o provisionamento das contas estão `A confirmar`.
 
+<a id="us-02"></a>
+
 ### US-02 — Enviar um vídeo
 
-**Classificação:** Declarada; identificador e confirmação assíncrona são Inferidos.
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
+
+**Classificação:** Declarada; identificador e confirmação assíncrona são Inferidos; política de admissão `Validada na descoberta`.
 
 Como usuário autenticado, quero enviar um vídeo e receber uma identificação do trabalho para poder acompanhar o processamento sem aguardar sua conclusão na mesma requisição.
 
 Critérios candidatos:
 
-- um vídeo aceito gera um identificador único associado ao usuário;
-- o sistema confirma a aceitação somente depois que o trabalho puder ser recuperado;
-- um arquivo recusado não cria um trabalho processável e retorna um motivo seguro;
-- formatos, tamanho, duração e demais limites estão `A confirmar`.
+- todas as validações de admissão aplicáveis, inclusive formato e tamanho, precedem a aceitação;
+- uma violação definitiva que possa ser verificada com segurança antes ou durante a transferência interrompe o envio antecipadamente;
+- a rejeição não cria um trabalho processável e reúne os problemas que puderem ser verificados com segurança na mesma submissão;
+- um vídeo aceito gera um identificador único associado ao usuário somente depois que trabalho, proprietário, estado e referência da origem puderem ser recuperados;
+- cada nova submissão cria outro trabalho e não está sujeita a uma cota acumulada; frequência, concorrência e capacidade podem ser limitadas operacionalmente;
+- formatos aceitos, tamanho, duração e valores dos limites operacionais estão `A confirmar`.
+
+<a id="us-03"></a>
 
 ### US-03 — Processar vídeos concorrentemente
+
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md)
 
 **Classificação:** Declarada; isolamento por trabalho é Inferido.
 
@@ -83,20 +102,31 @@ Critérios candidatos:
 - a falha de um trabalho não altera o estado nem os artefatos de outro;
 - volume e concorrência-alvo estão `A confirmar`.
 
+<a id="us-04"></a>
+
 ### US-04 — Preservar trabalhos aceitos durante picos e falhas
 
-**Classificação:** Declarada; semântica de recuperação e duplicidade é Inferida.
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
+
+**Classificação:** Declarada; semântica de recuperação e duplicidade é Inferida; distinção entre submissão e retentativa `Validada na descoberta`.
 
 Como usuário, quero que um trabalho aceito não seja perdido durante picos ou falhas para que eu não precise reenviar o vídeo sem saber o que aconteceu.
 
 Critérios candidatos:
 
 - um trabalho confirmado permanece consultável após reinício da aplicação;
-- uma entrega repetida não produz dois resultados visíveis para o mesmo trabalho;
+- uma reentrega duplicada não cria outro trabalho, tentativa ou resultado visível;
 - uma falha de processamento resulta em estado recuperável e diagnosticável;
-- garantias exatas de entrega, retentativa e recuperação estão `A confirmar`.
+- falhas transitórias de infraestrutura podem iniciar retentativas automáticas do mesmo trabalho, limitadas dentro de cada ciclo;
+- falhas permanentes não entram em repetição automática e o esgotamento do ciclo deixa o trabalho em `FALHOU`;
+- o proprietário pode solicitar reprocessamento, iniciando outro ciclo no mesmo trabalho e sem reenviar o vídeo;
+- quantidade automática por ciclo, espera progressiva, classificação concreta das falhas e garantias exatas de entrega e recuperação estão `A confirmar`.
+
+<a id="us-05"></a>
 
 ### US-05 — Consultar os próprios trabalhos
+
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
 
 **Classificação:** Declarada; conjunto de estados é Inferido.
 
@@ -106,10 +136,16 @@ Critérios candidatos:
 
 - a listagem retorna somente trabalhos pertencentes ao usuário autenticado;
 - cada item possui identificador, estado e datas relevantes;
-- o conjunto candidato de estados é `RECEBIDO`, `AGUARDANDO`, `PROCESSANDO`, `CONCLUÍDO` e `FALHOU`;
-- paginação, ordenação, retenção e terminologia dos estados estão `A confirmar`.
+- o conjunto candidato de estados consultáveis é `AGUARDANDO`, `PROCESSANDO`, `CONCLUÍDO` e `FALHOU`;
+- um reprocessamento autorizado preserva o histórico e pode levar o mesmo trabalho de `FALHOU` a `AGUARDANDO`;
+- histórico e datas relevantes permanecem disponíveis sem expiração automática por enquanto;
+- paginação, ordenação e terminologia final dos estados estão `A confirmar`.
+
+<a id="us-06"></a>
 
 ### US-06 — Baixar o resultado
+
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
 
 **Classificação:** Declarada; autorização por propriedade é Inferida da proteção por usuário.
 
@@ -119,10 +155,14 @@ Critérios candidatos:
 
 - o download é oferecido somente para um trabalho concluído;
 - somente o proprietário autorizado acessa o resultado;
-- um resultado ausente ou expirado não é apresentado como disponível;
-- prazo de retenção e comportamento de expiração estão `A confirmar`.
+- um resultado ausente não é apresentado como disponível;
+- vídeo de origem, resultado e histórico não expiram automaticamente por enquanto; exclusão explícita e futura revisão por custo, privacidade ou obrigação legal permanecem fora deste incremento.
+
+<a id="us-07"></a>
 
 ### US-07 — Ser notificado sobre falha
+
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
 
 **Classificação:** Declarada como possibilidade; opt-in, canal e garantias são `A confirmar`.
 
@@ -131,9 +171,20 @@ Como usuário, quero ser notificado quando o processamento falhar para tomar con
 Critérios candidatos:
 
 - uma transição para falha pode solicitar uma notificação associada ao usuário e ao trabalho;
+- a notificação de processamento ocorre somente depois que a falha foi registrada e os problemas aplicáveis foram consolidados;
+- problemas de admissão pertencem à resposta da submissão e não à notificação assíncrona de processamento;
 - a falha do canal de comunicação não desfaz nem oculta o estado do processamento;
 - mensagens externas não expõem caminhos internos, comandos, credenciais ou diagnósticos sensíveis;
-- canal, consentimento, quantidade de tentativas e confirmação de entrega estão `A confirmar`.
+- atualização em tempo real pode comunicar andamento e falha posteriores à aceitação, mas transporte, canal externo, consentimento, quantidade de tentativas de entrega e confirmação estão `A confirmar`.
+
+## Contratos conceituais candidatos
+
+Estes contratos descrevem intenção e informação mínima, sem escolher protocolo, endpoint ou formato físico.
+
+| Contrato | Responsabilidade | Resultado esperado | Classificação |
+|---|---|---|---|
+| `EnvioRejeitado(problemas[])` | Comunicar uma submissão que não satisfez a admissão | Coleção sanitizada dos problemas verificáveis sem criar trabalho processável | `Validada na descoberta`; estrutura física `A confirmar` |
+| `SolicitarReprocessamento(trabalhoId)` | Iniciar outro ciclo depois de uma falha, preservando trabalho, origem e histórico | Trabalho autorizado volta a `AGUARDANDO` e uma nova tentativa pode ser criada | Inferida da ausência de cota acumulada e da distinção entre submissão e retentativa |
 
 ## Requisitos técnicos relacionados
 
@@ -147,12 +198,12 @@ Estes itens não são histórias de usuário e, portanto, não recebem um compon
 | RT-04 | Declarado | Possuir CI/CD | Influencia entrega e governança; não cria componente lógico |
 | RT-05 | Preferência | Usar Java com Quarkus | Influencia viabilidade e implementação; não define fronteiras |
 
-## Questões que mais alteram o desenho
+## Questões ainda abertas
 
-1. Em que momento uma requisição é considerada aceita e quais falhas devem ser toleradas depois disso?
-2. Quais volumes, tamanhos de vídeo, concorrência e tempo de espera precisam ser demonstrados?
-3. Como as contas serão criadas e qual mecanismo de autenticação é suficiente para o trabalho acadêmico?
-4. Por quanto tempo vídeos enviados, resultados e histórico devem ser preservados?
-5. A notificação é obrigatória, opcional por usuário ou apenas uma capacidade demonstrável?
+1. Quais formatos, tamanhos, durações, volumes, concorrência e tempo de espera precisam ser demonstrados?
+2. Quantas retentativas automáticas compõem um ciclo, quais falhas são transitórias e como aplicar espera progressiva e controle concorrente?
+3. Que mecanismo comprova atomicidade entre aceitação, preservação e entrega ao processamento?
+4. Como as contas da demonstração serão provisionadas e qual será o primeiro recorte futuro de autogestão?
+5. A notificação exige consentimento, canal externo ou garantia de entrega? Atualização em tempo real será necessária e, se for, com qual transporte?
 
-Até que essas respostas existam, os critérios candidatos servem para o primeiro refinamento e não constituem compromisso definitivo.
+Essas lacunas mantêm detalhes como `A confirmar`, mas não invalidam as regras de admissão, retentativa, retenção e comunicação já validadas.

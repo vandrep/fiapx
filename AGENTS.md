@@ -51,6 +51,7 @@ Não crie documentação de retrospectiva para mudanças triviais. Atualize o co
 - O agente principal integra os resultados, resolve conflitos e é responsável pela resposta final.
 - Agentes consultivos não editam arquivos. Agentes executores só alteram o escopo explicitamente delegado.
 - Não aceite recomendações de outro agente sem confrontá-las com as evidências do repositório.
+- Consulte o agente `analista-negocio` antes de alterar semanticamente histórias de usuário ou o vocabulário do domínio. Ele prepara propostas e perguntas; somente o responsável pelo produto confirma necessidade, prioridade ou aceite.
 
 ## Arquitetura e decisões
 

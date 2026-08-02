@@ -44,7 +44,7 @@ relations:
   - type: governed_by
     target: CTX-GOV-002
   - type: informs
-    target: CTX-CMP-001
+    target: CTX-CMP-002
 ---
 
 # Event Storming enxuto
@@ -166,7 +166,7 @@ Esses elementos são decisões de domínio candidatas, não ADRs. Quando uma per
 
 ## Encaminhamento
 
-O [`WORK-008`](../acompanhamento/realizacoes.md#work-008--conduzir-event-storming-enxuto) foi encerrado com as seis questões revisadas. As descobertas confirmadas serão incorporadas ao glossário e às histórias em [`WORK-009`](../acompanhamento/roadmap.md#work-009--incorporar-descobertas-do-event-storming); o quadro permanece como evidência da descoberta, não como fonte concorrente de requisitos.
+O [`WORK-008`](../acompanhamento/realizacoes.md#work-008--conduzir-event-storming-enxuto) foi encerrado com as seis questões revisadas. As descobertas confirmadas foram incorporadas ao [glossário](glossario.md) e às [histórias](historias.md) em `WORK-009`; o quadro permanece como evidência da descoberta, não como fonte concorrente de requisitos.
 
 A revisão não tornou WebSocket, SSE, quantidade de quanta, persistência, armazenamento ou mecanismo de identidade decisões arquiteturais. Essas escolhas dependem do refinamento de requisitos, das ameaças, dos contratos e das medições correspondentes.
 

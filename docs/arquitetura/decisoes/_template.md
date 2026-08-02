@@ -9,7 +9,7 @@ relations:
   - type: derived_from
     target: CTX-REQ-001
   - type: affects
-    target: CTX-CMP-001
+    target: CTX-CMP-002
 ---
 
 # DEC-0000 — Título da decisão

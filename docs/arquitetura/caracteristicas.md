@@ -14,7 +14,7 @@ relations:
   - type: informed_by
     target: CTX-PRJ-001
   - type: informs
-    target: CTX-CMP-001
+    target: CTX-CMP-002
   - type: governed_by
     target: CTX-GOV-001
 ---
@@ -92,15 +92,18 @@ Exatamente três características foram selecionadas porque são as que mais alt
 
 ## Agrupamento preliminar por escopo
 
-Este agrupamento aplica o checkpoint de escopo antes de decidir componentes físicos ou topologia. Ele é uma hipótese reversível: uma característica que atravessa capacidades não cria automaticamente um quantum, e uma diferença de escopo só justifica distribuição quando exigir evolução, implantação ou operação independente.
+As características abaixo são propriedades do sistema. Elas foram analisadas depois da atribuição das histórias e antes da refatoração, sem criar, unir ou dividir componentes durante essa etapa. Somente a etapa seguinte usou as tensões encontradas para refatorar o inventário lógico.
 
-| Grupo candidato | Características e alcance | Capacidades lógicas afetadas | Implicação ainda em análise |
+Depois do refinamento, quatro regiões aparecem como hipóteses de agrupamento. Elas ajudam a estudar quanta, mas não estabelecem unidades de implantação nem transferem a responsabilidade por uma característica sistêmica para um componente isolado.
+
+| Região candidata | Características e alcance no sistema | Componentes afetados no modelo corrente | Evidência necessária antes de decidir topologia |
 |---|---|---|---|
-| Interação segura e autoridade do trabalho | `CA-01` da aceitação ao estado consultável; `CA-02` da identidade ao acesso ao resultado | Identidade e Acesso; Trabalhos de Vídeo | Pode permanecer em um único limite de implantação; separar essas capacidades não possui motivador operacional confirmado |
-| Execução confiável e elástica | `CA-01` na entrega e no relato do resultado; `CA-03` no backlog e nas tentativas | Trabalhos de Vídeo; Processamento de Mídia | É o único grupo que sugere um limite destacável, condicionado a carga medida e contrato durável que evite acoplamento síncrono |
-| Comunicação externa de falha | Segurança de conteúdo e confiabilidade da tentativa, hoje como suporte às características primárias | Trabalhos de Vídeo; Notificações | Não há característica prioritária nem regra confirmada que exija quantum próprio; pode continuar componente local ou adaptador |
+| Interação e acesso | `CA-02` na identidade, submissão, admissão, consulta e acesso ao resultado; `CA-01` na entrada aceita e recuperável | [`CMP-05`](componentes.md#cmp-05), [`CMP-06`](componentes.md#cmp-06), [`CMP-07`](componentes.md#cmp-07), [`CMP-09`](componentes.md#cmp-09), [`CMP-16`](componentes.md#cmp-16) | Perfil de acesso, requisitos de isolamento e necessidade de evolução ou operação independente |
+| Controle do ciclo | `CA-01` na aceitação, despacho, política de tentativas e consolidação do desfecho | [`CMP-08`](componentes.md#cmp-08), [`CMP-10`](componentes.md#cmp-10), [`CMP-11`](componentes.md#cmp-11), [`CMP-15`](componentes.md#cmp-15) | Semântica de transação, falha e recuperação entre os componentes |
+| Execução de mídia | `CA-03` no backlog e na concorrência; `CA-01` na execução, extração e empacotamento | [`CMP-12`](componentes.md#cmp-12), [`CMP-13`](componentes.md#cmp-13), [`CMP-14`](componentes.md#cmp-14) | Carga medida, custo de isolamento e contrato durável com o controle do ciclo |
+| Comunicação | Segurança do conteúdo e confiabilidade da entrega, hoje como suporte às características primárias | [`CMP-17`](componentes.md#cmp-17) | Canais, volume, política de reentrega e necessidade real de implantação independente |
 
-Há, portanto, mais de uma combinação candidata de características, mas ainda não existe evidência suficiente para concluir que elas precisam de unidades de implantação distintas. A comparação inicial deve permanecer entre um quantum em monólito modular e dois quanta com processamento destacável.
+As quatro regiões são candidatas e reversíveis. A quantidade e os limites dos quanta permanecem uma decisão futura, baseada também em acoplamento, dados, operação e medições.
 
 ## Trade-offs que orientam os componentes
 
