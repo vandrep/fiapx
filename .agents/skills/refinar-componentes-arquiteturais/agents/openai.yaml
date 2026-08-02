@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refinar Componentes Arquiteturais"
+  short_description: "Refina componentes, fronteiras e acoplamento"
+  default_prompt: "Use $refinar-componentes-arquiteturais para identificar e refinar iterativamente componentes, fronteiras e acoplamentos deste projeto."
