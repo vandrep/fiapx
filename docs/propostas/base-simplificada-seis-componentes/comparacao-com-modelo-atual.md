@@ -17,6 +17,8 @@ relations:
 
 # Comparação com o modelo canônico atual
 
+> Esta comparação retrata o baseline [`CTX-CMP-002`](../../arquitetura/componentes.md) vigente quando a proposta foi registrada. Desde 2026-08-03, o modelo ativo é [`CTX-CMP-003`](../../arquitetura/componentes-coesos.md), produzido pela consolidação conservadora de [`REQ-CHG-0003`](../../requisitos/refinamentos/REQ-CHG-0003.md). A tabela abaixo permanece histórica e não deve ser lida como estado corrente.
+
 ## Como ler
 
 Esta comparação torna explícitas divergências e preservações. Ela não promove a proposta nem encerra a validade do [modelo canônico `CTX-CMP-002`](../../arquitetura/componentes.md).

@@ -200,6 +200,50 @@ validate_story_backlinks() {
 
 validate_story_backlinks
 
+validate_accepted_decision_summary() {
+    local decisions_dir="$repo_root/docs/arquitetura/decisoes"
+    local project_context="$repo_root/docs/contexto-projeto.md"
+    local decision
+    local decision_metadata
+    local decision_id
+    local decisions_section
+    local accepted_count=0
+
+    [[ -d "$decisions_dir" && -e "$project_context" ]] || return
+
+    decisions_section=$(awk '
+        /^## Decisões vigentes$/ { inside = 1; next }
+        inside && /^## / { exit }
+        inside { print }
+    ' "$project_context")
+
+    while IFS= read -r -d '' decision; do
+        decision_metadata="$context_tmp/decision-$(basename "$decision").yaml"
+        awk 'NR == 1 { next } /^---$/ { exit } { print }' "$decision" >"$decision_metadata"
+
+        if [[ $(yq eval -r '.template // false' "$decision_metadata") == "true" ]]; then
+            continue
+        fi
+        if [[ $(yq eval -r '.status // ""' "$decision_metadata") != "aceita" ]]; then
+            continue
+        fi
+
+        accepted_count=$((accepted_count + 1))
+        decision_id=$(yq eval -r '.context_id // ""' "$decision_metadata")
+        if [[ -z "$decision_id" || ! "$decisions_section" =~ $decision_id ]]; then
+            echo "Erro: decisão aceita sem referência em docs/contexto-projeto.md: $decision_id." >&2
+            exit 1
+        fi
+    done < <(find "$decisions_dir" -maxdepth 1 -type f -name '[0-9]*.md' -print0)
+
+    if [[ $accepted_count -gt 0 ]] && grep -Fq 'Ainda não há decisões arquiteturais registradas' <<<"$decisions_section"; then
+        echo "Erro: o contexto do projeto afirma não haver decisões, mas existem ADRs aceitos." >&2
+        exit 1
+    fi
+}
+
+validate_accepted_decision_summary
+
 validate_work_register() {
     local document=$1
     local relative_path=${document#"$repo_root/"}
@@ -235,5 +279,7 @@ if [[ -e "$outcome_log" ]]; then
 fi
 
 bash "$repo_root/scripts/validar-componentes.sh"
+bash "$repo_root/scripts/validar-arquitetura-recomendada.sh"
+bash "$repo_root/docs/propostas/base-simplificada-seis-componentes/validacao/validar-pacote.sh"
 
 echo "Contexto válido: $(wc -l <"$ids_file") IDs únicos verificados."

@@ -11,6 +11,12 @@ relations:
     target: docs/referencia/projeto-original/
   - type: governed_by
     target: CTX-GOV-001
+  - type: informed_by
+    target: DEC-0002
+  - type: informed_by
+    target: DEC-0004
+  - type: informed_by
+    target: DEC-0005
 ---
 
 # Contexto do projeto FIAP X
@@ -49,7 +55,7 @@ Evoluir um protótipo que extrai imagens de um vídeo e gera um arquivo ZIP para
 - Entregar documentação da arquitetura e scripts de criação dos recursos persistentes.
 - Apresentar a documentação, a arquitetura e o sistema funcionando em um vídeo de até dez minutos.
 
-As tecnologias listadas no enunciado são recomendações, não decisões. Docker, Kubernetes ou Compose, RabbitMQ ou Kafka, PostgreSQL ou Redis, ferramentas de monitoramento e GitHub Actions devem ser avaliados contra os motivadores e restrições do projeto antes de serem adotados.
+As tecnologias listadas no enunciado nasceram como recomendações, não obrigações. Kubernetes e Keycloak foram posteriormente aceitos para o ambiente acadêmico em [`DEC-0002`](arquitetura/decisoes/0002-topologia-kubernetes.md) e [`DEC-0005`](arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md); RabbitMQ, PostgreSQL e object storage ainda dependem da validação de [`DEC-0003`](arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md).
 
 ## Estado observado do projeto-base
 
@@ -72,7 +78,12 @@ Uma preferência orienta a comparação de opções, mas ainda não é uma decis
 
 ## Decisões vigentes
 
-Ainda não há decisões arquiteturais registradas. Uma tecnologia recomendada pelo enunciado só passa a ser decisão quando o grupo aceitar seus trade-offs e registrar a escolha.
+- [`DEC-0001`](arquitetura/decisoes/0001-refinamento-de-componentes.md) está aceita e determina o ciclo de refinamento, a granularidade modular e a separação entre componentes lógicos, quanta e unidades de implantação.
+- [`DEC-0002`](arquitetura/decisoes/0002-topologia-kubernetes.md) aceita três quanta Kubernetes: `gestao-trabalhos`, `producao-resultados` e `notificador`.
+- [`DEC-0004`](arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md) aceita o baseline de oito componentes lógicos de [`CTX-CMP-003`](arquitetura/componentes-coesos.md).
+- [`DEC-0005`](arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) aceita Keycloak empacotado no Kubernetes para validação reproduzível na máquina do professor.
+
+A arquitetura física continua sendo refinada em [`CTX-ARCH-001`](arquitetura/comparacao-e-arquitetura-recomendada.md). Aceite durável, RabbitMQ, outbox/inbox, PostgreSQL e object storage permanecem `em_analise` em [`DEC-0003`](arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md) até a prova vertical.
 
 ## Questões em aberto
 
@@ -80,12 +91,12 @@ Estas respostas podem alterar as características prioritárias e as fronteiras 
 
 - Qual é o prazo, o tamanho do grupo e o tempo disponível para operação e demonstração?
 - A banca exige alguma tecnologia específica além do que está descrito como recomendação?
-- Qual ambiente de execução precisa ser demonstrado: local, nuvem ou ambos?
+- Quais características, se alguma, um ambiente futuro de produção terá além do Kubernetes local autocontido da demonstração?
 - Quais volume, tamanho e duração de vídeo devem ser suportados na demonstração?
 - O que significa "não perder uma requisição" nos casos de reinício, indisponibilidade e falha durante o processamento?
 - Quais estados do processamento precisam ser visíveis e por quanto tempo resultados e vídeos devem ser retidos?
-- Qual mecanismo de autenticação e qual canal de notificação atendem ao escopo acadêmico?
-- Existe limite de custo ou dependência de contas externas para a apresentação?
+- Qual canal, consentimento e garantia de entrega atendem à notificação de falha no escopo acadêmico?
+- Quais limites de CPU, memória e tempo de bootstrap a máquina usada na apresentação impõe ao ambiente autocontido?
 
 ## Manutenção deste contexto
 

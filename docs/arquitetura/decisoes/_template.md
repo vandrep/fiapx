@@ -9,7 +9,7 @@ relations:
   - type: derived_from
     target: CTX-REQ-001
   - type: affects
-    target: CTX-CMP-002
+    target: CTX-CMP-003
 ---
 
 # DEC-0000 — Título da decisão
@@ -35,6 +35,8 @@ Compare as opções viáveis, incluindo manter o estado atual quando fizer senti
 ## Decisão
 
 Enquanto o estado for `em_analise`, registre aqui a recomendação condicionada e o que falta para aceitá-la. Quando aceita, registre a escolha e o motivo determinante.
+
+Antes de alterar o estado para `aceita`, revise nos nós diretamente citados as questões e marcações `A confirmar` que a decisão resolveu. Atualize a fonte ativa ou acrescente uma nota temporal à evidência histórica; não reescreva a descoberta anterior nem transforme uma escolha técnica em novo critério de negócio.
 
 ## Consequências
 

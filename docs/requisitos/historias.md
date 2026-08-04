@@ -28,6 +28,8 @@ relations:
     target: CTX-CHAR-001
   - type: informs
     target: CTX-CMP-002
+  - type: informs
+    target: CTX-CMP-003
   - type: governed_by
     target: CTX-GOV-001
   - type: governed_by
@@ -45,7 +47,7 @@ Estas histórias traduzem o [enunciado](../enunciado.md) para unidades que possa
 - `Inferida`: a formulação ou o critério foi deduzido de uma necessidade declarada e ainda pode ser corrigido.
 - `A confirmar`: falta uma decisão que altera o comportamento esperado.
 
-O ator principal é denominado `Usuário`. Cadastro, recuperação de senha e administração de contas não integram as histórias deste primeiro incremento porque o enunciado exige proteção por usuário e senha, mas não descreve como as contas são provisionadas. A autogestão de credenciais e dados pessoais foi validada como direção futura; seu primeiro recorte e o provisionamento das contas da demonstração continuam `A confirmar`.
+O ator principal é denominado `Usuário`. Cadastro, recuperação de senha e administração de contas não integram as histórias deste primeiro incremento porque o enunciado exige proteção por usuário e senha, mas não descreve autogestão. O provisionamento reproduzível das contas da demonstração foi decidido em [`DEC-0005`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md); a autogestão de credenciais e dados pessoais permanece direção futura, com primeiro recorte `A confirmar`.
 
 ## Histórias do primeiro ciclo
 
@@ -63,8 +65,9 @@ Critérios candidatos:
 
 - credenciais válidas estabelecem uma identidade utilizável nas operações protegidas;
 - credenciais inválidas não concedem acesso;
-- uma requisição não autenticada a uma operação protegida é recusada;
-- o mecanismo de sessão ou token e o provisionamento das contas estão `A confirmar`.
+- uma requisição não autenticada a uma operação protegida é recusada.
+
+**Realização técnica vigente:** [`DEC-0005`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) escolhe Keycloak/OIDC e ao menos dois usuários reproduzíveis para a demonstração. Essa decisão não acrescenta critério de negócio nem inclui autogestão de contas no incremento.
 
 <a id="us-02"></a>
 
@@ -89,11 +92,11 @@ Critérios candidatos:
 
 ### US-03 — Processar vídeos concorrentemente
 
-**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md)
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0003`](refinamentos/REQ-CHG-0003.md)
 
 **Classificação:** Declarada; isolamento por trabalho é Inferido.
 
-Como usuário, quero que meu vídeo seja processado mesmo quando existirem outros trabalhos para que a solução suporte mais de um processamento ao mesmo tempo.
+Como usuário, quero que meu vídeo seja processado para obter as imagens extraídas, mesmo quando existirem outros trabalhos.
 
 Critérios candidatos:
 
@@ -106,7 +109,7 @@ Critérios candidatos:
 
 ### US-04 — Preservar trabalhos aceitos durante picos e falhas
 
-**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md) · [`REQ-CHG-0003`](refinamentos/REQ-CHG-0003.md)
 
 **Classificação:** Declarada; semântica de recuperação e duplicidade é Inferida; distinção entre submissão e retentativa `Validada na descoberta`.
 
@@ -126,7 +129,7 @@ Critérios candidatos:
 
 ### US-05 — Consultar os próprios trabalhos
 
-**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md) · [`REQ-CHG-0003`](refinamentos/REQ-CHG-0003.md)
 
 **Classificação:** Declarada; conjunto de estados é Inferido.
 
@@ -145,7 +148,7 @@ Critérios candidatos:
 
 ### US-06 — Baixar o resultado
 
-**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md) · [`REQ-CHG-0003`](refinamentos/REQ-CHG-0003.md)
 
 **Classificação:** Declarada; autorização por propriedade é Inferida da proteção por usuário.
 
@@ -162,7 +165,7 @@ Critérios candidatos:
 
 ### US-07 — Ser notificado sobre falha
 
-**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md)
+**Histórico de refinamento:** [`REQ-CHG-0001`](refinamentos/REQ-CHG-0001.md) · [`REQ-CHG-0002`](refinamentos/REQ-CHG-0002.md) · [`REQ-CHG-0003`](refinamentos/REQ-CHG-0003.md)
 
 **Classificação:** Declarada como possibilidade; opt-in, canal e garantias são `A confirmar`.
 
@@ -175,7 +178,26 @@ Critérios candidatos:
 - problemas de admissão pertencem à resposta da submissão e não à notificação assíncrona de processamento;
 - a falha do canal de comunicação não desfaz nem oculta o estado do processamento;
 - mensagens externas não expõem caminhos internos, comandos, credenciais ou diagnósticos sensíveis;
-- atualização em tempo real pode comunicar andamento e falha posteriores à aceitação, mas transporte, canal externo, consentimento, quantidade de tentativas de entrega e confirmação estão `A confirmar`.
+- notificações de submissão, sucesso ou progresso e a configuração de preferências ou múltiplos canais são candidatas futuras, fora desta história; para a notificação de falha, transporte, canal externo, consentimento, quantidade de tentativas de entrega e confirmação estão `A confirmar`.
+
+## Consolidação conservadora da proposta R6
+
+O refinamento [`REQ-CHG-0003`](refinamentos/REQ-CHG-0003.md) confrontou as dez histórias da [proposta R6](../propostas/base-simplificada-seis-componentes/historias.md) com este conjunto canônico. A decisão confirmada mantém `US-01..07`: sobreposições não criam novas histórias e possibilidades futuras não passam a integrar o incremento atual.
+
+| História R6 | Tratamento confirmado | Destino ou limite no conjunto canônico |
+|---|---|---|
+| [`R6-US-01`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-01) — Submeter vídeo | Sobreposição | Já coberta por [`US-02`](#us-02), sem alterar seus critérios de admissão e aceite recuperável |
+| [`R6-US-02`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-02) — Baixar imagens em conjunto | Sobreposição | Já coberta por [`US-06`](#us-06); o ZIP continua sendo o resultado obrigatório |
+| [`R6-US-03`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-03) — Visualizar trabalhos de vídeo | Sobreposição | Já coberta por [`US-05`](#us-05), sem ampliar os campos confirmados da consulta |
+| [`R6-US-04`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-04) — Receber notificações do trabalho | Candidata futura na parte que amplia o escopo | [`US-07`](#us-07) permanece restrita à falha; submissão, sucesso e progresso não são promovidos |
+| [`R6-US-05`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-05) — Processar vídeo | Sobreposição | O valor de extrair imagens foi explicitado em [`US-03`](#us-03), preservando concorrência controlada e isolamento |
+| [`R6-US-06`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-06) — Consultar motivo da falha | `A confirmar` | Pode refinar [`US-05`](#us-05), mas conteúdo, sanitização e nível de detalhe ainda não foram confirmados |
+| [`R6-US-07`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-07) — Reprocessar trabalho com falha | Refinamento já preservado | Corresponde ao reprocessamento do mesmo trabalho já previsto em [`US-04`](#us-04); não cria nova história nem remove tentativas e retentativas automáticas |
+| [`R6-US-08`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-08) — Cancelar trabalho | Candidata futura | Cancelamento permanece fora de [`US-04`](#us-04) e do incremento atual |
+| [`R6-US-09`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-09) — Configurar notificações | Candidata futura | Preferências, eventos adicionais e múltiplos canais permanecem fora de [`US-07`](#us-07) |
+| [`R6-US-10`](../propostas/base-simplificada-seis-componentes/historias.md#r6-us-10) — Baixar imagem individual | Candidata futura | Download individual permanece fora de [`US-06`](#us-06); o download vigente continua sendo o ZIP |
+
+`US-01` continua obrigatória, embora a proposta R6 tenha adiado identidade. Permanecem igualmente preservados o processamento concorrente de `US-03` e, em `US-04`, não perda, reentrega idempotente, retentativa automática limitada e reprocessamento manual no mesmo trabalho.
 
 ## Contratos conceituais candidatos
 
@@ -203,7 +225,9 @@ Estes itens não são histórias de usuário e, portanto, não recebem um compon
 1. Quais formatos, tamanhos, durações, volumes, concorrência e tempo de espera precisam ser demonstrados?
 2. Quantas retentativas automáticas compõem um ciclo, quais falhas são transitórias e como aplicar espera progressiva e controle concorrente?
 3. Que mecanismo comprova atomicidade entre aceitação, preservação e entrega ao processamento?
-4. Como as contas da demonstração serão provisionadas e qual será o primeiro recorte futuro de autogestão?
+4. Qual será o primeiro recorte futuro de autogestão de credenciais e dados pessoais?
 5. A notificação exige consentimento, canal externo ou garantia de entrega? Atualização em tempo real será necessária e, se for, com qual transporte?
+6. A consulta deve oferecer detalhe além da listagem?
+7. O usuário poderá consultar um motivo de falha sanitizado e, se puder, com qual nível de detalhe?
 
 Essas lacunas mantêm detalhes como `A confirmar`, mas não invalidam as regras de admissão, retentativa, retenção e comunicação já validadas.

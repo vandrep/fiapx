@@ -15,6 +15,8 @@ relations:
     target: CTX-PRJ-001
   - type: informs
     target: CTX-CMP-002
+  - type: informs
+    target: CTX-CMP-003
   - type: governed_by
     target: CTX-GOV-001
 ---

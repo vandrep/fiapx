@@ -1,9 +1,10 @@
 ---
 context_id: CTX-CMP-002
 context_type: component_model
-status: em_analise
+status: substituido
 recorded_at: 2026-08-02
 valid_from: 2026-08-02
+valid_until: 2026-08-03
 entities:
   - CMP-05
   - CMP-06
@@ -36,6 +37,8 @@ relations:
 ---
 
 # Identificação e refatoração de componentes modulares
+
+> Este modelo foi substituído pelo [`CTX-CMP-003`](componentes-coesos.md) em 2026-08-03. Ele permanece íntegro como evidência da granularidade anterior e das duas iterações que a produziram; não representa mais o inventário corrente.
 
 ## Escopo e lente
 

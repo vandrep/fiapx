@@ -113,26 +113,29 @@ Outros tipos podem possuir fluxos próprios, como `em_refinamento` para históri
 | `CTX-REQ-001` | Conjunto de requisitos | `docs/requisitos/historias.md` |
 | `CTX-CHAR-001` | Características arquiteturais | `docs/arquitetura/caracteristicas.md` |
 | `CTX-CMP-001` | Modelo histórico de componentes macro | `docs/arquitetura/componentes-macro.md` |
-| `CTX-CMP-002` | Modelo corrente de componentes modulares | `docs/arquitetura/componentes.md` |
+| `CTX-CMP-002` | Modelo histórico de componentes modulares | `docs/arquitetura/componentes.md` |
+| `CTX-CMP-003` | Modelo ativo de componentes coesos | [`docs/arquitetura/componentes-coesos.md`](../arquitetura/componentes-coesos.md) |
 | `DEC-0001` | Decisão sobre granularidade e ciclo de componentes | `docs/arquitetura/decisoes/0001-refinamento-de-componentes.md` |
+| `CTX-ARCH-001` | Comparação e arquitetura recomendada em análise | `docs/arquitetura/comparacao-e-arquitetura-recomendada.md` |
+| `DEC-0002` | Decisão aceita sobre topologia Kubernetes | `docs/arquitetura/decisoes/0002-topologia-kubernetes.md` |
+| `DEC-0003` | Decisão em análise sobre aceite, entrega durável e persistência | `docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md` |
+| `DEC-0004` | Decisão aceita sobre oito componentes do núcleo | `docs/arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md` |
+| `DEC-0005` | Decisão aceita sobre Keycloak no ambiente de validação | `docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md` |
 | `CTX-ROADMAP-001` | Roadmap ativo | `docs/acompanhamento/roadmap.md` |
 | `CTX-OUTCOME-001` | Registro de realizações | `docs/acompanhamento/realizacoes.md` |
 | `WORK-001` a `WORK-016` | Itens de trabalho | Roadmap ou registro de realizações, conforme o estado |
-| `REQ-CHG-0001` e `REQ-CHG-0002` | Mudanças de requisitos | `docs/requisitos/refinamentos/` |
+| `REQ-CHG-0001` a `REQ-CHG-0003` | Mudanças de requisitos | `docs/requisitos/refinamentos/` |
 | `CMP-01` a `CMP-04` | Componentes lógicos históricos | Inventário macro de `CTX-CMP-001` |
-| `CMP-05` | Componente lógico | Identidade e Acesso |
-| `CMP-06` | Componente lógico | Submissão de Vídeos |
-| `CMP-07` | Componente lógico | Admissão de Vídeos |
-| `CMP-08` | Componente lógico | Aceitação de Trabalhos |
-| `CMP-09` | Componente lógico | Consulta de Trabalhos |
-| `CMP-10` | Componente lógico | Política de Tentativas |
-| `CMP-11` | Componente lógico | Despacho de Processamento |
-| `CMP-12` | Componente lógico | Execução de Tentativas |
-| `CMP-13` | Componente lógico | Extração de Imagens |
-| `CMP-14` | Componente lógico | Empacotamento de Resultados |
-| `CMP-15` | Componente lógico | Registro de Desfecho |
-| `CMP-16` | Componente lógico | Acesso a Resultados |
-| `CMP-17` | Componente lógico | Comunicação de Falhas |
+| `CMP-05` a `CMP-17` | Componentes lógicos históricos | Inventário de `CTX-CMP-002` |
+| `CMP-18` | Componente lógico ativo | Autenticação e Identidade |
+| `CMP-19` | Componente lógico ativo | Submissão e Admissão |
+| `CMP-20` | Componente lógico ativo | Ciclo do Trabalho |
+| `CMP-21` | Componente lógico ativo | Processamento de Mídia |
+| `CMP-22` | Componente lógico ativo | Publicação de Resultados |
+| `CMP-23` | Componente lógico ativo | Consulta de Trabalhos |
+| `CMP-24` | Componente lógico ativo | Acesso a Resultados |
+| `CMP-25` | Componente lógico ativo | Comunicação de Falhas |
+| `AR-CMP-01` a `AR-CMP-08` | Rótulos lógicos históricos da análise comparativa | `docs/arquitetura/comparacao-e-arquitetura-recomendada.md` |
 
 Adicione novos IDs quando novos nós surgirem. Se uma fronteira for dividida, unida ou mudar de significado, crie novos IDs e conecte-os aos anteriores; não recicle a identidade antiga.
 
@@ -140,4 +143,4 @@ Itens de trabalho preservam o ID quando migram do roadmap para o registro de rea
 
 ## Validação
 
-Execute `scripts/validar-contexto.sh` depois de alterar metadados. A verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução. Para o modelo corrente de componentes, ela também chama `scripts/validar-componentes.sh`, que verifica a ordem do ciclo, a atribuição única das histórias, a motivação da refatoração e o caráter apenas candidato dos agrupamentos de quanta. Essas são fitness functions estruturais e não substituem a revisão do raciocínio registrado.
+Execute [`scripts/validar-contexto.sh`](../../scripts/validar-contexto.sh) depois de alterar metadados. A verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução. Ela também chama os validadores do modelo ativo, da arquitetura recomendada e do pacote R6 histórico. Esses controles verificam ordem do ciclo, atribuição única das histórias, motivação da refatoração, autoridades exclusivas, separação entre três quanta e workloads de plataforma, consolidação conservadora e precedência temporal. São fitness functions estruturais e não substituem a revisão do raciocínio registrado.

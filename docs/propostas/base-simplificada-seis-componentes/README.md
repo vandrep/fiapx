@@ -9,6 +9,10 @@ relations:
     target: CTX-REQ-001
   - type: informed_by
     target: CTX-CMP-002
+  - type: informs
+    target: REQ-CHG-0003
+  - type: informs
+    target: CTX-CMP-003
   - type: informed_by
     target: CTX-CHAR-001
   - type: governed_by
@@ -17,11 +21,13 @@ relations:
 
 # Base simplificada de seis componentes
 
+> **Atualização temporal — 2026-08-03:** o pacote não foi promovido integralmente. [`REQ-CHG-0003`](../../requisitos/refinamentos/REQ-CHG-0003.md) consolidou suas sobreposições sem ampliar o núcleo, e [`CTX-CMP-003`](../../arquitetura/componentes-coesos.md) aproveitou uniões coesas preservando identidade, tentativas e ZIP. As extensões candidatas permanecem futuras.
+
 ## Finalidade e precedência
 
 Este diretório preserva, de forma autocontida, o refinamento conduzido na conversa de 3 de agosto de 2026. Ele registra histórias, responsabilidades, decisões, alternativas e próximos passos para que o trabalho possa continuar em outro computador.
 
-O pacote é uma **proposta em análise**. Não substitui o conjunto canônico de [histórias `CTX-REQ-001`](../../requisitos/historias.md), o [modelo de componentes `CTX-CMP-002`](../../arquitetura/componentes.md), as [características `CTX-CHAR-001`](../../arquitetura/caracteristicas.md) nem o [roadmap oficial](../../acompanhamento/roadmap.md). Em caso de divergência, esses artefatos canônicos prevalecem até uma promoção explícita.
+O pacote é uma **proposta histórica em análise**, não uma segunda fonte canônica. Não substitui o conjunto de [histórias `CTX-REQ-001`](../../requisitos/historias.md), o [modelo ativo `CTX-CMP-003`](../../arquitetura/componentes-coesos.md), as [características `CTX-CHAR-001`](../../arquitetura/caracteristicas.md) nem o [roadmap oficial](../../acompanhamento/roadmap.md). O antigo [`CTX-CMP-002`](../../arquitetura/componentes.md) permanece como baseline temporal usado quando esta comparação foi escrita.
 
 Base Git usada na consolidação: `b71c41478d93bff247bc7412bf3721b808bee070`.
 

@@ -8,7 +8,8 @@ Identidade, relações, procedência e validade temporal seguem a [convenção d
 
 - visão e diagramas que respondam a uma pergunta arquitetural concreta;
 - [características arquiteturais](caracteristicas.md) priorizadas, com escopo e forma de verificação;
-- [inventário e refinamento iterativo de componentes](componentes.md), com o [modelo macro substituído](componentes-macro.md) preservado como histórico;
+- [modelo ativo de oito componentes coesos](componentes-coesos.md), com os modelos [modular de treze componentes](componentes.md) e [macro](componentes-macro.md) preservados como históricos;
+- [comparação entre o canônico e a proposta R6, com arquitetura recomendada](comparacao-e-arquitetura-recomendada.md), mantendo explícita a diferença entre componentes, quanta e topologia Kubernetes;
 - [decisões duráveis](decisoes/);
 - mecanismos de validação e sinais que indiquem quando uma decisão deve ser revista.
 

@@ -18,6 +18,10 @@ relations:
     target: CTX-PRJ-001
   - type: informed_by
     target: CTX-CMP-002
+  - type: informed_by
+    target: CTX-CMP-003
+  - type: informed_by
+    target: CTX-ARCH-001
 ---
 
 # Roadmap ativo
@@ -42,17 +46,18 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Dependência:** fronteiras candidatas de [`WORK-010`](realizacoes.md#work-010--refinar-componentes-e-delimitar-quanta-arquiteturais), concluído.
 - **Objetivo:** identificar ativos, fronteiras de confiança, ameaças, histórias de abuso, controles e riscos residuais do fluxo.
 - **Resultado verificável:** ameaças priorizadas ligadas a histórias, características, componentes ou quanta; mitigação e forma de teste para os riscos relevantes.
-- **Escopo inicial:** autenticação e autorização por proprietário, autogestão de credenciais e dados pessoais, upload não confiável com validação progressiva, execução do FFmpeg, novas submissões sem cota acumulada, limites operacionais, retentativas automáticas limitadas, reprocessamento, isolamento de trabalhos, consumo de recursos, retenção sem prazo, download e notificações.
+- **Escopo inicial:** Keycloak/OIDC e autorização por proprietário, bootstrap sem segredo no Git, upload não confiável com validação progressiva, execução do FFmpeg, novas submissões sem cota acumulada, limites operacionais, retentativas automáticas limitadas, reprocessamento, isolamento de trabalhos, consumo de recursos, retenção sem prazo, download e comunicação de falha.
 - **Próxima ação:** desenhar o fluxo de dados e marcar onde dados ou identidades cruzam uma fronteira de confiança.
 
 ### WORK-012 — Registrar as primeiras decisões arquiteturais
 
-- **Estado:** `a_fazer`.
+- **Estado:** `em_andamento`.
 - **Dependências:** [`WORK-010`](realizacoes.md#work-010--refinar-componentes-e-delimitar-quanta-arquiteturais), concluído; riscos relevantes de [`WORK-011`](#work-011--executar-threat-modeling-inicial) devem informar decisões afetadas.
 - **Objetivo:** registrar somente escolhas duráveis que já tenham pergunta, opções e evidências suficientes.
 - **Resultado verificável:** ADRs graph-ready com trade-offs, consequências, validação e sinais de revisão.
-- **Decisões candidatas:** semântica de aceitação e entrega, limites de quanta, estilo inicial de implantação e escolha de Java com Quarkus.
-- **Próxima ação:** ordenar as decisões pela incerteza que bloqueia a primeira fatia executável.
+- **Decisões aceitas:** [`DEC-0002`](../arquitetura/decisoes/0002-topologia-kubernetes.md), três quanta Kubernetes; [`DEC-0004`](../arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md), oito componentes; [`DEC-0005`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md), Keycloak autocontido.
+- **Decisão em análise:** [`DEC-0003`](../arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md), sobre aceite, RabbitMQ, outbox/inbox, PostgreSQL e object storage. Java com Quarkus continua apenas preferência.
+- **Próxima ação:** usar os riscos de [`WORK-011`](#work-011--executar-threat-modeling-inicial) e a primeira fatia executável para confrontar `DEC-0003` e registrar a escolha de Java/Quarkus separadamente.
 
 ## Depois — preparar e validar a implementação
 
@@ -69,7 +74,7 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Estado:** `a_fazer`.
 - **Dependências:** decisões necessárias de [`WORK-012`](#work-012--registrar-as-primeiras-decisões-arquiteturais) e suporte de [`WORK-013`](#work-013--ativar-especialista-java-e-quarkus) se Java com Quarkus for aceito.
 - **Objetivo:** validar a principal fronteira e a semântica de recuperação antes de implementar todo o produto.
-- **Resultado verificável:** trabalho sintético aceito e persistido, repetição/reinício exercitados, consulta disponível e verificações automatizadas executáveis pelos agentes.
+- **Resultado verificável:** cluster criado do zero com Keycloak e três deployments de aplicação; dois usuários autenticados; trabalho sintético aceito e persistido; repetição/reinício, acesso cruzado, ZIP e falha do notificador exercitados por verificações automatizadas.
 - **Sinais mínimos:** compilação, testes, formatação/análise estática e teste de dependência arquitetural proporcional à estrutura escolhida.
 - **Próxima ação:** transformar os cenários de aceitação e falha do primeiro ADR em testes executáveis.
 

@@ -45,6 +45,8 @@ relations:
     target: CTX-GOV-002
   - type: informs
     target: CTX-CMP-002
+  - type: informs
+    target: CTX-CMP-003
 ---
 
 # Event Storming enxuto
@@ -152,6 +154,8 @@ Esses elementos são decisões de domínio candidatas, não ADRs. Quando uma per
 | `ES-Q-04` | Vídeo de origem, resultado e histórico permanecem retidos por tempo indeterminado, sem expiração automática, por enquanto. | Regra declarada e revisável quando custo, privacidade, obrigação legal ou solicitação de exclusão exigirem uma política explícita. |
 | `ES-Q-05` | Problemas de validação são comunicados juntos depois de executar todas as verificações de admissão aplicáveis. Uma falha de processamento é comunicada somente depois de registrada e consolidada; a falha do canal continua sem alterar o trabalho. | Momento declarado. WebSocket e SSE são opções candidatas para atualização em tempo real, não escolhas aceitas; consentimento, canal externo e garantias de entrega seguem para refinamento. |
 | `ES-Q-06` | A direção desejada é permitir autogestão de conta, incluindo progressivamente credenciais e dados pessoais, como em aplicações modernas. | Visão declarada, não requisito integral do primeiro incremento. O provisionamento da demonstração e o recorte inicial de cadastro, recuperação, alteração, exclusão e dados pessoais permanecem a definir. |
+
+**Atualização temporal (2026-08-03):** a [`DEC-0005`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) resolveu, para o ambiente acadêmico, o mecanismo de autenticação e o provisionamento reproduzível das contas de demonstração. Isso não altera a descoberta registrada em `ES-DEC-01`/`ES-Q-06` nem promove autogestão: seu primeiro recorte continua em análise.
 
 ## Revisão de consistência
 

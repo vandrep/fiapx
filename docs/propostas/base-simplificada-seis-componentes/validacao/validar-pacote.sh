@@ -29,6 +29,23 @@ done
 stories="$package_root/historias.md"
 components="$package_root/componentes.md"
 roadmap="$package_root/acompanhamento/roadmap.md"
+package_readme="$package_root/README.md"
+comparison="$package_root/comparacao-com-modelo-atual.md"
+
+# shellcheck disable=SC2016 # Backticks are Markdown literals, not expansion.
+temporal_guardrails=(
+    'status: em_analise'
+    'o pacote não foi promovido integralmente'
+    'proposta histórica em análise'
+    'modelo ativo `CTX-CMP-003`'
+    'As extensões candidatas permanecem futuras.'
+)
+for guardrail in "${temporal_guardrails[@]}"; do
+    if ! grep -Fq "$guardrail" "$package_readme"; then
+        echo "Erro: salvaguarda temporal ausente no pacote histórico: $guardrail" >&2
+        exit 1
+    fi
+done
 
 story_ids=$(sed -n 's/^### \(R6-US-[0-9][0-9]\) —.*/\1/p' "$stories" | sort)
 story_count=$(wc -l <<<"$story_ids")
@@ -74,6 +91,18 @@ if ! grep -Fqx -- '- não há conceito de tentativa ou retentativa automática n
     echo "Erro: a retirada de tentativas não está preservada na convergência." >&2
     exit 1
 fi
+
+promotion_gates=(
+    'reintroduzir ou não identidade e segurança na mesma rodada canônica;'
+    'reconciliar a retirada de tentativas com regras já validadas'
+    'decidir se admissão e aceitação simplificadas preservam as garantias de confiabilidade necessárias;'
+)
+for gate in "${promotion_gates[@]}"; do
+    if ! grep -Fq "$gate" "$comparison"; then
+        echo "Erro: salvaguarda obrigatória antes da promoção ausente: $gate" >&2
+        exit 1
+    fi
+done
 
 declared_work=$(sed -n '/^entities:$/,/^relations:$/ s/^  - \(R6-WORK-[0-9][0-9]\)$/\1/p' "$roadmap" | sort)
 documented_work=$(sed -n 's/^### \(R6-WORK-[0-9][0-9]\) —.*/\1/p' "$roadmap" | sort)
@@ -121,4 +150,4 @@ while IFS= read -r -d '' document; do
     done < <(grep -oE '\]\([^)]*\)' "$document" || true)
 done < <(find "$package_root" -type f -name '*.md' -print0)
 
-echo "Pacote válido: 10 histórias, 6 componentes, roadmap consistente, diagramas fechados e links locais resolvidos."
+echo "Pacote histórico válido e não promovido integralmente: 10 histórias, 6 componentes e salvaguardas verificadas."
