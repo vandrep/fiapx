@@ -14,6 +14,8 @@ relations:
 
 # DEC-0000 — Título da decisão
 
+> Navegação: [decisões arquiteturais](README.md) · [arquitetura](../README.md)
+
 Ao copiar este modelo, substitua o ID e as datas e remova `template: true` para que o registro passe a ser validado como um nó real.
 
 ## Pergunta

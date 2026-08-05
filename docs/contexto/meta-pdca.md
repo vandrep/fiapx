@@ -13,6 +13,8 @@ relations:
 
 # Meta-PDCA para erros e falhas de processo
 
+> Navegação: [contexto e decisões](README.md) · [documentação](../README.md)
+
 ## Objetivo
 
 Impedir que a correção de um erro trate somente seu efeito imediato. Toda falha encontrada ativa dois ciclos conectados:

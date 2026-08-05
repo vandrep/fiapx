@@ -16,13 +16,15 @@ relations:
 
 # REQ-CHG-0000 — Título do refinamento
 
+> Navegação: [refinamentos de requisitos](README.md) · [histórias](../historias.md)
+
 Remova `template: true`, substitua IDs, atores e datas e acrescente `confirmed_by` e `confirmed_at` somente quando houver confirmação do responsável pelo produto.
 
 ## Alterações
 
 | História | Alteração semântica | Classificação anterior | Classificação resultante | Evidência | Confirmação |
 |---|---|---|---|---|---|
-| [`US-00`](../historias.md#us-00) | Descrever o que mudou, sem copiar o diff | `A confirmar` | `Validada na descoberta` | Fonte navegável | Responsável e data, ou `Não confirmada` |
+| [`US-00`](../historias.md) | Descrever o que mudou, sem copiar o diff | `A confirmar` | `Validada na descoberta` | Fonte navegável | Responsável e data, ou `Não confirmada` |
 
 ## Questões e consequências
 

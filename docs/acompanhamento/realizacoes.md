@@ -63,7 +63,7 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 
 - **Estado:** `concluido`.
 - **Concluído em:** 2026-08-01.
-- **Resultado:** o modelo corrente ganhou uma representação Mermaid com interações e limites explícitos.
+- **Resultado:** o modelo então vigente [`CTX-CMP-001`](../arquitetura/componentes-macro.md) ganhou uma representação Mermaid com interações e limites explícitos.
 - **Evidência:** seção “Diagrama lógico” em [`../arquitetura/componentes-macro.md`](../arquitetura/componentes-macro.md).
 - **Relações:** refina `CTX-CMP-001`.
 
@@ -120,7 +120,7 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Estado:** `concluido`.
 - **Concluído em:** 2026-08-02.
 - **Resultado:** o ciclo do capítulo 8 foi reexecutado na ordem `identificar → atribuir histórias → analisar responsabilidades → analisar características do sistema → refatorar → repetir e verificar`. Seis componentes iniciais foram diagnosticados sem alterar o inventário durante as análises e refatorados em treze componentes modulares; cada história possui exatamente um responsável principal nas duas atribuições.
-- **Evidência:** modelo corrente [`CTX-CMP-002`](../arquitetura/componentes.md), decisão [`DEC-0001`](../arquitetura/decisoes/0001-refinamento-de-componentes.md), características sistêmicas [`CTX-CHAR-001`](../arquitetura/caracteristicas.md#agrupamento-preliminar-por-escopo), skill [`refinar-componentes-arquiteturais`](../../.agents/skills/refinar-componentes-arquiteturais/SKILL.md) e fitness function [`validar-componentes.sh`](../../scripts/validar-componentes.sh).
+- **Evidência:** modelo então corrente [`CTX-CMP-002`](../arquitetura/componentes.md), decisão [`DEC-0001`](../arquitetura/decisoes/0001-refinamento-de-componentes.md), características sistêmicas [`CTX-CHAR-001`](../arquitetura/caracteristicas.md#agrupamento-preliminar-por-escopo), skill [`refinar-componentes-arquiteturais`](../../.agents/skills/refinar-componentes-arquiteturais/SKILL.md) e fitness function [`validar-componentes.sh`](../../scripts/validar-componentes.sh), na versão vigente em 2026-08-02.
 - **Relações:** `DEC-0001` produziu `CTX-CMP-002`, que substitui [`CTX-CMP-001`](../arquitetura/componentes-macro.md) sem apagar as iterações anteriores; informa [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial) e [`WORK-012`](../acompanhamento/roadmap.md#work-012--registrar-as-primeiras-decisões-arquiteturais).
 - **Informação relevante:** componente lógico é uma manifestação modular de comportamento, implementável como pacote, módulo ou biblioteca, e não equivale a microsserviço ou quantum. Quatro agrupamentos de quanta foram preservados apenas como hipóteses reversíveis; quantidade, limites e topologia não foram aceitos.
 - **Validação:** o modelo passou na validação de contexto e nos controles de ordem das etapas, atribuição única das sete histórias, motivação dos treze componentes e quatro agrupamentos apenas candidatos. Casos contrafactuais comprovaram rejeição de fase ausente ou fora de ordem, história ausente ou duplicada, componente sem motivação e afirmação prematura de topologia.

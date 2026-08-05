@@ -31,16 +31,22 @@ relations:
   - type: informed_by
     target: R6-CHAR-001
   - type: informed_by
+    target: DEC-0001
+  - type: informed_by
     target: DEC-0002
   - type: informed_by
     target: DEC-0004
   - type: informed_by
     target: DEC-0005
+  - type: depends_on
+    target: DEC-0003
   - type: governed_by
     target: CTX-GOV-001
 ---
 
 # Comparação e arquitetura recomendada
+
+> Navegação: [arquitetura](README.md) · [decisões](decisoes/README.md) · [README principal](../../README.md)
 
 ## Estado, objetivo e linguagem de evidência
 
@@ -60,22 +66,22 @@ As afirmações são diferenciadas assim:
 
 Os identificadores locais `AR-CMP-01..08` usados durante a comparação inicial são preservados como histórico e correspondem, na mesma ordem, a `CMP-18..25`. Os IDs canônicos e suas autoridades pertencem somente a [`CTX-CMP-003`](componentes-coesos.md); este documento não os redefine.
 
-## Escopo temporal e prova Git
+## Snapshot Git da comparação histórica
 
-**Observado em 2026-08-03:**
+**Snapshot observado em 2026-08-03:**
 
 | Evidência | Resultado |
 |---|---|
-| `git rev-parse HEAD` | `896914135f68c5755e90cd2c173943bb5f8763ee` |
-| `git rev-parse HEAD^` | `b71c41478d93bff247bc7412bf3721b808bee070` |
-| `git merge-base HEAD^ b71c414` | `b71c41478d93bff247bc7412bf3721b808bee070` |
-| Assunto de `HEAD` | `docs: registra proposta isolada de refinamento` |
-| `git diff-tree --no-commit-id --name-status -r HEAD` | 11 arquivos adicionados (`A`), todos sob `docs/propostas/base-simplificada-seis-componentes/` |
+| Commit da proposta comparada | `896914135f68c5755e90cd2c173943bb5f8763ee` |
+| Pai do commit da proposta | `b71c41478d93bff247bc7412bf3721b808bee070` |
+| `git merge-base 8969141 b71c414` | `b71c41478d93bff247bc7412bf3721b808bee070` |
+| Assunto de `8969141` | `docs: registra proposta isolada de refinamento` |
+| `git diff-tree --no-commit-id --name-status -r 8969141` | 11 arquivos adicionados (`A`), todos sob `docs/propostas/base-simplificada-seis-componentes/` |
 | Estatística do commit | 1.029 linhas adicionadas; nenhum arquivo anterior modificado ou removido |
 
-O próprio [README da proposta](../propostas/base-simplificada-seis-componentes/README.md) declara `b71c41478d93bff247bc7412bf3721b808bee070` como base e afirma que o pacote não substitui histórias, componentes, características nem roadmap canônicos. Portanto, o último commit não alterou a arquitetura vigente: ele acrescentou uma alternativa isolada construída sobre o snapshot imediatamente anterior. A comparação correta é entre o canônico existente em `b71c414` e a proposta adicionada em `8969141`, não entre duas implementações.
+O próprio [README da proposta](../propostas/base-simplificada-seis-componentes/README.md) declara `b71c41478d93bff247bc7412bf3721b808bee070` como base e afirma que o pacote não substitui histórias, componentes, características nem roadmap canônicos. Portanto, o commit `8969141` não alterou a arquitetura então vigente: acrescentou uma alternativa isolada construída sobre seu pai. A comparação histórica correta é entre o canônico existente em `b71c414` e a proposta adicionada em `8969141`, não entre duas implementações.
 
-Também é **observado** que não há aplicação-alvo implementada nesses commits. O código disponível permanece o protótipo de referência; a arquitetura abaixo descreve o destino recomendado, não o estado atual.
+Também é **observado** que não havia aplicação-alvo implementada nesses snapshots. O [estado corrente do repositório](../../README.md#estado-atual) continua distinguindo o protótipo de referência da arquitetura-alvo; a definição abaixo descreve um destino, não uma implementação existente.
 
 ## Comparação das histórias
 
@@ -179,7 +185,7 @@ API REST/HTTP, Keycloak, MinIO, Java/Quarkus, “exatamente três serviços” e
 
 ## Ciclo de refinamento dos componentes
 
-Esta seção preserva a análise que confrontou as dez formulações R6 com as sete histórias canônicas. O ciclo vigente, executado somente sobre `US-01..07`, e as autoridades canônicas estão em [`CTX-CMP-003`](componentes-coesos.md). Componente lógico é um limite modular de comportamento; não é automaticamente processo, serviço, banco, repositório ou quantum.
+Esta seção preserva a análise que confrontou as dez formulações R6 com as sete histórias canônicas. O ciclo é regido por [`DEC-0001`](decisoes/0001-refinamento-de-componentes.md); sua execução vigente sobre `US-01..07` e as autoridades canônicas estão em [`CTX-CMP-003`](componentes-coesos.md). Componente lógico é um limite modular de comportamento; não é automaticamente processo, serviço, banco, repositório ou quantum.
 
 ### 1. Técnica e inventário inicial congelado
 
@@ -470,9 +476,11 @@ flowchart LR
     N --> U
 ```
 
-As setas representam contratos lógicos. Entre processos, ordens e fatos passam por RabbitMQ; dentro de `gestao-trabalhos`, portas modulares podem ser chamadas em processo. Mesmo coimplantados, componentes não leem tabelas uns dos outros.
+As setas representam contratos lógicos. Entre processos, ordens e fatos exigem mensageria assíncrona; RabbitMQ é a candidata atual de [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md), ainda em análise. Dentro de `gestao-trabalhos`, portas modulares podem ser chamadas em processo. Mesmo coimplantados, componentes não leem tabelas uns dos outros.
 
 ## Arquitetura física recomendada
+
+Toda esta seção elabora a candidata física de [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md). PostgreSQL, RabbitMQ, object storage, outbox e inbox devem ser lidos como recomendação condicionada até a decisão ser aceita e validada; os três quanta e o Keycloak de demonstração já pertencem a decisões aceitas.
 
 ### Tecnologias e fronteiras de dados
 
@@ -493,7 +501,7 @@ Object storage usa chaves imutáveis/correlacionadas e políticas de ciclo de vi
 
 ### Entrega assíncrona e semântica
 
-RabbitMQ usa, no mínimo:
+Na candidata RabbitMQ de `DEC-0003`, a topologia lógica usa, no mínimo:
 
 | Exchange/fila lógica | Produtor | Consumidor | Política |
 |---|---|---|---|
@@ -720,12 +728,6 @@ Permanecem pendentes de confirmação:
 - serviços gerenciados, região, custos, backup/RPO/RTO e política de dados;
 - valores de requests/limits, HPA/KEDA, PDB e timeouts, que dependem de medição.
 
-O menor próximo incremento verificável é um corte vertical executável em ambiente de demonstração:
+O [roadmap ativo](../acompanhamento/roadmap.md) é a fonte do próximo trabalho: modelar ameaças, confrontar `DEC-0003`, registrar separadamente a escolha da stack, ativar o especialista correspondente somente depois desse aceite e então construir a fatia vertical. A implementação não deve antecipar Java/Quarkus nem as dependências físicas ainda em análise.
 
-1. confrontar `DEC-0003` com Threat Modeling, carga, falhas e custo;
-2. criar módulos Java/Quarkus mínimos e migrations do schema `gestao_trabalhos`, organizadas pela propriedade de tabelas de Submissão, Ciclo, Consulta e Acesso;
-3. após confrontar `DEC-0003`, implantar `gestao-trabalhos`, `producao-resultados`, `notificador`, Keycloak e as dependências físicas então aceitas; a candidata atual para a prova usa PostgreSQL, RabbitMQ e MinIO;
-4. fazer bootstrap de dois usuários, executar um vídeo até ZIP, injetar falha do broker/Produção depois do aceite e comprovar recuperação, idempotência e isolamento de proprietário;
-5. falhar o canal do `notificador`, medir recursos, backlog e lag e calibrar KEDA/retries sem alterar o estado do trabalho.
-
-Essa fatia testa a afirmação arquitetural mais arriscada — “aceito significa durável e processável sem perda” — antes de incorporar cancelamento, preferências, download individual ou notificações ampliadas.
+Essa fatia deverá testar a afirmação arquitetural mais arriscada — “aceito significa durável e processável sem perda” — com dois usuários, ZIP recuperável e falhas injetadas no processamento, mensageria e notificação, antes de incorporar cancelamento, preferências, download individual ou notificações ampliadas.

@@ -19,6 +19,8 @@ relations:
 
 # DEC-0001 — Refinar componentes antes de delimitar quanta
 
+> **Atualização temporal — 2026-08-03:** o ciclo desta decisão continua vigente, mas seu primeiro resultado concreto, [`CTX-CMP-002`](../componentes.md), foi substituído pelo [modelo de oito componentes `CTX-CMP-003`](../componentes-coesos.md). A topologia, ainda aberta quando este ADR foi aceito, passou a três quanta de validação em [`DEC-0002`](0002-topologia-kubernetes.md).
+
 ## Pergunta
 
 Qual granularidade e qual ordem de análise devem orientar a identificação dos componentes lógicos do FIAP X?
@@ -47,7 +49,7 @@ Adotar o ciclo `identificar → atribuir histórias → analisar responsabilidad
 
 Um componente lógico representa comportamento modular implementável como pacote, módulo ou biblioteca. Não equivale por si só a processo, microsserviço, banco, bounded context ou quantum. Cada história possui exatamente um componente responsável principal; colaboradores participam por contratos sem compartilhar essa responsabilidade.
 
-Durante as etapas de atribuição e análise, o inventário permanece congelado. Toda divisão, união ou adição ocorre apenas na etapa de refatoração e precisa citar um achado anterior. Quanta são avaliados depois do inventário refinado, considerando também acoplamento, dados, operação e características arquiteturais. Os quatro agrupamentos atuais são candidatos reversíveis, não uma decisão de topologia.
+Durante as etapas de atribuição e análise, o inventário permanece congelado. Toda divisão, união ou adição ocorre apenas na etapa de refatoração e precisa citar um achado anterior. Quanta são avaliados depois do inventário refinado, considerando também acoplamento, dados, operação e características arquiteturais. Na data da decisão, os quatro agrupamentos registrados eram candidatos reversíveis, não uma decisão de topologia.
 
 ## Consequências
 
@@ -55,11 +57,11 @@ Durante as etapas de atribuição e análise, o inventário permanece congelado.
 - As sete histórias possuem um responsável principal em cada iteração registrada.
 - O inventário refinado contém treze componentes comportamentais; componentes diferentes podem agir sobre `Trabalho` sem formar um único componente por entidade.
 - Implementações futuras devem preservar as dependências modulares ou registrar nova refatoração quando código e medições contradisserem a hipótese.
-- A escolha da quantidade de quanta, do estilo de implantação e da propriedade física dos dados continua aberta.
+- Na data da decisão, a quantidade de quanta, o estilo de implantação e a propriedade física dos dados continuavam abertos; [`DEC-0002`](0002-topologia-kubernetes.md) resolveu posteriormente a topologia de validação, enquanto [`DEC-0003`](0003-entrega-duravel-e-persistencia.md) mantém a persistência em análise.
 
 ## Validação e resultados
 
-O script [`validar-componentes.sh`](../../../scripts/validar-componentes.sh) verifica a ordem das etapas, a atribuição única das histórias, a motivação dos componentes refinados e a presença de quatro agrupamentos apenas candidatos. O modelo também registra uma segunda atribuição e repete as análises para verificar convergência.
+Na aceitação deste ADR, o validador verificava a ordem das etapas, a atribuição única, a motivação dos treze componentes e quatro agrupamentos ainda candidatos. O script [`validar-componentes.sh`](../../../scripts/validar-componentes.sh) evoluiu com o modelo ativo e hoje aplica as mesmas salvaguardas ao ciclo de oito componentes e aos três quanta aceitos. O histórico do Git preserva a versão do controle usada em cada resultado.
 
 ## Condições de revisão
 
@@ -73,3 +75,4 @@ O script [`validar-componentes.sh`](../../../scripts/validar-componentes.sh) ver
 | Data | Estado | Alteração | Evidência ou responsável |
 |---|---|---|---|
 | 2026-08-02 | `aceita` | Ciclo ordenado, granularidade modular e separação entre componente e quantum aceitos | Refinamento conduzido com o responsável pelo produto e registrado em `WORK-010` |
+| 2026-08-03 | `aceita` | Ciclo preservado; resultado lógico e topologia atualizados sem reverter a decisão de método | [`CTX-CMP-003`](../componentes-coesos.md) e [`DEC-0002`](0002-topologia-kubernetes.md) |

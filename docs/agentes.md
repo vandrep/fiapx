@@ -1,6 +1,8 @@
 # Agentes especializados
 
-Este documento registra os agentes existentes e candidatos. Uma ideia permanece aqui até possuir responsabilidade distinta, entradas conhecidas, contrato de entrega e um momento claro de uso. Somente agentes ativos recebem configuração em `.codex/agents/`.
+> Navegação: [documentação](README.md) · [README principal](../README.md)
+
+Este documento registra os agentes existentes e candidatos. Uma ideia permanece aqui até possuir responsabilidade distinta, entradas conhecidas, contrato de entrega e um momento claro de uso. Somente agentes ativos recebem configuração em [`.codex/agents/`](../.codex/agents/).
 
 ## Agentes ativos
 
@@ -9,7 +11,7 @@ Este documento registra os agentes existentes e candidatos. Uma ideia permanece 
 - **Status:** ativo.
 - **Papel:** analisar decisões estruturais, componentes, características arquiteturais e trade-offs.
 - **Operação:** consultiva e somente leitura.
-- **Configuração:** `.codex/agents/arquiteto.toml`.
+- **Configuração:** [`.codex/agents/arquiteto.toml`](../.codex/agents/arquiteto.toml).
 
 <a id="analista-negocio"></a>
 
@@ -22,7 +24,7 @@ Este documento registra os agentes existentes e candidatos. Uma ideia permanece 
 - **Entradas:** solicitação atual, histórias ou termos afetados, fontes diretamente relacionadas e histórico de refinamentos aplicável.
 - **Fora do escopo:** validar hipóteses, definir prioridade, aceitar histórias, decidir arquitetura ou editar artefatos.
 - **Entrega esperada:** IDs afetados, alteração proposta, classificação anterior e resultante, fontes, ambiguidades, perguntas e confirmação necessária.
-- **Configuração:** `.codex/agents/analista-negocio.toml`.
+- **Configuração:** [`.codex/agents/analista-negocio.toml`](../.codex/agents/analista-negocio.toml).
 
 <a id="atores-refinamento"></a>
 

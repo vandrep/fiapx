@@ -13,6 +13,8 @@ relations:
 
 # Histórico do roadmap local
 
+> Navegação: [índice da proposta histórica](../README.md) · [roadmap local](roadmap.md)
+
 ## Regra
 
 Este arquivo é append-only no nível semântico: novos eventos entram ao final. Não altere um evento anterior para fazer parecer que uma decisão diferente sempre existiu; acrescente correção ou sucessão explícita.

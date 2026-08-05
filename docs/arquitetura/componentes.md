@@ -198,7 +198,7 @@ Nenhuma nova divisão foi aplicada durante esta análise.
 | CA/CE estático | Ainda não mensurável sem namespaces e código |
 | Características verificáveis | Cenários existem; valores-alvo permanecem pendentes |
 
-O inventário modular converge como hipótese para orientar código e Threat Modeling. Ele permanece `em_analise` até que dependências físicas e testes confrontem os limites.
+Na verificação de 2026-08-02, o inventário modular convergia como hipótese para orientar código e Threat Modeling e ainda estava `em_analise`. Em 2026-08-03, ele foi substituído pelo [`CTX-CMP-003`](componentes-coesos.md), que passou a deter o inventário vigente.
 
 ## Dependências e contratos conceituais
 
@@ -244,7 +244,7 @@ Estes quatro agrupamentos são hipóteses futuras sem IDs próprios e não repre
 
 Identidade pode ser fornecida externamente, e Comunicação pode permanecer junto a outro agrupamento. A quantidade e a topologia serão decididas somente depois de riscos, contratos físicos e medições.
 
-## Riscos, fitness functions e próximo incremento
+## Riscos, fitness functions e próximo incremento então proposto
 
 | Risco | Verificação futura |
 |---|---|
@@ -255,4 +255,4 @@ Identidade pode ser fornecida externamente, e Comunicação pode permanecer junt
 | Duplicidade de tentativa | Reentregar o mesmo comando e observar um único desfecho visível |
 | Conclusão antes do artefato | Falhar entre empacotamento e registro e executar reconciliação |
 
-O próximo incremento é o Threat Modeling de [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial). Depois das decisões necessárias, a primeira estrutura Java deverá representar estes limites como pacotes ou módulos e aplicar fitness functions de dependência, preferencialmente com ArchUnit.
+Em 2026-08-02, o incremento seguinte proposto era o Threat Modeling de [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial). Caso Java fosse posteriormente aceito, a primeira estrutura deveria representar como módulos os limites que viessem a ser confirmados. O [roadmap ativo](../acompanhamento/roadmap.md) e o [`CTX-CMP-003`](componentes-coesos.md) contêm a orientação vigente.

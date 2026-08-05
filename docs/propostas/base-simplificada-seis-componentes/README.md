@@ -36,7 +36,7 @@ Base Git usada na consolidação: `b71c41478d93bff247bc7412bf3721b808bee070`.
 1. [Histórias propostas](historias.md) — dez histórias locais, com responsável principal único.
 2. [Componentes propostos](componentes.md) — seis fronteiras lógicas, autoridades e contratos.
 3. [Diagramas](diagramas.md) — evolução visual e fluxo final em Mermaid, renderizável pelo yFiles da interface.
-4. [Comparação com o modelo atual](comparacao-com-modelo-atual.md) — rastreabilidade para `US-01..07` e `CMP-05..17`.
+4. [Comparação com o modelo canônico de 2026-08-02](comparacao-com-modelo-atual.md) — rastreabilidade histórica para `US-01..07` e `CMP-05..17`.
 5. [Histórico de decisões e sugestões](historico-decisoes-e-sugestoes.md) — aceites, substituições, adiamentos e opções ainda abertas.
 6. [Características e quanta](caracteristicas-e-quanta.md) — pressões sistêmicas e três alternativas candidatas.
 7. [Roadmap local](acompanhamento/roadmap.md) e seu [histórico append-only](acompanhamento/historico.md).

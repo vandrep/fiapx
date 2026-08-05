@@ -38,6 +38,7 @@ temporal_guardrails=(
     'o pacote não foi promovido integralmente'
     'proposta histórica em análise'
     'modelo ativo `CTX-CMP-003`'
+    'Comparação com o modelo canônico de 2026-08-02'
     'As extensões candidatas permanecem futuras.'
 )
 for guardrail in "${temporal_guardrails[@]}"; do

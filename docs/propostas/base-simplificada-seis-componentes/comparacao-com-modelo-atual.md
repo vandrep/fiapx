@@ -15,13 +15,13 @@ relations:
     target: CTX-GOV-001
 ---
 
-# Comparação com o modelo canônico atual
+# Comparação com o modelo canônico de 2026-08-02
 
 > Esta comparação retrata o baseline [`CTX-CMP-002`](../../arquitetura/componentes.md) vigente quando a proposta foi registrada. Desde 2026-08-03, o modelo ativo é [`CTX-CMP-003`](../../arquitetura/componentes-coesos.md), produzido pela consolidação conservadora de [`REQ-CHG-0003`](../../requisitos/refinamentos/REQ-CHG-0003.md). A tabela abaixo permanece histórica e não deve ser lida como estado corrente.
 
 ## Como ler
 
-Esta comparação torna explícitas divergências e preservações. Ela não promove a proposta nem encerra a validade do [modelo canônico `CTX-CMP-002`](../../arquitetura/componentes.md).
+Quando registrada, esta comparação tornou explícitas divergências e preservações sem promover a proposta nem encerrar a validade do [modelo então canônico `CTX-CMP-002`](../../arquitetura/componentes.md). A atualização temporal acima define a leitura vigente.
 
 Estados usados:
 
@@ -46,6 +46,8 @@ Estados usados:
 
 As histórias locais `R6-US-07` (reprocessar) e `R6-US-08` (cancelar) tornam explícitas ações antes misturadas ao ciclo de trabalho.
 
+<a id="componentes-canonicos"></a>
+
 ## Componentes canônicos
 
 | Componente canônico | Tratamento | Componente proposto | Mudança relevante |
@@ -63,6 +65,8 @@ As histórias locais `R6-US-07` (reprocessar) e `R6-US-08` (cancelar) tornam exp
 | `CMP-15` Registro de Desfecho | absorvido | `R6-CMP-02` | mesma autoridade sobre estado, histórico e disputas |
 | `CMP-16` Acesso a Resultados | expandido e renomeado | `R6-CMP-04` | entrega conjunto ou item individual e consolida disponibilidade física |
 | `CMP-17` Comunicação de Falhas | expandido e renomeado | [`R6-CMP-06`](componentes.md#r6-cmp-06) | Notifica Usuário cobre mais eventos e configurações |
+
+<a id="diferencas-que-exigem-decisao-antes-de-promocao"></a>
 
 ## Diferenças que exigem decisão antes de promoção
 

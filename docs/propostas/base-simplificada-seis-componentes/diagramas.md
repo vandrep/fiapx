@@ -13,6 +13,8 @@ relations:
 
 # Diagramas da proposta
 
+> Navegação: [índice da proposta histórica](README.md) · [modelo proposto](componentes.md)
+
 Os blocos Mermaid podem ser renderizados pelo visualizador yFiles usado na interface. As setas representam interação ou passagem de fatos, não protocolo, sincronismo, processo ou implantação.
 
 ## Evolução resumida

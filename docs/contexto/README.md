@@ -11,6 +11,10 @@ relations:
 
 # Convenção de contexto e decisões
 
+> Navegação: [documentação](../README.md) · [README principal](../../README.md)
+
+Documentos desta área: [roteador de contexto](roteador.md), [rastreabilidade de refinamentos](rastreabilidade-refinamentos.md) e [Meta-PDCA](meta-pdca.md).
+
 ## Objetivo
 
 Manter o raciocínio do projeto rastreável como uma rede de contexto, e não apenas como uma coleção de documentos isolados. Decisões, requisitos, evidências, exceções e resultados devem possuir identidade estável e relações explícitas.
@@ -99,32 +103,34 @@ Outros tipos podem possuir fluxos próprios, como `em_refinamento` para históri
 - Um resultado pode validar, enfraquecer ou contradizer uma decisão sem reescrever sua justificativa original.
 - Mantenha o corpo Markdown como explicação humana do porquê; os metadados representam identidade e conexões, não substituem o raciocínio.
 
-## Identificadores atuais
+## Identificadores canônicos e grupos principais
+
+Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos históricos principais; a validação automatizada continua sendo a fonte da lista completa de IDs, inclusive os `R6-*` isolados na [proposta histórica](../propostas/base-simplificada-seis-componentes/README.md).
 
 | ID | Tipo | Artefato |
 |---|---|---|
 | `CTX-GOV-001` | Política | Este documento |
-| `CTX-GOV-002` | Política | `docs/contexto/meta-pdca.md` |
+| `CTX-GOV-002` | Política | [`docs/contexto/meta-pdca.md`](meta-pdca.md) |
 | `CTX-GOV-003` | Política | [`docs/contexto/rastreabilidade-refinamentos.md`](rastreabilidade-refinamentos.md) |
-| `CTX-ROUTE-001` | Roteador de contexto | `docs/contexto/roteador.md` |
-| `CTX-PRJ-001` | Contexto do projeto | `docs/contexto-projeto.md` |
-| `CTX-DOM-001` | Vocabulário do domínio | `docs/requisitos/glossario.md` |
-| `CTX-DOM-002` | Descoberta do domínio | `docs/requisitos/event-storming.md` |
-| `CTX-REQ-001` | Conjunto de requisitos | `docs/requisitos/historias.md` |
-| `CTX-CHAR-001` | Características arquiteturais | `docs/arquitetura/caracteristicas.md` |
-| `CTX-CMP-001` | Modelo histórico de componentes macro | `docs/arquitetura/componentes-macro.md` |
-| `CTX-CMP-002` | Modelo histórico de componentes modulares | `docs/arquitetura/componentes.md` |
+| `CTX-ROUTE-001` | Roteador de contexto | [`docs/contexto/roteador.md`](roteador.md) |
+| `CTX-PRJ-001` | Contexto do projeto | [`docs/contexto-projeto.md`](../contexto-projeto.md) |
+| `CTX-DOM-001` | Vocabulário do domínio | [`docs/requisitos/glossario.md`](../requisitos/glossario.md) |
+| `CTX-DOM-002` | Descoberta do domínio | [`docs/requisitos/event-storming.md`](../requisitos/event-storming.md) |
+| `CTX-REQ-001` | Conjunto de requisitos | [`docs/requisitos/historias.md`](../requisitos/historias.md) |
+| `CTX-CHAR-001` | Características arquiteturais | [`docs/arquitetura/caracteristicas.md`](../arquitetura/caracteristicas.md) |
+| `CTX-CMP-001` | Modelo histórico de componentes macro | [`docs/arquitetura/componentes-macro.md`](../arquitetura/componentes-macro.md) |
+| `CTX-CMP-002` | Modelo histórico de componentes modulares | [`docs/arquitetura/componentes.md`](../arquitetura/componentes.md) |
 | `CTX-CMP-003` | Modelo ativo de componentes coesos | [`docs/arquitetura/componentes-coesos.md`](../arquitetura/componentes-coesos.md) |
-| `DEC-0001` | Decisão sobre granularidade e ciclo de componentes | `docs/arquitetura/decisoes/0001-refinamento-de-componentes.md` |
-| `CTX-ARCH-001` | Comparação e arquitetura recomendada em análise | `docs/arquitetura/comparacao-e-arquitetura-recomendada.md` |
-| `DEC-0002` | Decisão aceita sobre topologia Kubernetes | `docs/arquitetura/decisoes/0002-topologia-kubernetes.md` |
-| `DEC-0003` | Decisão em análise sobre aceite, entrega durável e persistência | `docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md` |
-| `DEC-0004` | Decisão aceita sobre oito componentes do núcleo | `docs/arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md` |
-| `DEC-0005` | Decisão aceita sobre Keycloak no ambiente de validação | `docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md` |
-| `CTX-ROADMAP-001` | Roadmap ativo | `docs/acompanhamento/roadmap.md` |
-| `CTX-OUTCOME-001` | Registro de realizações | `docs/acompanhamento/realizacoes.md` |
-| `WORK-001` a `WORK-016` | Itens de trabalho | Roadmap ou registro de realizações, conforme o estado |
-| `REQ-CHG-0001` a `REQ-CHG-0003` | Mudanças de requisitos | `docs/requisitos/refinamentos/` |
+| `DEC-0001` | Decisão sobre granularidade e ciclo de componentes | [`docs/arquitetura/decisoes/0001-refinamento-de-componentes.md`](../arquitetura/decisoes/0001-refinamento-de-componentes.md) |
+| `CTX-ARCH-001` | Comparação e arquitetura recomendada em análise | [`docs/arquitetura/comparacao-e-arquitetura-recomendada.md`](../arquitetura/comparacao-e-arquitetura-recomendada.md) |
+| `DEC-0002` | Decisão aceita sobre topologia Kubernetes | [`docs/arquitetura/decisoes/0002-topologia-kubernetes.md`](../arquitetura/decisoes/0002-topologia-kubernetes.md) |
+| `DEC-0003` | Decisão em análise sobre aceite, entrega durável e persistência | [`docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md`](../arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md) |
+| `DEC-0004` | Decisão aceita sobre oito componentes do núcleo | [`docs/arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md`](../arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md) |
+| `DEC-0005` | Decisão aceita sobre Keycloak no ambiente de validação | [`docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) |
+| `CTX-ROADMAP-001` | Roadmap ativo | [`docs/acompanhamento/roadmap.md`](../acompanhamento/roadmap.md) |
+| `CTX-OUTCOME-001` | Registro de realizações | [`docs/acompanhamento/realizacoes.md`](../acompanhamento/realizacoes.md) |
+| `WORK-001` a `WORK-016` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
+| `REQ-CHG-0001` a `REQ-CHG-0003` | Mudanças de requisitos | [Índice de refinamentos](../requisitos/refinamentos/README.md) |
 | `CMP-01` a `CMP-04` | Componentes lógicos históricos | Inventário macro de `CTX-CMP-001` |
 | `CMP-05` a `CMP-17` | Componentes lógicos históricos | Inventário de `CTX-CMP-002` |
 | `CMP-18` | Componente lógico ativo | Autenticação e Identidade |
@@ -135,7 +141,7 @@ Outros tipos podem possuir fluxos próprios, como `em_refinamento` para históri
 | `CMP-23` | Componente lógico ativo | Consulta de Trabalhos |
 | `CMP-24` | Componente lógico ativo | Acesso a Resultados |
 | `CMP-25` | Componente lógico ativo | Comunicação de Falhas |
-| `AR-CMP-01` a `AR-CMP-08` | Rótulos lógicos históricos da análise comparativa | `docs/arquitetura/comparacao-e-arquitetura-recomendada.md` |
+| `AR-CMP-01` a `AR-CMP-08` | Rótulos lógicos históricos da análise comparativa | [`docs/arquitetura/comparacao-e-arquitetura-recomendada.md`](../arquitetura/comparacao-e-arquitetura-recomendada.md) |
 
 Adicione novos IDs quando novos nós surgirem. Se uma fronteira for dividida, unida ou mudar de significado, crie novos IDs e conecte-os aos anteriores; não recicle a identidade antiga.
 
@@ -143,4 +149,4 @@ Itens de trabalho preservam o ID quando migram do roadmap para o registro de rea
 
 ## Validação
 
-Execute [`scripts/validar-contexto.sh`](../../scripts/validar-contexto.sh) depois de alterar metadados. A verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução. Ela também chama os validadores do modelo ativo, da arquitetura recomendada e do pacote R6 histórico. Esses controles verificam ordem do ciclo, atribuição única das histórias, motivação da refatoração, autoridades exclusivas, separação entre três quanta e workloads de plataforma, consolidação conservadora e precedência temporal. São fitness functions estruturais e não substituem a revisão do raciocínio registrado.
+Execute [`scripts/validar-documentacao.sh`](../../scripts/validar-documentacao.sh) para verificar links, âncoras e alcançabilidade a partir do README principal. Depois de alterar metadados, execute também [`scripts/validar-contexto.sh`](../../scripts/validar-contexto.sh). A segunda verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução, além de chamar os validadores do modelo ativo, da arquitetura recomendada e do pacote R6 histórico. Esses controles são fitness functions estruturais e não substituem a revisão do raciocínio registrado.

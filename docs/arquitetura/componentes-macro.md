@@ -25,7 +25,7 @@ relations:
 
 # Fluxo de identificação e refinamento de componentes
 
-> Este modelo macro foi substituído pelo [`CTX-CMP-002`](componentes.md) em 2026-08-02. Ele permanece como evidência das iterações anteriores e não representa mais o inventário corrente.
+> Este modelo foi substituído pelo [`CTX-CMP-002`](componentes.md) em 2026-08-02, também histórico; o modelo ativo é [`CTX-CMP-003`](componentes-coesos.md). Ele permanece como evidência das iterações anteriores. Neste documento, “corrente” significa vigente na iteração registrada em 2026-08-01, não no projeto atual.
 
 ## Escopo, evidências e premissas
 
@@ -66,14 +66,14 @@ A técnica principal foi `Workflow`, usando o fluxo feliz e as ramificações de
 
 ### Verificação do Entity Trap
 
-| Candidato corrente | Sinal inspecionado | Conclusão |
+| Candidato desta iteração | Sinal inspecionado | Conclusão |
 |---|---|---|
 | Identidade e Acesso | Nome de capacidade e responsabilidade sobre identidade | Não representa CRUD de usuário; permanece coeso |
-| Trabalhos de Vídeo | Nome coincide com uma entidade e concentra várias operações | Sinal presente, mas não configura o antipadrão no modelo corrente: aceitação, propriedade, estado, consulta e autorização compartilham a mesma autoridade e invariantes; reabrir se a responsabilidade crescer sem essa coesão |
+| Trabalhos de Vídeo | Nome coincide com uma entidade e concentra várias operações | Sinal presente, mas não configura o antipadrão no modelo desta iteração: aceitação, propriedade, estado, consulta e autorização compartilham a mesma autoridade e invariantes; reabrir se a responsabilidade crescer sem essa coesão |
 | Processamento de Mídia | Nome de transformação e uso de executor externo | Representa comportamento, não uma entidade nem o mecanismo `ffmpeg` |
 | Notificações | Nome amplo e regras ainda incompletas | Não é depósito atual, mas sua justificativa é provisória; reduzir a adaptador se canal, preferência e retentativa não formarem responsabilidade própria |
 
-## Diagrama lógico do modelo corrente
+## Diagrama lógico do modelo então corrente (`CTX-CMP-001`)
 
 O diagrama resume o modelo lógico mantido após a iteração 3. Ele mostra responsabilidades e contratos lógicos, não microsserviços, quanta, processos, bancos ou unidades de implantação.
 
@@ -241,7 +241,7 @@ Há ainda acoplamento indireto pelo armazenamento de artefatos. Trabalhos de Ví
 
 | Alteração | Justificativa | Consequência |
 |---|---|---|
-| Manter os quatro componentes e seus IDs | Workflow, histórias, coesão e Entity Trap não revelaram nova responsabilidade autônoma nem duplicada | Preserva o modelo corrente sem fabricar serviços ou componentes para cada passo |
+| Manter os quatro componentes e seus IDs | Workflow, histórias, coesão e Entity Trap não revelaram nova responsabilidade autônoma nem duplicada | Preserva o modelo desta iteração sem fabricar serviços ou componentes para cada passo |
 | Tornar os três contratos entre componentes explícitos | Expõe direção, informação mínima e dependências temporais | Permite testar idempotência e substituir transporte sem transferir autoridade |
 | Limitar o conhecimento de Processamento e Notificações | Aplicação da Lei de Deméter | Trabalhos de Vídeo continua coordenador do ciclo, mas detalhes operacionais ficam encapsulados |
 | Registrar quantum único e processamento destacável antes de escolher implantação | Os escopos das características diferem, mas faltam carga e semântica de falha | A topologia permanece reversível e pode ser confrontada por experimento |
@@ -263,7 +263,7 @@ Banco relacional, mensageria, armazenamento local ou de objetos e `ffmpeg` devem
 
 | Critério | Resultado |
 |---|---|
-| Toda história possui um responsável principal | Atendido no modelo corrente |
+| Toda história possui um responsável principal | Atendido no modelo então corrente |
 | Papéis distintos e sem responsabilidade duplicada | Atendido após unir recebimento, acompanhamento e regra de entrega |
 | Descoberta por workflow e Entity Trap verificados | Atendido; nenhuma nova fronteira foi justificada |
 | Dependências lógicas e contratos relevantes explícitos | Atendido em nível conceitual; propriedade física e formatos ainda não definidos |
@@ -273,7 +273,7 @@ Banco relacional, mensageria, armazenamento local ou de objetos e `ffmpeg` devem
 | Características prioritárias verificáveis | Parcialmente atendido; cenários existem, valores-alvo faltam |
 | Todo componente justificado | Atendido provisoriamente; Notificações e Identidade podem ser externalizados ou reduzidos conforme as decisões pendentes |
 
-O ciclo produziu um modelo lógico corrente e hipóteses de quanta suficientes para orientar experimentos, mas não convergiu para uma topologia. Seu estado permanece `em_analise` enquanto as dependências estáticas, a semântica temporal e as medidas de carga não forem verificadas.
+O ciclo produziu um modelo lógico então corrente e hipóteses de quanta suficientes para orientar experimentos, mas naquele estágio não convergiu para uma topologia. Essas lacunas motivaram os refinamentos seguintes; este nó hoje está `substituido`, e o inventário vigente pertence ao [`CTX-CMP-003`](componentes-coesos.md).
 
 ## Riscos, lacunas e sinais para novo refinamento
 
@@ -288,15 +288,15 @@ O ciclo produziu um modelo lógico corrente e hipóteses de quanta suficientes p
 | Fan-out lógico concentrado em Trabalhos de Vídeo | Coordenador pode conhecer detalhes demais e criar mudanças em cascata | Testar contratos autossuficientes e revisar pela Lei de Deméter |
 | Topologia ainda aberta | Componentes podem ser confundidos com microsserviços | Comparar monólito modular com processamento destacável e alternativas distribuídas após definir cenários |
 
-Reabra este refinamento quando uma questão acima for respondida, quando a implementação revelar um contrato inadequado ou quando uma característica atravessar as fronteiras de modo diferente do previsto.
+Naquele estágio, a resposta a uma questão acima, um contrato inadequado revelado pela implementação ou uma característica atravessando as fronteiras seriam sinais de reabertura. Como este nó hoje está `substituido`, evidência nova deve alimentar um novo refinamento ou nó sucessor ligado ao [`CTX-CMP-003`](componentes-coesos.md), sem reescrever este registro histórico.
 
-## Menor próximo incremento verificável
+## Menor próximo incremento proposto naquele estágio
 
-Antes de implementar todos os componentes, defina e registre:
+Naquele estágio, propunha-se definir e registrar:
 
 1. o que significa aceitar um trabalho e quais falhas ele deve sobreviver;
 2. a carga mínima da demonstração;
-3. a escolha de Java com Quarkus e o estilo inicial de implantação;
+3. avaliar e registrar se Java com Quarkus seria adotado e qual seria o estilo inicial de implantação;
 4. o contrato conceitual `submeter -> preservar -> solicitar processamento -> relatar resultado -> consultar`.
 
-Em seguida, construa uma fatia de risco que aceite um trabalho sintético, preserve seu ID e estado, simule entrega repetida e reinício, e permita consultá-lo. Essa prova valida a fronteira entre `Trabalhos de Vídeo` e `Processamento de Mídia` antes de acrescentar todo o fluxo de arquivos, autenticação e notificação.
+A fatia de risco então proposta consistia em aceitar um trabalho sintético, preservar seu ID e estado, simular entrega repetida e reinício e permitir sua consulta. Essa prova buscaria validar a fronteira entre `Trabalhos de Vídeo` e `Processamento de Mídia` antes de acrescentar todo o fluxo de arquivos, autenticação e notificação. A sequência vigente pertence ao [roadmap ativo](../acompanhamento/roadmap.md).

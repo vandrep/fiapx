@@ -5,6 +5,8 @@ description: Identifica e refatora iterativamente componentes lógicos a partir 
 
 # Refinar componentes arquiteturais
 
+Esta skill segue as [instruções compartilhadas do repositório](../../../AGENTS.md) e usa o [roteador de contexto](../../../docs/contexto/roteador.md) para selecionar as fontes do projeto.
+
 ## Objetivo
 
 Conduzir um ciclo iterativo de identificação e reestruturação de componentes, inspirado no fluxo de pensamento baseado em componentes apresentado na 2ª edição de *Fundamentos da Arquitetura de Software*.

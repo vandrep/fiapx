@@ -20,6 +20,8 @@ relations:
 
 # Características arquiteturais e quanta candidatos
 
+> Navegação: [índice da proposta histórica](README.md) · [arquitetura canônica](../../arquitetura/README.md)
+
 ## Formato sugerido
 
 Uma característica só orienta a rodada quando possui cenário verificável:
@@ -75,6 +77,8 @@ As características são propriedades do sistema. Os componentes mostram onde h�
 | separar Processamento | permite capacidade e isolamento próprios | adiciona fronteira temporal e reconciliação |
 | gerar ZIP na Entrega | mantém extração independente do formato de acesso | ZIP pode introduzir latência e custo no download |
 | separar leitura da escrita | consulta evolui sem comandar o ciclo | projeção pode ficar temporariamente defasada |
+
+<a id="alternativas-candidatas-de-quanta"></a>
 
 ## Alternativas candidatas de quanta
 

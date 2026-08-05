@@ -278,6 +278,7 @@ if [[ -e "$outcome_log" ]]; then
     validate_work_register "$outcome_log"
 fi
 
+bash "$repo_root/scripts/validar-documentacao.sh"
 bash "$repo_root/scripts/validar-componentes.sh"
 bash "$repo_root/scripts/validar-arquitetura-recomendada.sh"
 bash "$repo_root/docs/propostas/base-simplificada-seis-componentes/validacao/validar-pacote.sh"

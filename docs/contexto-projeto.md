@@ -76,6 +76,8 @@ Essas observações descrevem o ponto de partida, não obrigam o novo projeto a 
 
 Uma preferência orienta a comparação de opções, mas ainda não é uma decisão arquitetural aceita. Ela deve ser confrontada com prazo, requisitos, custo operacional e capacidades necessárias; se confirmada, a escolha será registrada em ADR.
 
+<a id="decisoes-vigentes"></a>
+
 ## Decisões vigentes
 
 - [`DEC-0001`](arquitetura/decisoes/0001-refinamento-de-componentes.md) está aceita e determina o ciclo de refinamento, a granularidade modular e a separação entre componentes lógicos, quanta e unidades de implantação.

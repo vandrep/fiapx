@@ -1,6 +1,8 @@
 # HACKATON
 **Sistema de Processamento de Vídeos - FIAP X**
 
+> Navegação: [documentação](README.md) · [contexto derivado](contexto-projeto.md)
+
 ## Introdução
 Vocês foram contratados pela empresa **FIAP X** que precisa avançar no
 desenvolvimento de um projeto de processamento de imagens. Em uma rodada de

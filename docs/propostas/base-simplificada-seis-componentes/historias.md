@@ -34,6 +34,8 @@ Esta rodada foca o negócio de submissão, processamento, acompanhamento, entreg
 
 O ator padronizado é **Usuário**. Cada história tem exatamente um responsável principal no [modelo proposto](componentes.md#atribuicao-final-das-historias).
 
+<a id="inventario"></a>
+
 ## Inventário
 
 <a id="r6-us-01"></a>
@@ -135,6 +137,8 @@ Como usuário, quero baixar uma imagem extraída individualmente para obter some
 - **Origem:** história adicional sugerida e aceita.
 - **Responsável principal:** [`R6-CMP-04`](componentes.md#r6-cmp-04), Entrega de Imagens.
 - **Situação:** aceita na conversa; seleção e nomenclatura das imagens estão a confirmar.
+
+<a id="questoes-abertas"></a>
 
 ## Questões abertas
 

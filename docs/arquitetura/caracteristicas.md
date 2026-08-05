@@ -27,7 +27,7 @@ relations:
 
 Quais características devem orientar as primeiras fronteiras e os primeiros experimentos do FIAP X?
 
-As evidências vêm das [histórias de usuário](../requisitos/historias.md), do [enunciado](../enunciado.md) e dos riscos observados no [fluxo de upload do código-base](../referencia/projeto-original/main.go#L75). Como ainda não há volume, SLO ou ambiente de execução definidos, as medidas abaixo são verificáveis, mas seus valores-alvo continuam `A confirmar`.
+As evidências vêm das [histórias de usuário](../requisitos/historias.md), do [enunciado](../enunciado.md) e dos riscos observados no [fluxo de upload do código-base](../referencia/projeto-original/main.go#L75). Kubernetes e Keycloak já foram aceitos para o ambiente de validação em [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) e [`DEC-0005`](decisoes/0005-keycloak-no-ambiente-de-validacao.md); volume, SLO, capacidade, ambiente de produção e valores-alvo continuam `A confirmar`.
 
 ## Planilha de seleção
 
@@ -92,20 +92,22 @@ Exatamente três características foram selecionadas porque são as que mais alt
 
 **Medidas a confirmar:** pico esperado, concorrência, throughput, tempo máximo de espera e recursos disponíveis.
 
-## Agrupamento preliminar por escopo
+<a id="agrupamento-preliminar-por-escopo"></a>
 
-As características abaixo são propriedades do sistema. Elas foram analisadas depois da atribuição das histórias e antes da refatoração, sem criar, unir ou dividir componentes durante essa etapa. Somente a etapa seguinte usou as tensões encontradas para refatorar o inventário lógico.
+## Registro histórico do agrupamento preliminar por escopo
 
-Depois do refinamento, quatro regiões aparecem como hipóteses de agrupamento. Elas ajudam a estudar quanta, mas não estabelecem unidades de implantação nem transferem a responsabilidade por uma característica sistêmica para um componente isolado.
+Esta seção preserva a análise feita sobre o modelo [`CTX-CMP-002`](componentes.md), vigente em 2026-08-02 e posteriormente substituído. As características abaixo são propriedades do sistema. Elas foram analisadas depois da atribuição das histórias e antes da refatoração, sem criar, unir ou dividir componentes durante essa etapa. Somente a etapa seguinte usou as tensões encontradas para refatorar o inventário lógico.
 
-| Região candidata | Características e alcance no sistema | Componentes afetados no modelo corrente | Evidência necessária antes de decidir topologia |
+Naquele estágio, quatro regiões apareceram como hipóteses de agrupamento. Elas ajudaram a estudar quanta, mas não estabeleceram unidades de implantação nem transferiram a responsabilidade por uma característica sistêmica para um componente isolado.
+
+| Região candidata | Características e alcance no sistema | Componentes afetados no modelo então corrente (`CTX-CMP-002`) | Evidência então necessária antes de decidir topologia |
 |---|---|---|---|
 | Interação e acesso | `CA-02` na identidade, submissão, admissão, consulta e acesso ao resultado; `CA-01` na entrada aceita e recuperável | [`CMP-05`](componentes.md#cmp-05), [`CMP-06`](componentes.md#cmp-06), [`CMP-07`](componentes.md#cmp-07), [`CMP-09`](componentes.md#cmp-09), [`CMP-16`](componentes.md#cmp-16) | Perfil de acesso, requisitos de isolamento e necessidade de evolução ou operação independente |
 | Controle do ciclo | `CA-01` na aceitação, despacho, política de tentativas e consolidação do desfecho | [`CMP-08`](componentes.md#cmp-08), [`CMP-10`](componentes.md#cmp-10), [`CMP-11`](componentes.md#cmp-11), [`CMP-15`](componentes.md#cmp-15) | Semântica de transação, falha e recuperação entre os componentes |
 | Execução de mídia | `CA-03` no backlog e na concorrência; `CA-01` na execução, extração e empacotamento | [`CMP-12`](componentes.md#cmp-12), [`CMP-13`](componentes.md#cmp-13), [`CMP-14`](componentes.md#cmp-14) | Carga medida, custo de isolamento e contrato durável com o controle do ciclo |
 | Comunicação | Segurança do conteúdo e confiabilidade da entrega, hoje como suporte às características primárias | [`CMP-17`](componentes.md#cmp-17) | Canais, volume, política de reentrega e necessidade real de implantação independente |
 
-As quatro regiões são candidatas e reversíveis. A quantidade e os limites dos quanta permanecem uma decisão futura, baseada também em acoplamento, dados, operação e medições.
+Desde 2026-08-03, o [modelo ativo `CTX-CMP-003`](componentes-coesos.md) consolida oito componentes, e [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) aceita três quanta para validação. A tabela acima continua como evidência da etapa anterior; a composição vigente pertence ao modelo ativo e ao ADR. Medidas de capacidade e a arquitetura de produção ainda dependem de experimentos.
 
 ## Trade-offs que orientam os componentes
 

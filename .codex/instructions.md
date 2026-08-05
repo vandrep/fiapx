@@ -1,11 +1,11 @@
 # Instruções operacionais do Codex
 
-Use `AGENTS.md` como fonte principal de regras compartilhadas e `docs/contexto-projeto.md` apenas quando a tarefa exigir contexto específico deste projeto.
+Use [`AGENTS.md`](../AGENTS.md) como fonte principal de regras compartilhadas e [`docs/contexto-projeto.md`](../docs/contexto-projeto.md) apenas quando a tarefa exigir contexto específico deste projeto.
 
 ## Agentes especializados
 
 - `arquiteto`: consultor somente leitura para análise estrutural e decisões arquiteturais.
-- Consulte `docs/agentes.md` para o registro de agentes ativos, candidatos e seus gatilhos de criação.
+- Consulte [`docs/agentes.md`](../docs/agentes.md) para o registro de agentes ativos, candidatos e seus gatilhos de criação.
 - Novos agentes devem ter responsabilidade estreita, permissões mínimas e contrato de entrega explícito.
 - Mantenha instruções reutilizáveis em `.codex/agents/` e conhecimento específico do projeto em `docs/`.
 

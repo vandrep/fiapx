@@ -28,6 +28,8 @@ Este é um registro curado da conversa, não uma transcrição literal. A ordem 
 | `nao_adotada_agora` | foi avaliada e não integra a base atual |
 | `a_confirmar` | ainda não houve escolha suficiente |
 
+<a id="linha-de-evolucao"></a>
+
 ## Linha de evolução
 
 | Ordem | Proposta ou decisão | Situação final | Consequência preservada |
@@ -47,6 +49,8 @@ Este é um registro curado da conversa, não uma transcrição literal. A ordem 
 | 13 | Dividir imediatamente componentes com muitas responsabilidades | `nao_adotada_agora` | seis fronteiras permanecem; quatro divisões ficam condicionais |
 | 14 | Usar a base de seis componentes como proposta de continuidade | `aceita_na_conversa` | inventário registrado em `R6-CMP-MODEL-001` |
 | 15 | Escolher um quantum ou uma quantidade de serviços | `a_confirmar` | alternativas A, B e C permanecem candidatas |
+
+<a id="divisoes-condicionais"></a>
 
 ## Divisões condicionais
 

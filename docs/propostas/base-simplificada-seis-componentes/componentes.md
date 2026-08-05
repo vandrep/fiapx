@@ -32,6 +32,8 @@ O inventário abaixo resulta da rodada conversacional e foi verificado como hip�
 
 A técnica predominante foi `Workflow`, complementada pelos atos do Usuário. O termo **Trabalho de Vídeo** aparece em vários limites, mas não cria `Entity Trap`: cada componente detém um comportamento distinto, e somente Gerenciar Trabalhos de Vídeo possui autoridade sobre estado e transições.
 
+<a id="inventario-refinado"></a>
+
 ## Inventário refinado
 
 <a id="r6-cmp-01"></a>
@@ -105,6 +107,8 @@ A técnica predominante foi `Workflow`, complementada pelos atos do Usuário. O 
 - **Autoridade:** configuração de comunicação do usuário e histórico próprio de envio.
 - **Fornece:** `ConfigurarNotificacoes` e `NotificarAcontecimento`.
 - **Depende de:** fatos autossuficientes da Submissão e de Gerenciar Trabalhos; adaptadores de canal.
+
+<a id="atribuicao-final-das-historias"></a>
 
 ## Atribuição final das histórias
 

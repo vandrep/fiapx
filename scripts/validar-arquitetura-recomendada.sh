@@ -56,6 +56,34 @@ for choice in "${premature_choices[@]}"; do
     fi
 done
 
+# shellcheck disable=SC2016 # Backticks são literais Markdown.
+temporal_guardrails=(
+    '## Snapshot Git da comparação histórica'
+    'Commit da proposta comparada'
+    'o commit `8969141` não alterou a arquitetura então vigente'
+    'O [roadmap ativo](../acompanhamento/roadmap.md) é a fonte do próximo trabalho'
+    'Toda esta seção elabora a candidata física de [`DEC-0003`]'
+)
+for guardrail in "${temporal_guardrails[@]}"; do
+    if ! grep -Fq "$guardrail" "$architecture"; then
+        echo "Erro: arquitetura perdeu uma salvaguarda temporal ou de autoridade: $guardrail" >&2
+        exit 1
+    fi
+done
+
+obsolete_claims=(
+    'git rev-parse HEAD'
+    'o último commit não alterou'
+    'criar módulos Java/Quarkus mínimos'
+    'Entre processos, ordens e fatos passam por RabbitMQ'
+)
+for claim in "${obsolete_claims[@]}"; do
+    if grep -Fq "$claim" "$architecture"; then
+        echo "Erro: arquitetura contém afirmação móvel, superada ou prematura: $claim" >&2
+        exit 1
+    fi
+done
+
 expected_components=$(sed -n '/^entities:$/,/^relations:$/ s/^  - \(CMP-[0-9][0-9]*\)$/\1/p' "$component_model" | sort)
 documented_components=$(sed -n 's/^### \(CMP-[0-9][0-9]*\) —.*/\1/p' "$architecture" | sort)
 component_count=$(grep -c '^CMP-' <<<"$expected_components" || true)
