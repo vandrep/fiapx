@@ -118,9 +118,10 @@ Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos hi
 | `CTX-DOM-002` | Descoberta do domínio | [`docs/requisitos/event-storming.md`](../requisitos/event-storming.md) |
 | `CTX-REQ-001` | Conjunto de requisitos | [`docs/requisitos/historias.md`](../requisitos/historias.md) |
 | `CTX-CHAR-001` | Características arquiteturais | [`docs/arquitetura/caracteristicas.md`](../arquitetura/caracteristicas.md) |
-| `CTX-CMP-001` | Modelo histórico de componentes macro | [`docs/arquitetura/componentes-macro.md`](../arquitetura/componentes-macro.md) |
-| `CTX-CMP-002` | Modelo histórico de componentes modulares | [`docs/arquitetura/componentes.md`](../arquitetura/componentes.md) |
+| `CTX-CMP-001` | Modelo histórico de componentes macro | [`docs/arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md`](../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md) |
+| `CTX-CMP-002` | Modelo histórico de componentes modulares | [`docs/arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md`](../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md) |
 | `CTX-CMP-003` | Modelo ativo de componentes coesos | [`docs/arquitetura/componentes-coesos.md`](../arquitetura/componentes-coesos.md) |
+| `CTX-EVD-CMP-003` | Evidência histórica do ciclo que produziu o modelo coeso | [`docs/arquitetura/historico/componentes/ctx-cmp-003-refinamento.md`](../arquitetura/historico/componentes/ctx-cmp-003-refinamento.md) |
 | `DEC-0001` | Decisão sobre granularidade e ciclo de componentes | [`docs/arquitetura/decisoes/0001-refinamento-de-componentes.md`](../arquitetura/decisoes/0001-refinamento-de-componentes.md) |
 | `CTX-ARCH-001` | Comparação e arquitetura recomendada em análise | [`docs/arquitetura/comparacao-e-arquitetura-recomendada.md`](../arquitetura/comparacao-e-arquitetura-recomendada.md) |
 | `DEC-0002` | Decisão aceita sobre topologia Kubernetes | [`docs/arquitetura/decisoes/0002-topologia-kubernetes.md`](../arquitetura/decisoes/0002-topologia-kubernetes.md) |

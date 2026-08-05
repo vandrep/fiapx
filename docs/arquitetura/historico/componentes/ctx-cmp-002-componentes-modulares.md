@@ -38,11 +38,11 @@ relations:
 
 # Identificação e refatoração de componentes modulares
 
-> Este modelo foi substituído pelo [`CTX-CMP-003`](componentes-coesos.md) em 2026-08-03. Ele permanece íntegro como evidência da granularidade anterior e das duas iterações que a produziram; não representa mais o inventário corrente.
+> Este modelo foi substituído pelo [`CTX-CMP-003`](../../componentes-coesos.md) em 2026-08-03. Ele permanece íntegro como evidência da granularidade anterior e das duas iterações que a produziram; não representa mais o inventário corrente.
 
 ## Escopo e lente
 
-Este modelo sucede o [`CTX-CMP-001`](componentes-macro.md), que permanece como evidência do refinamento macro anterior. Aqui, componente significa manifestação modular de comportamento: um pacote, módulo ou biblioteca com responsabilidade e dependências controladas. Componente não significa serviço, processo, banco, bounded context ou quantum.
+Este modelo sucede o [`CTX-CMP-001`](ctx-cmp-001-componentes-macro.md), que permanece como evidência do refinamento macro anterior. Aqui, componente significa manifestação modular de comportamento: um pacote, módulo ou biblioteca com responsabilidade e dependências controladas. Componente não significa serviço, processo, banco, bounded context ou quantum.
 
 O ciclo segue a ordem `identificar → atribuir histórias → analisar responsabilidades → analisar características do sistema → refatorar → repetir e verificar`. Nenhuma quantidade desejada de componentes ou unidades de implantação orienta a descoberta.
 
@@ -59,18 +59,18 @@ O ciclo segue a ordem `identificar → atribuir histórias → analisar responsa
 
 ### Técnica de descoberta
 
-A técnica principal foi `Workflow`, complementada por `Actor/Actions`. O [Event Storming validado](../requisitos/event-storming.md#fluxo-principal-candidato) distingue autenticar, receber um vídeo, acompanhar o trabalho, processar mídia, fornecer resultado e comunicar falha. `Entity Trap` será verificado nas análises; não se criou um componente por tabela, tecnologia ou passo mecânico.
+A técnica principal foi `Workflow`, complementada por `Actor/Actions`. O [Event Storming validado](../../../requisitos/event-storming.md#fluxo-principal-candidato) distingue autenticar, receber um vídeo, acompanhar o trabalho, processar mídia, fornecer resultado e comunicar falha. `Entity Trap` será verificado nas análises; não se criou um componente por tabela, tecnologia ou passo mecânico.
 
 ### Inventário inicial congelado
 
 | Componente inicial | Papel derivado do fluxo | Evidência principal |
 |---|---|---|
-| Identidade e Acesso | Estabelecer quem realiza uma operação protegida | [`US-01`](../requisitos/historias.md#us-01) |
-| Recebimento de Vídeo | Receber, validar e aceitar o envio | [`US-02`](../requisitos/historias.md#us-02) |
-| Acompanhamento de Trabalhos | Preservar trabalho, estado, ciclos, tentativas e consulta | [`US-04`](../requisitos/historias.md#us-04) e [`US-05`](../requisitos/historias.md#us-05) |
-| Processamento de Mídia | Executar processamento concorrente e produzir o resultado | [`US-03`](../requisitos/historias.md#us-03) |
-| Entrega de Resultados | Autorizar e fornecer o resultado | [`US-06`](../requisitos/historias.md#us-06) |
-| Notificações | Comunicar uma falha já registrada | [`US-07`](../requisitos/historias.md#us-07) |
+| Identidade e Acesso | Estabelecer quem realiza uma operação protegida | [`US-01`](../../../requisitos/historias.md#us-01) |
+| Recebimento de Vídeo | Receber, validar e aceitar o envio | [`US-02`](../../../requisitos/historias.md#us-02) |
+| Acompanhamento de Trabalhos | Preservar trabalho, estado, ciclos, tentativas e consulta | [`US-04`](../../../requisitos/historias.md#us-04) e [`US-05`](../../../requisitos/historias.md#us-05) |
+| Processamento de Mídia | Executar processamento concorrente e produzir o resultado | [`US-03`](../../../requisitos/historias.md#us-03) |
+| Entrega de Resultados | Autorizar e fornecer o resultado | [`US-06`](../../../requisitos/historias.md#us-06) |
+| Notificações | Comunicar uma falha já registrada | [`US-07`](../../../requisitos/historias.md#us-07) |
 
 Este inventário permanece inalterado até a etapa explícita de refatoração.
 
@@ -198,7 +198,7 @@ Nenhuma nova divisão foi aplicada durante esta análise.
 | CA/CE estático | Ainda não mensurável sem namespaces e código |
 | Características verificáveis | Cenários existem; valores-alvo permanecem pendentes |
 
-Na verificação de 2026-08-02, o inventário modular convergia como hipótese para orientar código e Threat Modeling e ainda estava `em_analise`. Em 2026-08-03, ele foi substituído pelo [`CTX-CMP-003`](componentes-coesos.md), que passou a deter o inventário vigente.
+Na verificação de 2026-08-02, o inventário modular convergia como hipótese para orientar código e Threat Modeling e ainda estava `em_analise`. Em 2026-08-03, ele foi substituído pelo [`CTX-CMP-003`](../../componentes-coesos.md), que passou a deter o inventário vigente.
 
 ## Dependências e contratos conceituais
 
@@ -255,4 +255,4 @@ Identidade pode ser fornecida externamente, e Comunicação pode permanecer junt
 | Duplicidade de tentativa | Reentregar o mesmo comando e observar um único desfecho visível |
 | Conclusão antes do artefato | Falhar entre empacotamento e registro e executar reconciliação |
 
-Em 2026-08-02, o incremento seguinte proposto era o Threat Modeling de [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial). Caso Java fosse posteriormente aceito, a primeira estrutura deveria representar como módulos os limites que viessem a ser confirmados. O [roadmap ativo](../acompanhamento/roadmap.md) e o [`CTX-CMP-003`](componentes-coesos.md) contêm a orientação vigente.
+Em 2026-08-02, o incremento seguinte proposto era o Threat Modeling de [`WORK-011`](../../../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial). Caso Java fosse posteriormente aceito, a primeira estrutura deveria representar como módulos os limites que viessem a ser confirmados. O [roadmap ativo](../../../acompanhamento/roadmap.md) e o [`CTX-CMP-003`](../../componentes-coesos.md) contêm a orientação vigente.

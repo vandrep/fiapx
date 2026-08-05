@@ -25,24 +25,24 @@ relations:
 
 # Fluxo de identificação e refinamento de componentes
 
-> Este modelo foi substituído pelo [`CTX-CMP-002`](componentes.md) em 2026-08-02, também histórico; o modelo ativo é [`CTX-CMP-003`](componentes-coesos.md). Ele permanece como evidência das iterações anteriores. Neste documento, “corrente” significa vigente na iteração registrada em 2026-08-01, não no projeto atual.
+> Este modelo foi substituído pelo [`CTX-CMP-002`](ctx-cmp-002-componentes-modulares.md) em 2026-08-02, também histórico; o modelo ativo é [`CTX-CMP-003`](../../componentes-coesos.md). Ele permanece como evidência das iterações anteriores. Neste documento, “corrente” significa vigente na iteração registrada em 2026-08-01, não no projeto atual.
 
 ## Escopo, evidências e premissas
 
-Este ciclo cobre as histórias descritas em [histórias de usuário](../requisitos/historias.md), usa o [glossário do domínio](../requisitos/glossario.md) e é orientado pelas [características arquiteturais prioritárias](caracteristicas.md). Foram usadas estas evidências:
+Este ciclo cobre as histórias descritas em [histórias de usuário](../../../requisitos/historias.md), usa o [glossário do domínio](../../../requisitos/glossario.md) e é orientado pelas [características arquiteturais prioritárias](../../caracteristicas.md). Foram usadas estas evidências:
 
-- `Declarada`: o [enunciado](../enunciado.md) exige autenticação, concorrência, ausência de perda durante picos, status por usuário, notificação, persistência, escala e testes.
-- `Observada`: o [código-base](../referencia/projeto-original/main.go#L30) concentra HTTP, arquivos, processamento, ZIP, status e frontend em um processo e um arquivo.
-- `Observada`: [`handleVideoUpload`](../referencia/projeto-original/main.go#L75) salva o arquivo e chama [`processVideo`](../referencia/projeto-original/main.go#L126) de forma síncrona; [`handleStatus`](../referencia/projeto-original/main.go#L253) deriva o estado dos ZIPs presentes em disco.
-- `Observada`: o [timestamp do upload](../referencia/projeto-original/main.go#L94), o [diretório temporário](../referencia/projeto-original/main.go#L129) e o [resultado](../referencia/projeto-original/main.go#L160) usam precisão de um segundo, criando colisão possível em execuções concorrentes.
-- `Validada na descoberta`: o [Event Storming](../requisitos/event-storming.md) confirmou a ordem entre autenticação, admissão, aceitação, processamento, resultado, consulta, download e eventual notificação sem impor topologia; as fronteiras ainda serão revalidadas em `WORK-010`.
+- `Declarada`: o [enunciado](../../../enunciado.md) exige autenticação, concorrência, ausência de perda durante picos, status por usuário, notificação, persistência, escala e testes.
+- `Observada`: o [código-base](../../../referencia/projeto-original/main.go#L30) concentra HTTP, arquivos, processamento, ZIP, status e frontend em um processo e um arquivo.
+- `Observada`: [`handleVideoUpload`](../../../referencia/projeto-original/main.go#L75) salva o arquivo e chama [`processVideo`](../../../referencia/projeto-original/main.go#L126) de forma síncrona; [`handleStatus`](../../../referencia/projeto-original/main.go#L253) deriva o estado dos ZIPs presentes em disco.
+- `Observada`: o [timestamp do upload](../../../referencia/projeto-original/main.go#L94), o [diretório temporário](../../../referencia/projeto-original/main.go#L129) e o [resultado](../../../referencia/projeto-original/main.go#L160) usam precisão de um segundo, criando colisão possível em execuções concorrentes.
+- `Validada na descoberta`: o [Event Storming](../../../requisitos/event-storming.md) confirmou a ordem entre autenticação, admissão, aceitação, processamento, resultado, consulta, download e eventual notificação sem impor topologia; as fronteiras ainda serão revalidadas em `WORK-010`.
 - `Preferência`: Java com Quarkus favorece viabilidade pela familiaridade, mas não define componentes nem unidades de implantação.
 
 As histórias e os critérios inferidos permanecem `em_analise`. Este documento descreve componentes lógicos; não decide quantidade de aplicações, microsserviços, repositórios, bancos, filas ou containers.
 
 ## Hipótese preliminar de escopo e quanta
 
-O [agrupamento preliminar das características](caracteristicas.md#agrupamento-preliminar-por-escopo) produz duas alternativas que orientam a análise sem decidir a topologia:
+O [agrupamento preliminar das características](../../caracteristicas.md#agrupamento-preliminar-por-escopo) produz duas alternativas que orientam a análise sem decidir a topologia:
 
 | Alternativa | Composição candidata | Benefício procurado | Custo e condição |
 |---|---|---|---|
@@ -273,7 +273,7 @@ Banco relacional, mensageria, armazenamento local ou de objetos e `ffmpeg` devem
 | Características prioritárias verificáveis | Parcialmente atendido; cenários existem, valores-alvo faltam |
 | Todo componente justificado | Atendido provisoriamente; Notificações e Identidade podem ser externalizados ou reduzidos conforme as decisões pendentes |
 
-O ciclo produziu um modelo lógico então corrente e hipóteses de quanta suficientes para orientar experimentos, mas naquele estágio não convergiu para uma topologia. Essas lacunas motivaram os refinamentos seguintes; este nó hoje está `substituido`, e o inventário vigente pertence ao [`CTX-CMP-003`](componentes-coesos.md).
+O ciclo produziu um modelo lógico então corrente e hipóteses de quanta suficientes para orientar experimentos, mas naquele estágio não convergiu para uma topologia. Essas lacunas motivaram os refinamentos seguintes; este nó hoje está `substituido`, e o inventário vigente pertence ao [`CTX-CMP-003`](../../componentes-coesos.md).
 
 ## Riscos, lacunas e sinais para novo refinamento
 
@@ -288,7 +288,7 @@ O ciclo produziu um modelo lógico então corrente e hipóteses de quanta sufici
 | Fan-out lógico concentrado em Trabalhos de Vídeo | Coordenador pode conhecer detalhes demais e criar mudanças em cascata | Testar contratos autossuficientes e revisar pela Lei de Deméter |
 | Topologia ainda aberta | Componentes podem ser confundidos com microsserviços | Comparar monólito modular com processamento destacável e alternativas distribuídas após definir cenários |
 
-Naquele estágio, a resposta a uma questão acima, um contrato inadequado revelado pela implementação ou uma característica atravessando as fronteiras seriam sinais de reabertura. Como este nó hoje está `substituido`, evidência nova deve alimentar um novo refinamento ou nó sucessor ligado ao [`CTX-CMP-003`](componentes-coesos.md), sem reescrever este registro histórico.
+Naquele estágio, a resposta a uma questão acima, um contrato inadequado revelado pela implementação ou uma característica atravessando as fronteiras seriam sinais de reabertura. Como este nó hoje está `substituido`, evidência nova deve alimentar um novo refinamento ou nó sucessor ligado ao [`CTX-CMP-003`](../../componentes-coesos.md), sem reescrever este registro histórico.
 
 ## Menor próximo incremento proposto naquele estágio
 
@@ -299,4 +299,4 @@ Naquele estágio, propunha-se definir e registrar:
 3. avaliar e registrar se Java com Quarkus seria adotado e qual seria o estilo inicial de implantação;
 4. o contrato conceitual `submeter -> preservar -> solicitar processamento -> relatar resultado -> consultar`.
 
-A fatia de risco então proposta consistia em aceitar um trabalho sintético, preservar seu ID e estado, simular entrega repetida e reinício e permitir sua consulta. Essa prova buscaria validar a fronteira entre `Trabalhos de Vídeo` e `Processamento de Mídia` antes de acrescentar todo o fluxo de arquivos, autenticação e notificação. A sequência vigente pertence ao [roadmap ativo](../acompanhamento/roadmap.md).
+A fatia de risco então proposta consistia em aceitar um trabalho sintético, preservar seu ID e estado, simular entrega repetida e reinício e permitir sua consulta. Essa prova buscaria validar a fronteira entre `Trabalhos de Vídeo` e `Processamento de Mídia` antes de acrescentar todo o fluxo de arquivos, autenticação e notificação. A sequência vigente pertence ao [roadmap ativo](../../../acompanhamento/roadmap.md).

@@ -5,12 +5,11 @@ set -euo pipefail
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 architecture="$repo_root/docs/arquitetura/comparacao-e-arquitetura-recomendada.md"
 component_model="$repo_root/docs/arquitetura/componentes-coesos.md"
-canonical_stories="$repo_root/docs/requisitos/historias.md"
 proposal_stories="$repo_root/docs/propostas/base-simplificada-seis-componentes/historias.md"
 delivery_decision="$repo_root/docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md"
 topology_decision="$repo_root/docs/arquitetura/decisoes/0002-topologia-kubernetes.md"
 
-for document in "$architecture" "$component_model" "$canonical_stories" "$proposal_stories" "$delivery_decision" "$topology_decision"; do
+for document in "$architecture" "$component_model" "$proposal_stories" "$delivery_decision" "$topology_decision"; do
     if [[ ! -e "$document" ]]; then
         echo "Erro: artefato necessário à validação da arquitetura inexistente: ${document#"$repo_root/"}." >&2
         exit 1
@@ -61,7 +60,7 @@ temporal_guardrails=(
     '## Snapshot Git da comparação histórica'
     'Commit da proposta comparada'
     'o commit `8969141` não alterou a arquitetura então vigente'
-    'O [roadmap ativo](../acompanhamento/roadmap.md) é a fonte do próximo trabalho'
+    'O [roadmap ativo](../acompanhamento/roadmap.md) é a única fonte da sequência e do próximo trabalho'
     'Toda esta seção elabora a candidata física de [`DEC-0003`]'
 )
 for guardrail in "${temporal_guardrails[@]}"; do
@@ -84,44 +83,57 @@ for claim in "${obsolete_claims[@]}"; do
     fi
 done
 
-expected_components=$(sed -n '/^entities:$/,/^relations:$/ s/^  - \(CMP-[0-9][0-9]*\)$/\1/p' "$component_model" | sort)
-documented_components=$(sed -n 's/^### \(CMP-[0-9][0-9]*\) —.*/\1/p' "$architecture" | sort)
-component_count=$(grep -c '^CMP-' <<<"$expected_components" || true)
-
-if [[ $component_count -ne 8 || "$documented_components" != "$expected_components" ]]; then
-    echo "Erro: a definição recomendada diverge do inventário de oito componentes de CTX-CMP-003." >&2
-    diff -u <(printf '%s\n' "$expected_components") <(printf '%s\n' "$documented_components") >&2 || true
+expected_components=$(printf 'CMP-%s\n' {18..25})
+canonical_metadata_components=$(sed -n '/^entities:$/,/^relations:$/ s/^  - \(CMP-[0-9][0-9]*\)$/\1/p' "$component_model" | sort)
+canonical_documented_components=$(sed -n 's/^### \(CMP-[0-9][0-9]*\) —.*/\1/p' "$component_model" | sort)
+if [[ "$canonical_metadata_components" != "$expected_components" || "$canonical_documented_components" != "$expected_components" ]]; then
+    echo "Erro: a fonte canônica deve definir exatamente CMP-18..25." >&2
     exit 1
 fi
 
-assignment_section=$(awk '
-    /^## Atribuição final das histórias canônicas$/ { inside = 1; next }
+expected_historical_labels=$(for number in $(seq 1 8); do printf 'AR-CMP-%02d\n' "$number"; done)
+metadata_historical_labels=$(sed -n '/^entities:$/,/^relations:$/ s/^  - \(AR-CMP-[0-9][0-9]*\)$/\1/p' "$architecture" | sort)
+if [[ "$metadata_historical_labels" != "$expected_historical_labels" ]]; then
+    echo "Erro: os metadados da comparação devem preservar exatamente AR-CMP-01..08." >&2
+    exit 1
+fi
+
+mapping_section=$(awk '
+    /^## Mapeamento histórico do inventário comparativo$/ { inside = 1; next }
     inside && /^## / { exit }
     inside { print }
 ' "$architecture")
 
-expected_stories=$(sed -n '/^entities:$/,/^relations:$/ s/^  - \(US-[0-9][0-9]*\)$/\1/p' "$canonical_stories" | sort)
-# shellcheck disable=SC2016 # Backticks are literais Markdown, não substituição de comando.
-assigned_stories=$(sed -n 's/^| `\(US-[0-9][0-9]*\)` |.*/\1/p' <<<"$assignment_section" | sort)
-
-if [[ "$assigned_stories" != "$expected_stories" ]]; then
-    echo "Erro: as histórias canônicas não possuem exatamente um responsável final." >&2
-    diff -u <(printf '%s\n' "$expected_stories") <(printf '%s\n' "$assigned_stories") >&2 || true
+# shellcheck disable=SC2016 # Backticks are Markdown literals, not expansion.
+mapped_historical_labels=$(sed -n 's/^| <a id="ar-cmp-[^"]*"><\/a>`\(AR-CMP-[0-9][0-9]*\)` |.*/\1/p' <<<"$mapping_section" | sort)
+if [[ "$mapped_historical_labels" != "$expected_historical_labels" ]]; then
+    echo "Erro: o mapeamento deve conter exatamente AR-CMP-01..08." >&2
     exit 1
 fi
 
-if grep -Fq 'R6-US-' <<<"$assignment_section"; then
-    echo "Erro: uma formulação R6 foi promovida à atribuição canônica." >&2
-    exit 1
-fi
-
-while IFS= read -r component_id; do
-    [[ -z "$component_id" ]] && continue
-    if ! grep -Fq "\`$component_id\`" <<<"$assignment_section"; then
-        echo "Erro: componente ativo sem rastreabilidade na atribuição final: $component_id." >&2
+for number in $(seq 1 8); do
+    printf -v suffix '%02d' "$number"
+    historical_id="AR-CMP-$suffix"
+    component_id="CMP-$((number + 17))"
+    mapping_prefix="<a id=\"ar-cmp-$suffix\"></a>\`$historical_id\`"
+    mapping_count=$(grep -Fc "$mapping_prefix" <<<"$mapping_section" || true)
+    mapping_row=$(grep -F "$mapping_prefix" <<<"$mapping_section" || true)
+    if [[ $mapping_count -ne 1 || "$mapping_row" != *"componentes-coesos.md#cmp-$((number + 17))"* ]]; then
+        echo "Erro: $historical_id deve mapear, na mesma linha, para o link canônico de $component_id." >&2
         exit 1
     fi
-done <<<"$expected_components"
+done
+
+if grep -Eq '^### CMP-[0-9]+' "$architecture"; then
+    echo "Erro: a comparação voltou a definir blocos CMP-* e criou uma segunda fonte de verdade." >&2
+    exit 1
+fi
+
+if grep -Fqx '## Atribuição final das histórias canônicas' "$architecture" \
+    || ! grep -Fq 'componentes-coesos.md#hist%C3%B3rias-atribu%C3%ADdas' <<<"$mapping_section"; then
+    echo "Erro: a atribuição final deve permanecer somente no modelo canônico, referenciado pela comparação." >&2
+    exit 1
+fi
 
 r6_section=$(awk '
     /^## Rastreabilidade das formulações R6$/ { inside = 1; next }
@@ -160,64 +172,70 @@ if [[ "$documented_requirements" != "$expected_requirements" ]]; then
     exit 1
 fi
 
-quanta_section=$(awk '
-    /^## Quanta, processos e serviços$/ { inside = 1; next }
+topology_section=$(awk '
+    /^## Decisão$/ { inside = 1; next }
     inside && /^## / { exit }
     inside { print }
-' "$architecture")
+' "$topology_decision")
 
-required_quanta=(
-    'Gestão de Trabalhos de Vídeo'
-    'Produção de Resultados'
-    'Comunicação de Falhas'
-)
 # shellcheck disable=SC2016 # Backticks are Markdown literals, not expansion.
-required_deployments=(
-    '`gestao-trabalhos`'
-    '`producao-resultados`'
-    '`notificador`'
+required_topology_rows=(
+    '| Gestão de Trabalhos de Vídeo | `gestao-trabalhos` |'
+    '| Produção de Resultados | `producao-resultados` |'
+    '| Comunicação de Falhas | `notificador` |'
 )
 
-for quantum in "${required_quanta[@]}"; do
-    if ! grep -Fq "| $quantum |" <<<"$quanta_section"; then
-        echo "Erro: quantum decidido ausente da arquitetura: $quantum." >&2
+for topology_row in "${required_topology_rows[@]}"; do
+    if ! grep -Fq "$topology_row" <<<"$topology_section"; then
+        echo "Erro: quantum e Deployment decididos ausentes de DEC-0002: $topology_row" >&2
         exit 1
     fi
 done
 
-for deployment in "${required_deployments[@]}"; do
-    if ! grep -Fq "$deployment" <<<"$quanta_section"; then
-        echo "Erro: deployment decidido ausente da arquitetura: $deployment." >&2
-        exit 1
-    fi
-done
-
-quantum_count=$(grep -Ec '^\| (Gestão de Trabalhos de Vídeo|Produção de Resultados|Comunicação de Falhas) \|' <<<"$quanta_section" || true)
-if [[ $quantum_count -ne 3 ]]; then
-    echo "Erro: esperados três quanta decididos; encontrados $quantum_count." >&2
+quantum_count=$(grep -Ec '^\| (Gestão de Trabalhos de Vídeo|Produção de Resultados|Comunicação de Falhas) \|' <<<"$topology_section" || true)
+topology_row_count=$(awk '
+    /^\| Quantum \| Deployment \|/ { in_table = 1; next }
+    in_table && /^\|---/ { next }
+    in_table && /^\|/ { count++; next }
+    in_table { exit }
+    END { print count + 0 }
+' <<<"$topology_section")
+if [[ $quantum_count -ne 3 || $topology_row_count -ne 3 ]]; then
+    echo "Erro: DEC-0002 deve decidir exatamente os três quanta esperados; encontrados $topology_row_count registros." >&2
     exit 1
 fi
 
-if grep -Eq '^\|.*Keycloak.*\|$' <<<"$quanta_section"; then
-    echo "Erro: Keycloak foi contado como quantum da aplicação." >&2
+if grep -Eq '^\|.*Keycloak.*\|$' <<<"$topology_section"; then
+    echo "Erro: DEC-0002 contou Keycloak como quantum da aplicação." >&2
     exit 1
 fi
 
-required_guardrails=(
+required_architecture_guardrails=(
     'Kubernetes decidido'
-    'Submissão nunca aciona Processamento nem Comunicação de Falhas'
-    'é a única autoridade e o único escritor do estado do trabalho'
     '(issuer, subject)'
-    'somente Ciclo decide retry e estado'
     'at-least-once'
     'Redis não é incluído sem necessidade medida'
     'não transforma os oito componentes em oito microsserviços'
     'não são quanta da aplicação'
     'Deployment Keycloak'
 )
-for guardrail in "${required_guardrails[@]}"; do
+for guardrail in "${required_architecture_guardrails[@]}"; do
     if ! grep -Fq "$guardrail" "$architecture"; then
         echo "Erro: salvaguarda arquitetural ausente: $guardrail." >&2
+        exit 1
+    fi
+done
+
+# Autoridades lógicas são verificadas na fonte canônica, não na comparação.
+# shellcheck disable=SC2016 # Backticks are Markdown literals, not expansion.
+required_component_guardrails=(
+    'Submissão nunca aciona Processamento nem Comunicação de Falhas'
+    'É a única autoridade e o único escritor do estado do trabalho'
+    '`CMP-21/22` relatam falha técnica; somente `CMP-20` decide política e estado'
+)
+for guardrail in "${required_component_guardrails[@]}"; do
+    if ! grep -Fq "$guardrail" "$component_model"; then
+        echo "Erro: salvaguarda do componente ausente da fonte canônica: $guardrail." >&2
         exit 1
     fi
 done
@@ -251,4 +269,4 @@ while IFS= read -r raw_target; do
     fi
 done < <(grep -oE '\]\([^)]*\)' "$architecture" || true)
 
-echo "Arquitetura recomendada válida: 7 histórias, 10 formulações R6, 8 componentes, 24 requisitos, 3 quanta e Keycloak de plataforma verificados."
+echo "Arquitetura recomendada válida: 10 formulações R6, 8 mapeamentos AR-CMP canônicos, 24 requisitos e 3 quanta em DEC-0002 verificados."

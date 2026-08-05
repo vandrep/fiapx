@@ -17,11 +17,11 @@ relations:
 
 # Comparação com o modelo canônico de 2026-08-02
 
-> Esta comparação retrata o baseline [`CTX-CMP-002`](../../arquitetura/componentes.md) vigente quando a proposta foi registrada. Desde 2026-08-03, o modelo ativo é [`CTX-CMP-003`](../../arquitetura/componentes-coesos.md), produzido pela consolidação conservadora de [`REQ-CHG-0003`](../../requisitos/refinamentos/REQ-CHG-0003.md). A tabela abaixo permanece histórica e não deve ser lida como estado corrente.
+> Esta comparação retrata o baseline [`CTX-CMP-002`](../../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md) vigente quando a proposta foi registrada. Desde 2026-08-03, o modelo ativo é [`CTX-CMP-003`](../../arquitetura/componentes-coesos.md), produzido pela consolidação conservadora de [`REQ-CHG-0003`](../../requisitos/refinamentos/REQ-CHG-0003.md). A tabela abaixo permanece histórica e não deve ser lida como estado corrente.
 
 ## Como ler
 
-Quando registrada, esta comparação tornou explícitas divergências e preservações sem promover a proposta nem encerrar a validade do [modelo então canônico `CTX-CMP-002`](../../arquitetura/componentes.md). A atualização temporal acima define a leitura vigente.
+Quando registrada, esta comparação tornou explícitas divergências e preservações sem promover a proposta nem encerrar a validade do [modelo então canônico `CTX-CMP-002`](../../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md). A atualização temporal acima define a leitura vigente.
 
 Estados usados:
 

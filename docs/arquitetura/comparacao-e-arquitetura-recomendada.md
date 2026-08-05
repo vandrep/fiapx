@@ -50,7 +50,7 @@ relations:
 
 ## Estado, objetivo e linguagem de evidência
 
-Este nó compara o conjunto de [sete histórias `CTX-REQ-001`](../requisitos/historias.md) e o modelo histórico de treze componentes [`CTX-CMP-002`](componentes.md) com a proposta isolada de [dez formulações `R6-REQ-001`](../propostas/base-simplificada-seis-componentes/historias.md) e seis componentes [`R6-CMP-MODEL-001`](../propostas/base-simplificada-seis-componentes/componentes.md). A consolidação confirmada em [`REQ-CHG-0003`](../requisitos/refinamentos/REQ-CHG-0003.md) preserva somente `US-01..07` como núcleo, e [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md) estabelece o sucessor de oito componentes [`CTX-CMP-003`](componentes-coesos.md).
+Este nó compara o conjunto de [sete histórias `CTX-REQ-001`](../requisitos/historias.md) e o modelo histórico de treze componentes [`CTX-CMP-002`](historico/componentes/ctx-cmp-002-componentes-modulares.md) com a proposta isolada de [dez formulações `R6-REQ-001`](../propostas/base-simplificada-seis-componentes/historias.md) e seis componentes [`R6-CMP-MODEL-001`](../propostas/base-simplificada-seis-componentes/componentes.md). A consolidação confirmada em [`REQ-CHG-0003`](../requisitos/refinamentos/REQ-CHG-0003.md) preserva somente `US-01..07` como núcleo, e [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md) estabelece o sucessor de oito componentes [`CTX-CMP-003`](componentes-coesos.md).
 
 O documento continua `em_analise` como definição física e plano de validação: não descreve uma implementação existente. Já estão decididos o núcleo conservador, os oito componentes, três quanta Kubernetes e o Keycloak empacotado; [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md), valores operacionais e resultados de testes permanecem em análise.
 
@@ -183,206 +183,28 @@ Kubernetes, RabbitMQ/Kafka, PostgreSQL/Redis, Prometheus/Grafana/ELK e GitHub Ac
 
 API REST/HTTP, Keycloak, MinIO, Java/Quarkus, “exatamente três serviços” e Redis não são requisitos textuais. Keycloak e os três serviços são escolhas aceitas para a entrega acadêmica, não necessidades do domínio nem prescrição de produção. HTTP/REST continua adaptação proposta; Java com Quarkus é uma **preferência registrada a confirmar**. Redis só deve ser acrescentado se medição demonstrar necessidade de cache ou coordenação que PostgreSQL/RabbitMQ não atendam com segurança.
 
-## Ciclo de refinamento dos componentes
+## Evidência do refinamento dos componentes
 
-Esta seção preserva a análise que confrontou as dez formulações R6 com as sete histórias canônicas. O ciclo é regido por [`DEC-0001`](decisoes/0001-refinamento-de-componentes.md); sua execução vigente sobre `US-01..07` e as autoridades canônicas estão em [`CTX-CMP-003`](componentes-coesos.md). Componente lógico é um limite modular de comportamento; não é automaticamente processo, serviço, banco, repositório ou quantum.
+O ciclo completo que confrontou as histórias canônicas, o modelo `CTX-CMP-002` e a proposta R6 foi preservado em [`CTX-EVD-CMP-003`](historico/componentes/ctx-cmp-003-refinamento.md). Esse registro contém técnica, inventário congelado, atribuições, análises, refatoração e verificação de convergência.
 
-### 1. Técnica e inventário inicial congelado
+Este documento mantém somente os deltas comparativos necessários para explicar a proposta R6 e a arquitetura física em análise. As fronteiras, autoridades e contratos correntes pertencem exclusivamente a [`CTX-CMP-003`](componentes-coesos.md); a decisão de adotá-los pertence a [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md).
 
-Foi usado `Workflow`, complementado por `Actor/Action`: autenticar, submeter, governar o trabalho, processar mídia, disponibilizar resultado, consultar e comunicar. A estratégia inicial combina o modelo R6 com a reintegração obrigatória de identidade. O inventário foi congelado com sete candidatos antes da atribuição:
+## Mapeamento histórico do inventário comparativo
 
-| Candidato inicial | Papel inicial | Evidência |
+Os rótulos `AR-CMP-01..08` foram usados durante a comparação e permanecem somente para rastreabilidade. Eles não redefinem papéis, autoridades, contratos ou mecanismos de `CMP-18..25`.
+
+| Rótulo histórico | Componente canônico | Delta relevante observado na consolidação |
 |---|---|---|
-| Autenticação e Identidade | estabelecer identidade autenticada | `US-01`, EN-08 e EN-09 |
-| Submissão de Vídeos | receber, admitir e iniciar um trabalho | `US-02` e `R6-US-01` |
-| Gerenciar Trabalhos | preservar estado, histórico e decisões do ciclo | `US-04`, `R6-US-07` e `R6-US-08` |
-| Processamento de Mídia | transformar origem em imagens | `US-03` e `R6-US-05` |
-| Entrega de Imagens | publicar e autorizar representações do resultado | `US-06`, `R6-US-02` e `R6-US-10` |
-| Visualizar Trabalhos | projetar lista, detalhe e falha sanitizada | `US-05`, `R6-US-03` e `R6-US-06` |
-| Notificar Usuário | comunicar acontecimentos configurados | `US-07`, `R6-US-04` e `R6-US-09` |
+| <a id="ar-cmp-01"></a>`AR-CMP-01` | [`CMP-18 — Autenticação e Identidade`](componentes-coesos.md#cmp-18) | reintegrou identidade obrigatória, adiada pela proposta R6, sem transferir propriedade do recurso |
+| <a id="ar-cmp-02"></a>`AR-CMP-02` | [`CMP-19 — Submissão e Admissão`](componentes-coesos.md#cmp-19) | restringiu a borda à entrada e moveu aceite para o Ciclo |
+| <a id="ar-cmp-03"></a>`AR-CMP-03` | [`CMP-20 — Ciclo do Trabalho`](componentes-coesos.md#cmp-20) | preservou autoridade única sobre estado, ciclos, tentativas e desfecho |
+| <a id="ar-cmp-04"></a>`AR-CMP-04` | [`CMP-21 — Processamento de Mídia`](componentes-coesos.md#cmp-21) | preservou execução e concorrência sem autoridade sobre usuário, estado ou retry |
+| <a id="ar-cmp-05"></a>`AR-CMP-05` | [`CMP-22 — Publicação de Resultados`](componentes-coesos.md#cmp-22) | separou manifestação durável do resultado de sua leitura autorizada |
+| <a id="ar-cmp-06"></a>`AR-CMP-06` | [`CMP-23 — Consulta de Trabalhos`](componentes-coesos.md#cmp-23) | manteve projeção somente leitura sem promover detalhe de falha ainda não confirmado |
+| <a id="ar-cmp-07"></a>`AR-CMP-07` | [`CMP-24 — Acesso a Resultados`](componentes-coesos.md#cmp-24) | separou autorização e entrega do ZIP da publicação física |
+| <a id="ar-cmp-08"></a>`AR-CMP-08` | [`CMP-25 — Comunicação de Falhas`](componentes-coesos.md#cmp-25) | restringiu o núcleo à falha persistida, sem promover eventos e preferências futuras |
 
-Não há `Entity Trap`: “Trabalho” aparece em vários candidatos, mas somente Gerenciar reivindica transições; os demais submetem comandos, publicam fatos, projetam leitura ou autorizam acesso. Banco, fila, storage, IdP, HTTP, FFmpeg, ZIP, observabilidade e Kubernetes não foram convertidos em componentes de negócio.
-
-### 2. Atribuição inicial, sem alterar o inventário
-
-| História | Responsável principal inicial | Colaboradores | Observação |
-|---|---|---|---|
-| `US-01` | Autenticação e Identidade | Keycloak | obrigação declarada |
-| `US-02` | Submissão de Vídeos | Identidade; Gerenciar | envio e resposta de aceite |
-| `US-03` | Processamento de Mídia | Gerenciar; Entrega | concorrência pertence ao processamento |
-| `US-04` | Gerenciar Trabalhos | Submissão; Processamento; Entrega | preservação, tentativas e recuperação |
-| `US-05` | Visualizar Trabalhos | Identidade; Gerenciar | leitura por proprietário |
-| `US-06` | Entrega de Imagens | Identidade; Gerenciar; Processamento | ZIP obrigatório |
-| `US-07` | Notificar Usuário | Gerenciar | somente após falha persistida |
-| `R6-US-01` | Submissão de Vídeos | Identidade; Gerenciar | equivalente simplificado de envio |
-| `R6-US-02` | Entrega de Imagens | Gerenciar | download em conjunto |
-| `R6-US-03` | Visualizar Trabalhos | Identidade; Gerenciar | lista e detalhe |
-| `R6-US-04` | Notificar Usuário | Gerenciar | extensão condicional além da falha |
-| `R6-US-05` | Processamento de Mídia | Gerenciar; Entrega | transformação |
-| `R6-US-06` | Visualizar Trabalhos | Gerenciar | motivo sanitizado da falha |
-| `R6-US-07` | Gerenciar Trabalhos | Processamento | reprocessamento do mesmo trabalho |
-| `R6-US-08` | Gerenciar Trabalhos | Processamento | cancelamento condicional |
-| `R6-US-09` | Notificar Usuário | — | preferências condicionais |
-| `R6-US-10` | Entrega de Imagens | Gerenciar | download individual condicional |
-
-Todas as dezessete formulações têm exatamente um principal. A atribuição das histórias R6 condicionais mostra onde elas caberiam; não as promove a requisito atual.
-
-### 3. Análise de responsabilidades, sem alterar o inventário
-
-| Candidato congelado | Papel e autoridade encontrados | Acoplamento e achado para a refatoração |
-|---|---|---|
-| Autenticação e Identidade | valida e fornece identidade confiável; não possui credencial, trabalho ou propriedade | papel distinto; manter Keycloak separado da autorização do recurso |
-| Submissão de Vídeos | recebe origem, valida admissão e solicita criação | o acionamento direto de Processamento/Notificação viola Deméter e duplica a coordenação do ciclo; aceite não pode ser autoridade da borda |
-| Gerenciar Trabalhos | única autoridade de proprietário, estado, tentativas, transições e histórico | deve absorver aceite e outbox; alto `fan-in` é necessário, mas `fan-out` deve ocorrer por fatos/comandos duráveis |
-| Processamento de Mídia | controla execução, concorrência e extração | não deve conhecer usuário, estado ou canal; pode escalar independentemente |
-| Entrega de Imagens | reúne publicação/escrita de artefatos e acesso/leitura autorizada | mistura falhas de produção com segurança de download e tem dependências em direções opostas; dividir |
-| Visualizar Trabalhos | projeta leitura sem comandar o ciclo | papel coeso; precisa de contrato de consistência eventual explícito |
-| Notificar Usuário | decide comunicação e adapta canal | manter coeso no núcleo de falha; preferências e eventos ampliados só se confirmados |
-
-Acoplamento temporal necessário: a origem precisa estar durável antes do aceite; o trabalho e sua outbox precisam confirmar juntos; publicação íntegra antecede `CONCLUÍDO`; falha persistida antecede notificação. Acoplamento acidental a remover: Submissão conhecer Produção, canal, fila ou estado posterior; Processamento atualizar tabelas do Ciclo; Acesso ler diretamente tabelas de Publicação ou Ciclo.
-
-### 4. Análise de características, sem alterar o inventário
-
-As [características canônicas `CTX-CHAR-001`](caracteristicas.md) permanecem sistêmicas:
-
-| Característica | Pressão sobre o sistema | Evidência verificável | Trade-off |
-|---|---|---|---|
-| Confiabilidade e recuperabilidade | aceite atômico no banco, entrega assíncrona durável, idempotência e reconciliação | reinício em cada fronteira e balanço de trabalhos | mais tabelas, mensagens e estados intermediários |
-| Segurança | identidade na borda, propriedade em toda leitura, entrada não confiável e URLs temporárias | testes `401/403`, upload malicioso e ausência de segredo em logs | IdP e políticas aumentam operação |
-| Escalabilidade do processamento | desacoplar CPU/I/O do request e escalar pelo backlog | variar réplicas e medir idade da fila | consistência eventual e custo de coordenação |
-| Observabilidade | correlacionar aceite, tentativa, publicação, consulta e notificação | métricas, logs e traces por IDs estáveis | custo de instrumentação e cardinalidade controlada |
-| Testabilidade/manutenibilidade | contratos pequenos e dependências unidirecionais | ArchUnit, contratos e Testcontainers | disciplina de módulos e fixtures adicionais |
-| Viabilidade | prazo acadêmico e familiaridade | incremento executável com três processos | serviços gerenciados e K8s podem exceder o necessário para a demo |
-
-Nenhum componente foi adicionado, removido ou renomeado durante as análises de responsabilidade e características.
-
-### 5. Refatoração motivada
-
-| Origem congelada | Achado anterior | Alteração somente nesta etapa | Resultado local |
-|---|---|---|---|
-| Autenticação e Identidade | obrigação declarada, papel coeso | manter e restringir à identidade autenticada | `CMP-18` |
-| Submissão de Vídeos | admissão coesa, mas aceite/efeitos a jusante pertencem ao ciclo | renomear e restringir; mover aceite e despacho | `CMP-19` |
-| Gerenciar Trabalhos | deve ser a única autoridade e o ponto de aceite/outbox | renomear para papel orientado ao ciclo e absorver tentativas, aceite, despacho lógico e desfecho | `CMP-20` |
-| Processamento de Mídia | mesmo perfil de execução/extração | manter | `CMP-21` |
-| Entrega de Imagens | escrita/publicação e leitura/autorização mudam por motivos distintos | dividir | `CMP-22` Publicação e `CMP-24` Acesso |
-| Visualizar Trabalhos | projeção somente leitura coesa | renomear para finalidade | `CMP-23` |
-| Notificar Usuário | papel coeso, escopo deve ser controlado | renomear e restringir núcleo | `CMP-25` |
-
-O inventário final possui oito componentes como consequência dos achados, não como meta prévia.
-
-## Síntese do inventário lógico refinado
-
-O inventário abaixo é uma síntese navegável. A definição canônica completa e o ciclo sobre as sete histórias pertencem a [`CTX-CMP-003`](componentes-coesos.md).
-
-<a id="ar-cmp-01"></a>
-
-### CMP-18 — Autenticação e Identidade
-
-- **Papel:** validar a identidade OIDC e fornecer um sujeito confiável às operações protegidas.
-- **Possui:** validação de assinatura, emissor, audiência e validade; mapeamento de `(issuer, subject)`.
-- **Não possui:** senha, cadastro do IdP, trabalho, vídeo, resultado ou estado.
-- **Fornece:** `IdentidadeAutenticada(issuer, subject)` ou recusa segura.
-- **Dados:** nenhum segredo de credencial do usuário; apenas referências técnicas se necessárias.
-- **Dependências:** Keycloak por OIDC. Ciclo, Consulta e Acesso decidem propriedade sobre seus próprios dados.
-
-<a id="ar-cmp-02"></a>
-
-### CMP-19 — Submissão e Admissão
-
-- **Papel:** receber uma origem não confiável, validar sua admissão e entregar uma referência durável candidata ao aceite.
-- **Possui:** streaming de upload, limites, formato/conteúdo, checksum, chave de idempotência da submissão e consolidação de problemas.
-- **Não possui:** identidade/estado do trabalho, tentativa, despacho, Produção de Resultados ou Comunicação de Falhas.
-- **Fornece:** `SolicitarSubmissao` e `OrigemAdmitida`; devolve `EnvioRejeitado` sem criar trabalho processável.
-- **Dados:** sessão/idempotência de submissão e metadados de validação; vídeo no storage por porta própria.
-- **Dependências:** Autenticação e Identidade, object storage e Ciclo do Trabalho.
-
-**Invariante:** Submissão nunca aciona Processamento nem Comunicação de Falhas, direta ou indiretamente por adaptador próprio. Depois de preservar a origem, solicita ao Ciclo do Trabalho o aceite. Se não houver aceite, um reconciliador remove a origem órfã conforme política.
-
-<a id="ar-cmp-03"></a>
-
-### CMP-20 — Ciclo do Trabalho
-
-- **Papel:** aceitar e governar todo o ciclo recuperável do trabalho.
-- **Possui:** ID, proprietário `(issuer, subject)`, referência da origem, estado, histórico, ciclos, tentativas, política de falhas, retentativa limitada, reprocessamento manual, transições e outbox do trabalho.
-- **Não possui:** bytes da origem, extração, publicação física, projeção de consulta, download ou canal externo.
-- **Fornece:** `AceitarTrabalho`, `AutorizarTentativa`, `AplicarFatoDaTentativa`, `SolicitarReprocessamento`, consultas de autorização e fatos do trabalho.
-- **Dados:** agregado do trabalho, tentativas, inbox e outbox em sua própria fronteira transacional.
-- **Dependências:** referência durável de Submissão; fatos idempotentes de Processamento/Publicação; broker por adaptador.
-
-**Invariantes:**
-
-1. é a única autoridade e o único escritor do estado do trabalho;
-2. só responde `TrabalhoAceito` depois de verificar a origem durável e confirmar, na mesma transação PostgreSQL, trabalho, proprietário, estado inicial e registro da outbox;
-3. nenhuma Publicação, Produção de Resultados ou Comunicação de Falhas escreve diretamente seu esquema;
-4. uma reentrega técnica não cria nova tentativa; somente política explícita autoriza uma nova tentativa;
-5. `CONCLUÍDO` exige `ResultadoPublicado` com manifesto e ZIP recuperáveis.
-
-<a id="ar-cmp-04"></a>
-
-### CMP-21 — Processamento de Mídia
-
-- **Papel:** executar uma tentativa autorizada e transformar a origem em conjunto completo de imagens.
-- **Possui:** deduplicação da ordem, concorrência, isolamento temporário, FFmpeg, validação e diagnóstico técnico da execução.
-- **Não possui:** usuário, estado do trabalho, decisão de retry, ZIP, autorização de acesso ou notificação.
-- **Fornece:** `TentativaIniciada`, `ImagensExtraidas` ou `FalhaTecnicaDaTentativa`, sempre correlacionados; somente Ciclo decide retry e estado.
-- **Dados:** inbox e registro técnico da execução; temporários descartáveis por tentativa.
-- **Dependências:** broker, object storage e Publicação de Resultados.
-
-<a id="ar-cmp-05"></a>
-
-### CMP-22 — Publicação de Resultados
-
-- **Papel:** validar e tornar o resultado completo, incluindo ZIP, duravelmente recuperável.
-- **Possui:** manifesto, catálogo das imagens, empacotamento ZIP, checksum, promoção de chaves temporárias para definitivas e outbox de publicação.
-- **Não possui:** estado do trabalho, propriedade, download HTTP ou decisão de tentativa.
-- **Fornece:** `PublicarResultado`, `ResultadoPublicado` ou `FalhaTecnicaDaPublicacao`; somente Ciclo decide retry e estado.
-- **Dados:** manifesto, referências e inbox/outbox próprios; bytes no object storage.
-- **Dependências:** imagens de Processamento e object storage.
-
-<a id="ar-cmp-06"></a>
-
-### CMP-23 — Consulta de Trabalhos
-
-- **Papel:** listar, em leitura somente, os trabalhos do sujeito autenticado.
-- **Possui:** projeção de identificador, estado, datas e regra de filtragem por `(issuer, subject)`.
-- **Não possui:** transição, tentativa, origem, resultado ou regra de notificação.
-- **Fornece:** `ListarMeusTrabalhos`; detalhe e motivo sanitizado permanecem `A confirmar`.
-- **Dados:** read model próprio, alimentado por fatos do Ciclo.
-- **Dependências:** Autenticação e Identidade e eventos do Ciclo; não lê o esquema do Ciclo.
-
-<a id="ar-cmp-07"></a>
-
-### CMP-24 — Acesso a Resultados
-
-- **Papel:** autorizar e entregar uma representação publicada do resultado.
-- **Possui:** elegibilidade de acesso, resolução do manifesto, emissão de URL curta/temporária ou streaming controlado e auditoria mínima.
-- **Não possui:** empacotamento, estado, extração ou políticas de tentativa.
-- **Fornece:** `BaixarResultado`; `BaixarImagem` somente se a extensão for confirmada.
-- **Dados:** projeção mínima de resultados elegíveis e auditoria; não lê esquemas de Ciclo/Publicação.
-- **Dependências:** Autenticação e Identidade, eventos de trabalho/resultado e object storage.
-
-<a id="ar-cmp-08"></a>
-
-### CMP-25 — Comunicação de Falhas
-
-- **Papel:** compor e entregar comunicação segura a partir de um fato de negócio persistido.
-- **Possui:** inbox, template de falha, destino permitido, tentativas do canal e resultado da entrega.
-- **Não possui:** estado do trabalho, diagnóstico bruto, aceite, extração ou publicação.
-- **Fornece:** `NotificarFalha`; demais acontecimentos e preferências permanecem futuras.
-- **Dados:** inbox, outbox/adaptador de canal e histórico próprio, sem segredos no conteúdo.
-- **Dependências:** fatos autossuficientes do Ciclo e provedor de e-mail/comunicação.
-
-## Atribuição final das histórias canônicas
-
-| História | Responsável principal único | Colaboradores principais | Escopo |
-|---|---|---|---|
-| `US-01` | `CMP-18` Autenticação e Identidade | Keycloak | declarado |
-| `US-02` | `CMP-19` Submissão e Admissão | `CMP-18`, `CMP-20` | declarado |
-| `US-03` | `CMP-21` Processamento de Mídia | `CMP-20`, `CMP-22` | declarado |
-| `US-04` | `CMP-20` Ciclo do Trabalho | `CMP-19`, `CMP-21`, `CMP-22` | declarado/inferido canônico |
-| `US-05` | `CMP-23` Consulta de Trabalhos | `CMP-18`, `CMP-20` | declarado |
-| `US-06` | `CMP-24` Acesso a Resultados | `CMP-18`, `CMP-20`, `CMP-22` | declarado |
-| `US-07` | `CMP-25` Comunicação de Falhas | `CMP-20` | declarado como possibilidade |
+A atribuição vigente de `US-01..07` está no [modelo canônico](componentes-coesos.md#hist%C3%B3rias-atribu%C3%ADdas); a atribuição executada durante o ciclo está preservada na [evidência histórica](historico/componentes/ctx-cmp-003-refinamento.md#itera%C3%A7%C3%A3o-2--hist%C3%B3rias-atribu%C3%ADdas).
 
 ## Rastreabilidade das formulações R6
 
@@ -401,41 +223,15 @@ As formulações R6 não recebem uma segunda atribuição como se fossem necessi
 | `R6-US-09` | extensão futura | novo refinamento de comunicação, se confirmado |
 | `R6-US-10` | extensão futura | `CMP-24`, se confirmada |
 
-## Repetição das análises e convergência
+## Convergência e revisão das fronteiras
 
-Depois da refatoração, o inventário permaneceu congelado:
+A repetição das atribuições e análises, os critérios de convergência e os achados que motivaram cada fronteira pertencem a [`CTX-EVD-CMP-003`](historico/componentes/ctx-cmp-003-refinamento.md#itera%C3%A7%C3%A3o-2--verifica%C3%A7%C3%A3o-de-converg%C3%AAncia). As autoridades aceitas e os sinais normativos de revisão pertencem, respectivamente, a [`CTX-CMP-003`](componentes-coesos.md#autoridades-e-verifica%C3%A7%C3%A3o-l%C3%B3gica) e [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md#condi%C3%A7%C3%B5es-de-revis%C3%A3o).
 
-| Critério | Resultado |
-|---|---|
-| Todas as histórias canônicas possuem um principal | Atendido para `US-01..07`; R6 possui destino, não uma segunda atribuição |
-| Autoridade de estado não duplicada | Atendido: somente `CMP-20` |
-| Entrada não conhece consequências a jusante | Atendido: `CMP-19` depende do Ciclo, nunca de Produção/Comunicação |
-| Escrita/publicação separada de leitura/autorização | Atendido por `CMP-22` e `CMP-24` |
-| Tentativas/retry/idempotência preservados | Atendido no Ciclo e nos adaptadores de entrega |
-| Segurança reintegrada | Atendido por `CMP-18`; Keycloak e dois usuários de demo são decididos por `DEC-0005` |
-| Dependências aferentes/eferentes explícitas | Atendido conceitualmente; CA/CE numérico depende do código |
-| Características verificáveis | Cenários definidos; SLOs e cargas ainda a confirmar |
-| Todo componente justificado | Atendido pelas histórias, requisitos ou característica primária |
-
-O maior `fan-in` fica no Ciclo do Trabalho, o que é intencional por ele arbitrar transições. Seu `fan-out` é reduzido por outbox e fatos autossuficientes: ele não conhece implementação de Produção, projeção, storage ou canal. Processamento e Publicação permanecem no mesmo quantum por compartilharem perfil de CPU/I/O e fluxo da tentativa, mas mantêm contratos e dados lógicos separados. Acesso e Consulta compartilham implantação e schema físico de Gestão por viabilidade, mas preservam módulos, propriedade de tabelas e autoridade.
-
-Sinais para reabrir fronteiras:
-
-- separar Admissão se regras, equipe ou cadência evoluírem independentemente do upload;
-- separar Publicação de Processamento em outro deployment se ZIP/artefatos tiverem backlog e escala próprios;
-- separar preferências da entrega de notificações se múltiplos canais criarem regras substanciais;
-- unir Consulta ou Acesso ao Ciclo somente se a projeção provar custo sem política própria e sem leitura cruzada;
-- rever os três quanta se medições mostrarem acoplamento de implantação ou perfis operacionais diferentes.
+Esta comparação não mantém outra cópia desses critérios. Resultados de código ou medição devem atualizar a evidência apropriada ou motivar um novo nó, nunca alterar silenciosamente o significado dos componentes atuais.
 
 ## Quanta, processos e serviços
 
-Somente após a convergência lógica, [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) agrupa os componentes em três quanta e três deployments de aplicação. Isso não transforma os oito componentes em oito microsserviços. Keycloak e outras dependências de plataforma também não entram nessa contagem.
-
-| Quantum decidido | Componentes lógicos | Processo/artefato implantável | Motivo e custo |
-|---|---|---|---|
-| Gestão de Trabalhos de Vídeo | `CMP-18`, `CMP-19`, `CMP-20`, `CMP-23`, `CMP-24` | `gestao-trabalhos` | baixa latência na borda e aceite transacional; compartilha implantação/schema físico, preservando módulos e tabelas |
-| Produção de Resultados | `CMP-21`, `CMP-22` | `producao-resultados` | isola CPU/I/O, backlog e scratch; exige contrato assíncrono, inbox e storage durável |
-| Comunicação de Falhas | `CMP-25` | `notificador` | isola canal e retentativas desde o início; aceita o custo de um processo possivelmente pequeno |
+Somente após a convergência lógica, [`DEC-0002`](decisoes/0002-topologia-kubernetes.md#decis%C3%A3o) agrupou os componentes em três quanta e três `Deployment`s de aplicação. O ADR é a única fonte da composição, dos motivos, custos e condições de revisão. Isso não transforma os oito componentes em oito microsserviços; Keycloak e outras dependências de plataforma também não entram nessa contagem.
 
 Quatro distinções são obrigatórias:
 
@@ -713,7 +509,7 @@ Fitness functions estruturais adicionais:
 - alterar réplicas de `producao-resultados` não exige alterar API nem banco do Ciclo;
 - scan falha se manifesto contém Secret em claro, container root ou imagem sem digest.
 
-## Decisões pendentes e próximo incremento
+## Decisões e pendências
 
 [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) aceita Kubernetes e os três quanta nomeados; [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md) aceita os oito componentes; [`DEC-0005`](decisoes/0005-keycloak-no-ambiente-de-validacao.md) aceita Keycloak empacotado. A semântica física de durabilidade de [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md) continua `em_analise` até a prova vertical.
 
@@ -728,6 +524,4 @@ Permanecem pendentes de confirmação:
 - serviços gerenciados, região, custos, backup/RPO/RTO e política de dados;
 - valores de requests/limits, HPA/KEDA, PDB e timeouts, que dependem de medição.
 
-O [roadmap ativo](../acompanhamento/roadmap.md) é a fonte do próximo trabalho: modelar ameaças, confrontar `DEC-0003`, registrar separadamente a escolha da stack, ativar o especialista correspondente somente depois desse aceite e então construir a fatia vertical. A implementação não deve antecipar Java/Quarkus nem as dependências físicas ainda em análise.
-
-Essa fatia deverá testar a afirmação arquitetural mais arriscada — “aceito significa durável e processável sem perda” — com dois usuários, ZIP recuperável e falhas injetadas no processamento, mensageria e notificação, antes de incorporar cancelamento, preferências, download individual ou notificações ampliadas.
+O [roadmap ativo](../acompanhamento/roadmap.md) é a única fonte da sequência e do próximo trabalho; este documento não a replica. Qualquer prova vertical relacionada deve confrontar a afirmação arquitetural mais arriscada — “aceito significa durável e processável sem perda” — sem promover silenciosamente Java/Quarkus, dependências físicas em análise ou extensões futuras.

@@ -19,7 +19,7 @@ relations:
 
 # DEC-0001 — Refinar componentes antes de delimitar quanta
 
-> **Atualização temporal — 2026-08-03:** o ciclo desta decisão continua vigente, mas seu primeiro resultado concreto, [`CTX-CMP-002`](../componentes.md), foi substituído pelo [modelo de oito componentes `CTX-CMP-003`](../componentes-coesos.md). A topologia, ainda aberta quando este ADR foi aceito, passou a três quanta de validação em [`DEC-0002`](0002-topologia-kubernetes.md).
+> **Atualização temporal — 2026-08-03:** o ciclo desta decisão continua vigente, mas seu primeiro resultado concreto, [`CTX-CMP-002`](../historico/componentes/ctx-cmp-002-componentes-modulares.md), foi substituído pelo [modelo de oito componentes `CTX-CMP-003`](../componentes-coesos.md). A topologia, ainda aberta quando este ADR foi aceito, passou a três quanta de validação em [`DEC-0002`](0002-topologia-kubernetes.md).
 
 ## Pergunta
 
@@ -27,7 +27,7 @@ Qual granularidade e qual ordem de análise devem orientar a identificação dos
 
 ## Contexto e evidências
 
-O modelo [`CTX-CMP-001`](../componentes-macro.md) agrupava responsabilidades em quatro capacidades amplas. A revisão do capítulo 8 de *Fundamentals of Software Architecture* mostrou que esses limites estavam mais próximos de quanta ou serviços candidatos do que de manifestações modulares: mais de um componente pode tratar a mesma entidade, desde que cada um encapsule um comportamento coeso.
+O modelo [`CTX-CMP-001`](../historico/componentes/ctx-cmp-001-componentes-macro.md) agrupava responsabilidades em quatro capacidades amplas. A revisão do capítulo 8 de *Fundamentals of Software Architecture* mostrou que esses limites estavam mais próximos de quanta ou serviços candidatos do que de manifestações modulares: mais de um componente pode tratar a mesma entidade, desde que cada um encapsule um comportamento coeso.
 
 O ciclo descrito pela referência atribui as histórias aos componentes antes de analisar responsabilidades e características. Essas duas análises diagnosticam o inventário congelado; somente a etapa posterior refatora ou adiciona componentes. Antecipar a quantidade de quanta inverteria essa relação e poderia fazer a topologia desejada determinar os componentes.
 
@@ -53,7 +53,7 @@ Durante as etapas de atribuição e análise, o inventário permanece congelado.
 
 ## Consequências
 
-- O modelo anterior permanece como evidência histórica e é substituído por [`CTX-CMP-002`](../componentes.md).
+- O modelo anterior permanece como evidência histórica e é substituído por [`CTX-CMP-002`](../historico/componentes/ctx-cmp-002-componentes-modulares.md).
 - As sete histórias possuem um responsável principal em cada iteração registrada.
 - O inventário refinado contém treze componentes comportamentais; componentes diferentes podem agir sobre `Trabalho` sem formar um único componente por entidade.
 - Implementações futuras devem preservar as dependências modulares ou registrar nova refatoração quando código e medições contradisserem a hipótese.

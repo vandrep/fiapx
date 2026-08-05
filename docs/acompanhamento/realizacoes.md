@@ -55,7 +55,7 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Estado:** `concluido`.
 - **Concluído em:** 2026-08-01.
 - **Resultado:** histórias foram atribuídas a quatro componentes lógicos, com papéis, autoridades, contratos, lacunas e critérios de convergência explícitos.
-- **Evidência:** [`../arquitetura/componentes-macro.md`](../arquitetura/componentes-macro.md).
+- **Evidência:** [`../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md`](../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md).
 - **Relações:** produzido a partir de `CTX-REQ-001`, `CTX-DOM-001` e `CTX-CHAR-001`; informa o modelo `CTX-CMP-001`.
 - **Informação relevante:** componente lógico ainda não significa serviço nem quantum; acoplamento e implantação continuam em análise.
 
@@ -63,8 +63,8 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 
 - **Estado:** `concluido`.
 - **Concluído em:** 2026-08-01.
-- **Resultado:** o modelo então vigente [`CTX-CMP-001`](../arquitetura/componentes-macro.md) ganhou uma representação Mermaid com interações e limites explícitos.
-- **Evidência:** seção “Diagrama lógico” em [`../arquitetura/componentes-macro.md`](../arquitetura/componentes-macro.md).
+- **Resultado:** o modelo então vigente [`CTX-CMP-001`](../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md) ganhou uma representação Mermaid com interações e limites explícitos.
+- **Evidência:** seção “Diagrama lógico” em [`../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md`](../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md).
 - **Relações:** refina `CTX-CMP-001`.
 
 ### WORK-005 — Estabelecer glossário do domínio
@@ -100,7 +100,7 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Concluído em:** 2026-08-02.
 - **Resultado:** o fluxo do envio ao resultado ou à falha foi revisado com o responsável; ficaram explícitos o ponto de aceitação, a precedência e agregação das validações de admissão, a ausência de cota funcional de novas tentativas, a retenção sem prazo, o momento de comunicação das falhas e a direção incremental de autogestão de contas.
 - **Evidência:** [Event Storming validado e resultado das seis questões](../requisitos/event-storming.md#resultado-da-revisão-das-questões).
-- **Relações:** produziu [`CTX-DOM-002`](../requisitos/event-storming.md), que informou [`WORK-009`](#work-009--incorporar-descobertas-do-event-storming) e a revalidação de [`CTX-CMP-001`](../arquitetura/componentes-macro.md).
+- **Relações:** produziu [`CTX-DOM-002`](../requisitos/event-storming.md), que informou [`WORK-009`](#work-009--incorporar-descobertas-do-event-storming) e a revalidação de [`CTX-CMP-001`](../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md).
 - **Informação relevante:** WebSocket e SSE permanecem opções de transporte; retenção sem prazo não impede uma futura política de exclusão; ausência de cota funcional total de tentativas não define gatilho automático nem elimina idempotência e salvaguardas operacionais.
 - **Revisão arquitetural:** as descobertas preservam as autoridades atuais, mas ampliam os contratos candidatos de Trabalhos de Vídeo e Identidade e Acesso. Nenhum novo componente ou quantum foi decidido antes de incorporar os requisitos e reexecutar o refinamento.
 
@@ -120,8 +120,8 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Estado:** `concluido`.
 - **Concluído em:** 2026-08-02.
 - **Resultado:** o ciclo do capítulo 8 foi reexecutado na ordem `identificar → atribuir histórias → analisar responsabilidades → analisar características do sistema → refatorar → repetir e verificar`. Seis componentes iniciais foram diagnosticados sem alterar o inventário durante as análises e refatorados em treze componentes modulares; cada história possui exatamente um responsável principal nas duas atribuições.
-- **Evidência:** modelo então corrente [`CTX-CMP-002`](../arquitetura/componentes.md), decisão [`DEC-0001`](../arquitetura/decisoes/0001-refinamento-de-componentes.md), características sistêmicas [`CTX-CHAR-001`](../arquitetura/caracteristicas.md#agrupamento-preliminar-por-escopo), skill [`refinar-componentes-arquiteturais`](../../.agents/skills/refinar-componentes-arquiteturais/SKILL.md) e fitness function [`validar-componentes.sh`](../../scripts/validar-componentes.sh), na versão vigente em 2026-08-02.
-- **Relações:** `DEC-0001` produziu `CTX-CMP-002`, que substitui [`CTX-CMP-001`](../arquitetura/componentes-macro.md) sem apagar as iterações anteriores; informa [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial) e [`WORK-012`](../acompanhamento/roadmap.md#work-012--registrar-as-primeiras-decisões-arquiteturais).
+- **Evidência:** modelo então corrente [`CTX-CMP-002`](../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md), decisão [`DEC-0001`](../arquitetura/decisoes/0001-refinamento-de-componentes.md), características sistêmicas [`CTX-CHAR-001`](../arquitetura/caracteristicas.md#agrupamento-preliminar-por-escopo), skill [`refinar-componentes-arquiteturais`](../../.agents/skills/refinar-componentes-arquiteturais/SKILL.md) e fitness function [`validar-componentes.sh`](../../scripts/validar-componentes.sh), na versão vigente em 2026-08-02.
+- **Relações:** `DEC-0001` produziu `CTX-CMP-002`, que substitui [`CTX-CMP-001`](../arquitetura/historico/componentes/ctx-cmp-001-componentes-macro.md) sem apagar as iterações anteriores; informa [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial) e [`WORK-012`](../acompanhamento/roadmap.md#work-012--registrar-as-primeiras-decisões-arquiteturais).
 - **Informação relevante:** componente lógico é uma manifestação modular de comportamento, implementável como pacote, módulo ou biblioteca, e não equivale a microsserviço ou quantum. Quatro agrupamentos de quanta foram preservados apenas como hipóteses reversíveis; quantidade, limites e topologia não foram aceitos.
 - **Validação:** o modelo passou na validação de contexto e nos controles de ordem das etapas, atribuição única das sete histórias, motivação dos treze componentes e quatro agrupamentos apenas candidatos. Casos contrafactuais comprovaram rejeição de fase ausente ou fora de ordem, história ausente ou duplicada, componente sem motivação e afirmação prematura de topologia.
 - **Meta-PDCA aplicado:** o processo anterior permitia antecipar quanta e modificar componentes durante etapas diagnósticas. A skill passou a congelar o inventário nessas etapas, e `validar-componentes.sh` tornou a sequência e as invariantes objetivamente verificáveis. A primeira mutação de etapa ausente revelou que `set -e` encerrava o validador antes do diagnóstico; a contagem de títulos passou a tratar explicitamente ausência e duplicidade, e toda a bateria contrafactual foi reexecutada com sucesso.

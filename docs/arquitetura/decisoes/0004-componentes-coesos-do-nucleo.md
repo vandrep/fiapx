@@ -13,6 +13,8 @@ relations:
     target: CTX-CMP-002
   - type: informed_by
     target: R6-CMP-MODEL-001
+  - type: informed_by
+    target: CTX-EVD-CMP-003
   - type: produces
     target: CTX-CMP-003
   - type: governed_by
@@ -27,9 +29,11 @@ Qual inventário lógico deve orientar o primeiro código sem perder as autorida
 
 ## Contexto e evidências
 
-O modelo [`CTX-CMP-002`](../componentes.md) tornou explícitas treze responsabilidades, mas algumas fronteiras podem virar módulos anêmicos no primeiro incremento. A proposta [`R6-CMP-MODEL-001`](../../propostas/base-simplificada-seis-componentes/componentes.md) trouxe uniões úteis, porém adiou identidade, retirou tentativas e misturou publicação com acesso.
+O modelo [`CTX-CMP-002`](../historico/componentes/ctx-cmp-002-componentes-modulares.md) tornou explícitas treze responsabilidades, mas algumas fronteiras podem virar módulos anêmicos no primeiro incremento. A proposta [`R6-CMP-MODEL-001`](../../propostas/base-simplificada-seis-componentes/componentes.md) trouxe uniões úteis, porém adiou identidade, retirou tentativas e misturou publicação com acesso.
 
 O responsável pelo produto confirmou em [`REQ-CHG-0003`](../../requisitos/refinamentos/REQ-CHG-0003.md) uma consolidação conservadora das sete histórias: concorrência, não perda, tentativas, reprocessamento e ZIP permanecem; cancelamento, download individual, detalhe/motivo de falha e notificações ampliadas não entram no núcleo.
+
+A evidência [`CTX-EVD-CMP-003`](../historico/componentes/ctx-cmp-003-refinamento.md) preserva o inventário inicial, as atribuições, as análises e a refatoração que informaram esta decisão sem competir com a definição vigente.
 
 ## Opções e trade-offs
 

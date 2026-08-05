@@ -27,7 +27,7 @@ relations:
 
 Este diretório preserva, de forma autocontida, o refinamento conduzido na conversa de 3 de agosto de 2026. Ele registra histórias, responsabilidades, decisões, alternativas e próximos passos para que o trabalho possa continuar em outro computador.
 
-O pacote é uma **proposta histórica em análise**, não uma segunda fonte canônica. Não substitui o conjunto de [histórias `CTX-REQ-001`](../../requisitos/historias.md), o [modelo ativo `CTX-CMP-003`](../../arquitetura/componentes-coesos.md), as [características `CTX-CHAR-001`](../../arquitetura/caracteristicas.md) nem o [roadmap oficial](../../acompanhamento/roadmap.md). O antigo [`CTX-CMP-002`](../../arquitetura/componentes.md) permanece como baseline temporal usado quando esta comparação foi escrita.
+O pacote é uma **proposta histórica em análise**, não uma segunda fonte canônica. Não substitui o conjunto de [histórias `CTX-REQ-001`](../../requisitos/historias.md), o [modelo ativo `CTX-CMP-003`](../../arquitetura/componentes-coesos.md), as [características `CTX-CHAR-001`](../../arquitetura/caracteristicas.md) nem o [roadmap oficial](../../acompanhamento/roadmap.md). O antigo [`CTX-CMP-002`](../../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md) permanece como baseline temporal usado quando esta comparação foi escrita.
 
 Base Git usada na consolidação: `b71c41478d93bff247bc7412bf3721b808bee070`.
 

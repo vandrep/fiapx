@@ -17,6 +17,8 @@ relations:
   - type: derived_from
     target: CTX-REQ-001
   - type: informed_by
+    target: CTX-EVD-CMP-003
+  - type: informed_by
     target: REQ-CHG-0003
   - type: informed_by
     target: CTX-DOM-001
@@ -34,115 +36,53 @@ relations:
 
 # Componentes coesos do núcleo
 
-## Escopo, evidências e premissas
+> **Definição vigente:** `CTX-CMP-003` é o baseline lógico do núcleo desde 2026-08-03, aceito por [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md). “Ativo” identifica a fonte corrente; não afirma que a arquitetura já foi implementada ou comprovada fisicamente.
+>
+> Navegação: [índice de arquitetura](README.md) · [evidência do refinamento](historico/componentes/ctx-cmp-003-refinamento.md) · [topologia de validação](decisoes/0002-topologia-kubernetes.md) · [persistência e mensageria em análise](decisoes/0003-entrega-duravel-e-persistencia.md)
 
-Este modelo sucede o [`CTX-CMP-002`](componentes.md), preservado como evidência do refinamento granular anterior. Ele consolida os comportamentos úteis da proposta [`R6-CMP-MODEL-001`](../propostas/base-simplificada-seis-componentes/componentes.md) sem promover suas extensões futuras nem remover autenticação, concorrência, tentativas, retentativas, reprocessamento, ZIP ou a garantia de não perder trabalhos aceitos.
+## Estado e precedência
+
+| Camada | Situação vigente | Autoridade |
+|---|---|---|
+| `CMP-18..25` e suas autoridades | baseline lógico aceito | [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md) e este modelo |
+| Keycloak por OIDC | aceito para o ambiente de validação | [`DEC-0005`](decisoes/0005-keycloak-no-ambiente-de-validacao.md) |
+| três quanta e três `Deployment`s | topologia aceita para validação; consequências ainda não comprovadas | [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) |
+| PostgreSQL, RabbitMQ, object storage e realização física de outbox/inbox | recomendação ainda `em_analise` | [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md) |
+| código, testes e medições do modelo | evidência física pendente | [roadmap ativo](../acompanhamento/roadmap.md) |
+| inventários anteriores e ciclo que produziu este modelo | evidência histórica, não orientação corrente | [histórico de componentes](README.md#evolu%C3%A7%C3%A3o-dos-componentes) |
+
+Componente é um limite lógico e modular de comportamento. Quantum, processo, imagem, `Deployment`, banco, fila e provedor de identidade são decisões físicas separadas e não determinam este inventário.
+
+## Escopo e limites
+
+Este modelo sucede o [`CTX-CMP-002`](historico/componentes/ctx-cmp-002-componentes-modulares.md) e consolida os comportamentos úteis da proposta [`R6-CMP-MODEL-001`](../propostas/base-simplificada-seis-componentes/componentes.md). A [evidência `CTX-EVD-CMP-003`](historico/componentes/ctx-cmp-003-refinamento.md) preserva técnica, inventário inicial, análises, refatoração e verificação de convergência sem competir com esta definição.
 
 O escopo funcional é exatamente o conjunto canônico [`US-01..US-07`](../requisitos/historias.md), consolidado por [`REQ-CHG-0003`](../requisitos/refinamentos/REQ-CHG-0003.md). Cancelamento, download individual, consulta detalhada com motivo de falha e notificações além da falha permanecem fora do núcleo.
 
-Classificação das entradas:
+As fronteiras, autoridades, projeções e obrigações de idempotência abaixo estão decididas. Nomes de contratos são conceituais; formatos físicos das projeções e mecanismos de idempotência, como inbox, outbox ou deduplicação no transporte, continuam sujeitos à prova vertical e às decisões indicadas na tabela de precedência.
 
-| Classe | Evidência usada |
-|---|---|
-| **Declarada** | autenticação, envio, processamento concorrente, não perda, consulta por usuário, ZIP e possibilidade de notificação de falha |
-| **Validada na descoberta** | admissão antes do aceite, distinção entre submissão, reentrega, retentativa e reprocessamento, retenção atual e ordem da comunicação |
-| **Decidida** | ciclo de refinamento de [`DEC-0001`](decisoes/0001-refinamento-de-componentes.md); consolidação conservadora; Keycloak empacotado para a prova; três quanta de aplicação para validação |
-| **Inferida** | contratos, projeções, idempotência, outbox/inbox e detalhes de autoridade necessários para tornar as necessidades verificáveis |
+## Inventário vigente
 
-Componente continua sendo um limite lógico e modular de comportamento. Quantum, processo, imagem, `Deployment`, banco, fila e provedor de identidade são decisões físicas posteriores e não determinam este inventário.
-
-## Iteração 1 — Componentes identificados
-
-### Técnica e inventário inicial congelado
-
-Foi usado `Workflow`, complementado por `Actor/Action`: autenticar, submeter, governar, processar, publicar/entregar, consultar e comunicar. O particionamento inicial foi orientado ao domínio; mecanismos como HTTP, OIDC, RabbitMQ, storage e FFmpeg não originaram componentes.
-
-| Componente inicial | Papel derivado do fluxo | Evidência principal |
+| ID | Componente | Autoridade ou finalidade principal |
 |---|---|---|
-| Autenticação e Identidade | estabelecer a identidade confiável de quem realiza uma operação | `US-01` |
-| Submissão de Vídeos | receber, admitir e encaminhar um vídeo para aceite | `US-02` |
-| Gestão do Trabalho | preservar o trabalho e arbitrar seu ciclo | `US-04` |
-| Processamento de Mídia | transformar uma origem em imagens e resultado | `US-03` |
-| Entrega de Resultados | tornar o ZIP acessível ao proprietário | `US-06` |
-| Consulta de Trabalhos | apresentar os trabalhos do usuário | `US-05` |
-| Comunicação de Falhas | comunicar uma falha já registrada | `US-07` |
-
-O inventário permaneceu congelado durante a atribuição e as duas análises seguintes. Não há `Entity Trap`: embora trabalho e resultado apareçam em mais de um candidato, cada uso será confrontado com comportamento, autoridade e razão de mudança.
-
-## Iteração 1 — Histórias atribuídas
-
-| História | Responsável principal | Colaboradores | Observações |
-|---|---|---|---|
-| `US-01` | Autenticação e Identidade | provedor de identidade | autenticação permanece integralmente no escopo |
-| `US-02` | Submissão de Vídeos | Identidade; Gestão do Trabalho | submissão coordena a história nesta iteração |
-| `US-03` | Processamento de Mídia | Gestão; Entrega | concorrência e isolamento pertencem ao processamento |
-| `US-04` | Gestão do Trabalho | Submissão; Processamento; Entrega | somente Gestão arbitra novas tentativas e desfechos |
-| `US-05` | Consulta de Trabalhos | Identidade; Gestão | leitura não altera o ciclo |
-| `US-06` | Entrega de Resultados | Identidade; Gestão; Processamento | mistura publicação e autorização nesta hipótese |
-| `US-07` | Comunicação de Falhas | Gestão | comunicação ocorre depois da falha persistida |
-
-Cada história possui exatamente um responsável principal; colaboradores fornecem contratos e não compartilham essa autoridade.
-
-## Iteração 1 — Papéis e responsabilidades analisados
-
-O inventário continuou congelado.
-
-| Componente inicial | Achado de responsabilidade ou acoplamento | Sinal para a refatoração posterior |
-|---|---|---|
-| Autenticação e Identidade | autenticar credenciais, validar token e decidir propriedade são autoridades diferentes | separar Keycloak, identidade autenticada e autorização sobre o recurso |
-| Submissão de Vídeos | transferência/admissão e aceite do trabalho possuem transações e falhas distintas | restringir a entrada e deixar o aceite com a autoridade do ciclo |
-| Gestão do Trabalho | alto `fan-in` é coerente para arbitrar estado, ciclo e tentativas | manter autoridade única e reduzir conhecimento de adaptadores a jusante |
-| Processamento de Mídia | extração e publicação compartilham fluxo, mas publicação possui invariante próprio de recuperabilidade | separar transformação de manifestação durável do resultado |
-| Entrega de Resultados | publicação/escrita e autorização/leitura mudam por motivos diferentes | dividir Publicação de Acesso |
-| Consulta de Trabalhos | projeção somente leitura possui política própria de propriedade e consistência | manter separada do escritor do ciclo |
-| Comunicação de Falhas | falha de canal e retentativas externas não devem alterar trabalho | manter coesa e limitada à falha no núcleo |
-
-Acoplamentos temporais relevantes:
-
-- origem recuperável precede aceite;
-- aceite persistido precede despacho;
-- tentativa autorizada precede execução;
-- imagens, manifesto e ZIP recuperáveis precedem conclusão;
-- falha persistida precede notificação.
-
-## Iteração 1 — Características do sistema analisadas
-
-As características permanecem propriedades sistêmicas e não foram atribuídas aos componentes durante esta etapa.
-
-| Característica | Pressão observada nas fronteiras | Verificação que a torna concreta |
-|---|---|---|
-| Confiabilidade e recuperabilidade | uma autoridade de ciclo, aceite durável, idempotência e publicação antes da conclusão | reinício depois do aceite, mensagem duplicada e reconciliação entre estado e ZIP |
-| Segurança | IdP externo, identidade estável, autorização no proprietário do recurso e entrada não confiável | `401/403`, dois usuários e ausência de acesso cruzado |
-| Escalabilidade do processamento | execução intensiva separável do fluxo interativo, com concorrência e scratch limitados | variar réplicas sob backlog sem colisão nem perda |
-| Viabilidade operacional | poucos processos, mas perfis de falha e escala explícitos | ambiente Kubernetes reproduzível e medição do custo dos três quanta |
-
-Os benefícios de isolar execução e comunicação têm como custo contratos assíncronos, consistência eventual, observabilidade e operação adicional.
-
-## Iteração 1 — Refatoração motivada
-
-| Origem congelada | Achado anterior | Alteração aplicada somente agora | Resultado |
-|---|---|---|---|
-| Autenticação e Identidade | autoridade sobre propriedade estava sobreposta | manter e restringir à integração OIDC e identidade autenticada | [`CMP-18`](#cmp-18) |
-| Submissão de Vídeos | entrada e aceite possuíam falhas/transações distintas | unir submissão e admissão; mover aceite para o ciclo | [`CMP-19`](#cmp-19) |
-| Gestão do Trabalho | centralização de transições é coesa | renomear e consolidar aceite, tentativas, desfecho e outbox | [`CMP-20`](#cmp-20) |
-| Processamento de Mídia | publicação possui invariante durável próprio | restringir à execução e extração | [`CMP-21`](#cmp-21) |
-| Entrega de Resultados | escrita e leitura têm segurança e escala diferentes | dividir em Publicação e Acesso | [`CMP-22`](#cmp-22) e [`CMP-24`](#cmp-24) |
-| Consulta de Trabalhos | leitura/propriedade formam papel coeso | manter | [`CMP-23`](#cmp-23) |
-| Comunicação de Falhas | canal externo tem falha própria, sem autoridade de estado | manter e restringir à falha | [`CMP-25`](#cmp-25) |
-
-Oito componentes resultam desses achados; a quantidade não foi uma meta de descoberta.
-
-## Iteração 2 — Componentes identificados
+| [`CMP-18`](#cmp-18) | Autenticação e Identidade | validar a identidade OIDC, sem decidir propriedade |
+| [`CMP-19`](#cmp-19) | Submissão e Admissão | admitir uma origem recuperável antes de solicitar aceite |
+| [`CMP-20`](#cmp-20) | Ciclo do Trabalho | ser o único escritor do estado e arbitrar tentativas e desfechos |
+| [`CMP-21`](#cmp-21) | Processamento de Mídia | executar uma tentativa autorizada e relatar fatos técnicos |
+| [`CMP-22`](#cmp-22) | Publicação de Resultados | tornar manifesto, imagens e ZIP recuperáveis antes da conclusão |
+| [`CMP-23`](#cmp-23) | Consulta de Trabalhos | manter a projeção somente leitura dos trabalhos do sujeito |
+| [`CMP-24`](#cmp-24) | Acesso a Resultados | autorizar o proprietário e entregar o ZIP publicado |
+| [`CMP-25`](#cmp-25) | Comunicação de Falhas | comunicar uma falha persistida sem alterar o trabalho |
 
 <a id="cmp-18"></a>
 
 ### CMP-18 — Autenticação e Identidade
 
 - **Papel:** validar uma identidade OIDC e disponibilizar um sujeito confiável às operações protegidas.
-- **Possui:** validação de assinatura, emissor, audiência e validade do token; mapeamento de `(issuer, subject)` para `IdentidadeAutenticada`.
+- **Responsabilidades e autoridade:** validação de assinatura, emissor, audiência e validade do token; mapeamento de `(issuer, subject)` para `IdentidadeAutenticada`.
 - **Não possui:** senha, cadastro, sessão do IdP, trabalho, relação de proprietário ou decisão de acesso a um recurso.
 - **Fornece:** `IdentidadeAutenticada(issuer, subject)` ou recusa segura.
-- **Dependências:** Keycloak por contrato OIDC e suporte do framework na borda.
+- **Dependências decididas:** Keycloak por contrato OIDC e suporte do framework na borda.
 
 Keycloak autentica credenciais e emite tokens. Ciclo, Consulta e Acesso decidem propriedade sobre os dados sob sua autoridade; este componente não fornece um `ExigirProprietario` genérico.
 
@@ -151,10 +91,11 @@ Keycloak autentica credenciais e emite tokens. Ciclo, Consulta e Acesso decidem 
 ### CMP-19 — Submissão e Admissão
 
 - **Papel:** receber uma origem não confiável, validar sua admissão e entregar uma referência durável candidata ao aceite.
-- **Possui:** streaming, limites, validação de formato/conteúdo, checksum, idempotência da submissão e problemas de admissão.
+- **Responsabilidades e autoridade:** streaming, limites, validação de formato/conteúdo, checksum, idempotência da submissão e problemas de admissão.
 - **Não possui:** estado, tentativa, despacho, processamento, resultado ou notificação.
 - **Fornece:** `OrigemAdmitida` ou `EnvioRejeitado`; solicita `AceitarTrabalho` somente depois da origem recuperável.
-- **Dependências:** identidade autenticada, object storage e Ciclo do Trabalho.
+- **Dependências lógicas:** identidade autenticada, porta de origem recuperável e Ciclo do Trabalho.
+- **Realização em análise:** object storage e detalhes de reconciliação pertencem à [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md).
 
 Submissão nunca aciona Processamento nem Comunicação de Falhas, direta ou indiretamente por adaptador próprio.
 
@@ -163,10 +104,11 @@ Submissão nunca aciona Processamento nem Comunicação de Falhas, direta ou ind
 ### CMP-20 — Ciclo do Trabalho
 
 - **Papel:** aceitar e governar todo o ciclo recuperável do trabalho.
-- **Possui:** ID, proprietário `(issuer, subject)`, referência da origem, estado, histórico, ciclos, tentativas, política de falhas, retry finito, reprocessamento, transições, inbox e outbox.
+- **Responsabilidades e autoridade:** ID, proprietário `(issuer, subject)`, referência da origem, estado, histórico, ciclos, tentativas, política de falhas, retry finito, reprocessamento e transições.
 - **Não possui:** bytes, extração, publicação física, projeção de consulta, download ou canal externo.
 - **Fornece:** `AceitarTrabalho`, `AutorizarTentativa`, `AplicarFatoDaTentativa`, `SolicitarReprocessamento` e fatos do trabalho.
-- **Dependências:** origem admitida e fatos idempotentes de Processamento/Publicação.
+- **Dependências lógicas:** origem admitida e fatos idempotentes de Processamento/Publicação.
+- **Realização em análise:** inbox, outbox, persistência e entrega ao processamento pertencem à [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md).
 
 É a única autoridade e o único escritor do estado do trabalho. Categorias técnicas recebidas não alteram o estado por si: o Ciclo decide se a falha é transitória ou permanente, se autoriza outra tentativa e qual transição aplicar.
 
@@ -175,32 +117,36 @@ Submissão nunca aciona Processamento nem Comunicação de Falhas, direta ou ind
 ### CMP-21 — Processamento de Mídia
 
 - **Papel:** executar uma tentativa autorizada e transformar a origem no conjunto completo de imagens.
-- **Possui:** deduplicação técnica, concorrência, isolamento, scratch, FFmpeg e diagnóstico técnico da execução.
+- **Responsabilidades e autoridade:** execução, deduplicação lógica pela identidade da tentativa autorizada, concorrência, isolamento, scratch, FFmpeg e diagnóstico técnico da tentativa.
 - **Não possui:** usuário, estado, decisão de retry, ZIP, autorização de acesso ou notificação.
 - **Fornece:** `TentativaIniciada`, `ImagensExtraidas` ou `FalhaTecnicaDaTentativa`, sempre correlacionados.
-- **Dependências:** broker, object storage e Publicação de Resultados.
+- **Dependências lógicas:** tentativa autorizada, origem recuperável e Publicação de Resultados.
+- **Realização em análise:** o mecanismo físico de deduplicação, broker e object storage pertencem à [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md).
 
 O componente descreve natureza e evidência técnica da falha; não a classifica como transitória/permanente para o negócio e não cria outra tentativa.
+
+`CMP-20` conserva a identidade da tentativa. Em uma reentrega, `CMP-21` trata a mesma identidade de forma idempotente, e `CMP-22` não publica um segundo resultado visível para ela. Inbox, chaves ou outra realização física dessa garantia permanecem em análise na `DEC-0003`.
 
 <a id="cmp-22"></a>
 
 ### CMP-22 — Publicação de Resultados
 
 - **Papel:** tornar manifesto, imagens e ZIP completos duravelmente recuperáveis.
-- **Possui:** catálogo de imagens, empacotamento ZIP, checksums, chaves imutáveis, promoção de temporários e outbox de publicação.
+- **Responsabilidades e autoridade:** catálogo de imagens, empacotamento ZIP, checksums, publicação idempotente pela identidade da tentativa e manifestação completa do resultado antes da conclusão.
 - **Não possui:** estado do trabalho, propriedade, download HTTP ou decisão de tentativa.
 - **Fornece:** `ResultadoPublicado` ou `FalhaTecnicaDaPublicacao`.
-- **Dependências:** imagens completas de Processamento e object storage.
+- **Dependências lógicas:** imagens completas de Processamento e porta de publicação durável.
+- **Realização em análise:** object storage, chaves imutáveis, promoção de temporários e outbox pertencem à [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md).
 
 <a id="cmp-23"></a>
 
 ### CMP-23 — Consulta de Trabalhos
 
 - **Papel:** listar os trabalhos do sujeito autenticado por uma projeção somente leitura.
-- **Possui:** projeção de identificador, estado e datas; regra de filtragem por `(issuer, subject)`.
+- **Responsabilidades e autoridade:** projeção de identificador, estado e datas; regra de filtragem por `(issuer, subject)`.
 - **Não possui:** transição, tentativa, diagnóstico exposto, origem ou resultado.
 - **Fornece:** `ListarMeusTrabalhos`.
-- **Dependências:** identidade autenticada e fatos do Ciclo; não lê tabelas internas do Ciclo.
+- **Dependências lógicas:** identidade autenticada e fatos do Ciclo; não lê tabelas internas do Ciclo.
 
 Consulta detalhada e motivo sanitizado de falha permanecem `A confirmar` e não integram o contrato atual.
 
@@ -209,22 +155,24 @@ Consulta detalhada e motivo sanitizado de falha permanecem `A confirmar` e não 
 ### CMP-24 — Acesso a Resultados
 
 - **Papel:** autorizar o proprietário e entregar o ZIP publicado de um trabalho concluído.
-- **Possui:** elegibilidade por identidade/propriedade/estado, resolução do manifesto, streaming ou URL temporária e auditoria mínima.
+- **Responsabilidades e autoridade:** elegibilidade por identidade, propriedade e estado; resolução do manifesto publicado.
 - **Não possui:** empacotamento, estado, extração ou download individual de imagem.
 - **Fornece:** `BaixarResultado` ou recusa segura.
-- **Dependências:** identidade autenticada, fatos de elegibilidade, manifesto publicado e object storage.
+- **Dependências lógicas:** identidade autenticada, fatos de elegibilidade e manifesto publicado.
+- **Realização em análise:** streaming, URL temporária, auditoria física e object storage dependem da prova vertical e da [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md).
 
 <a id="cmp-25"></a>
 
 ### CMP-25 — Comunicação de Falhas
 
 - **Papel:** compor e entregar uma comunicação segura depois de uma falha persistida.
-- **Possui:** inbox, template de falha, destino permitido, tentativas do canal e resultado da entrega.
+- **Responsabilidades e autoridade:** composição segura da falha, destino permitido, tentativas do canal e resultado da entrega.
 - **Não possui:** estado, diagnóstico bruto, aceite, processamento, eventos ampliados ou preferências.
 - **Fornece:** `NotificarFalha` e registra o resultado da entrega sem alterar o trabalho.
-- **Dependências:** fato autossuficiente do Ciclo e provedor de comunicação.
+- **Dependências lógicas:** fato autossuficiente do Ciclo e porta de comunicação.
+- **Realização em análise:** inbox, canal e provedor concretos ainda dependem das decisões e critérios da notificação.
 
-## Iteração 2 — Histórias atribuídas
+## Histórias atribuídas
 
 | História | Responsável principal | Colaboradores | Contrato entre fronteiras |
 |---|---|---|---|
@@ -236,9 +184,7 @@ Consulta detalhada e motivo sanitizado de falha permanecem `A confirmar` e não 
 | `US-06` | [`CMP-24`](#cmp-24) | `CMP-18`, `CMP-20`, `CMP-22` | identidade + elegibilidade + manifesto |
 | `US-07` | [`CMP-25`](#cmp-25) | `CMP-20` | `TrabalhoFalhou` autossuficiente |
 
-## Iteração 2 — Papéis e responsabilidades analisados
-
-O inventário refinado permaneceu congelado.
+## Autoridades e verificação lógica
 
 | Questão | Resultado |
 |---|---|
@@ -247,34 +193,13 @@ O inventário refinado permaneceu congelado.
 | Autoridade de identidade e propriedade | Keycloak autentica; `CMP-18` valida; `CMP-20/23/24` aplicam propriedade no recurso que conhecem |
 | Autoridade de falha e retry | `CMP-21/22` relatam falha técnica; somente `CMP-20` decide política e estado |
 | Publicação versus acesso | `CMP-22` escreve a manifestação durável; `CMP-24` autoriza e entrega |
-| Acoplamento temporal | todos os cinco precedentes relevantes possuem fatos/contratos explícitos |
+| Acoplamento temporal | origem recuperável precede aceite; aceite precede despacho; tentativa autorizada precede execução; resultado recuperável precede conclusão; falha persistida precede comunicação |
 | Lei de Deméter | Submissão não conhece Produção/Comunicação; mídia não conhece usuário; Comunicação não consulta estado |
 | Entity Trap | trabalho aparece em várias fronteiras, mas nenhuma delas oferece CRUD genérico |
 
-`CMP-20` possui maior `fan-in`, coerente com a autoridade de transição. Seu `fan-out` físico é reduzido por outbox e fatos; quantificação estática de `CA/CE` depende dos módulos implementados.
+`CMP-20` possui maior `fan-in`, coerente com a autoridade de transição. O modelo reduz seu conhecimento a contratos e fatos; a realização física desse desacoplamento está em análise na `DEC-0003`. A quantificação estática de `CA/CE` depende dos módulos implementados.
 
-## Iteração 2 — Características do sistema analisadas
-
-| Característica | Evidência de adequação | Custo ou pendência |
-|---|---|---|
-| Confiabilidade | aceite, outbox, tentativa, publicação e desfecho possuem autoridades testáveis | atomicidade física e reconciliação ainda precisam da prova vertical |
-| Segurança | credenciais ficam no Keycloak; identidade e propriedade não se confundem | realm, clientes, limites e Threat Modeling precisam ser materializados |
-| Escalabilidade | processamento/publicação podem variar capacidade sem possuir o trabalho | carga, concorrência e recursos-alvo continuam a medir |
-| Operabilidade | notificação isolada impede que falha de canal afete o núcleo | terceiro processo aumenta manifests, dados, observabilidade e custo de operação |
-
-## Iteração 2 — Verificação de convergência
-
-| Critério | Resultado |
-|---|---|
-| Sete histórias com um responsável principal | atendido |
-| Oito papéis distintos e justificados | atendido pelas histórias e características prioritárias |
-| Autoridades não duplicadas | atendido para identidade, propriedade, estado, falha/retry e resultado |
-| Contratos e ordens relevantes explícitos | atendido conceitualmente |
-| Mecanismos não tratados como componentes | atendido para IdP, broker, storage, outbox, FFmpeg e Kubernetes |
-| Extensões futuras fora do núcleo | atendido conforme `REQ-CHG-0003` |
-| Evidência física | pendente de código, testes, Threat Modeling e medição |
-
-O modelo converge e passa a ser o baseline modular ativo por [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md). Evidência do código poderá substituí-lo por um novo nó, sem reescrever este raciocínio.
+As características permanecem sistêmicas e pertencem a [`CTX-CHAR-001`](caracteristicas.md). A [evidência do refinamento](historico/componentes/ctx-cmp-003-refinamento.md) registra como elas pressionaram as fronteiras sem atribuí-las a componentes isolados. O modelo lógico convergiu nessa análise e foi aceito por [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md); código ou medição poderão validá-lo, enfraquecê-lo ou motivar um nó sucessor.
 
 ## Dependências e contratos conceituais
 
@@ -299,35 +224,28 @@ flowchart LR
 |---|---|---|---|
 | Identidade | Submissão/Consulta/Acesso | `IdentidadeAutenticada(issuer, subject)` | não contém senha nem decisão de propriedade |
 | Submissão | Ciclo | `AceitarTrabalho` com origem recuperável | não aciona processamento ou notificação |
-| Ciclo | Processamento | `ProcessarTentativa` durável e correlacionada | reentrega não cria tentativa |
-| Processamento | Publicação | imagens completas e referências opacas | sem usuário ou estado |
+| Ciclo | Processamento | `ProcessarTentativa` durável e correlacionada | reentrega não cria tentativa; a identidade permite execução idempotente |
+| Processamento | Publicação | imagens completas e referências opacas | sem usuário ou estado; a mesma tentativa não cria dois resultados visíveis |
 | Processamento/Publicação | Ciclo | fatos ou falhas técnicas correlacionadas | somente Ciclo decide retry/transição |
 | Ciclo/Publicação | Consulta/Acesso | fatos autossuficientes | sem leitura cruzada de tabelas |
 | Ciclo | Comunicação de Falhas | falha persistida e sanitizada | canal não altera trabalho |
 
-## Agrupamentos de quanta para validação
+## Relação com a topologia de validação
 
-Os agrupamentos foram definidos somente depois da convergência lógica. A escolha de três processos é uma topologia para a prova, não a origem dos oito componentes.
+Somente depois da convergência lógica, [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) agrupou estes componentes em três quanta e três `Deployment`s para validação. Esse ADR é a fonte da composição física, das consequências e das condições de revisão; a topologia não redefine as fronteiras deste inventário.
 
-| Estado | Quantum | Componentes | Deployment | Motivo e custo |
-|---|---|---|---|---|
-| `selecionado_para_validacao` | **Gestão de Trabalhos de Vídeo** | `CMP-18`, `CMP-19`, `CMP-20`, `CMP-23`, `CMP-24` | `gestao-trabalhos` | agrupa interação, aceite e autorização; preserva módulos/tabelas, mas compartilha implantação |
-| `selecionado_para_validacao` | **Produção de Resultados** | `CMP-21`, `CMP-22` | `producao-resultados` | isola CPU/I/O, backlog e scratch; exige mensageria, inbox e storage durável |
-| `selecionado_para_validacao` | **Comunicação de Falhas** | `CMP-25` | `notificador` | isola falha/retentativa do canal desde o início; acrescenta um processo pequeno e custo operacional |
+Keycloak integra o mesmo ambiente Kubernetes reproduzível por [`DEC-0005`](decisoes/0005-keycloak-no-ambiente-de-validacao.md). Mesmo executado por um `Deployment`, não é componente, quantum nem serviço de negócio do FIAP X.
 
-Keycloak será instalado no mesmo ambiente Kubernetes reproduzível como dependência de plataforma. Mesmo executado por um `Deployment`, não é componente, quantum nem serviço de negócio do FIAP X.
+## Fitness functions do modelo lógico
 
-## Riscos, fitness functions e próximo incremento
-
-| Risco | Fitness function |
+| Risco de fronteira | Verificação |
 |---|---|
-| aceitação sem despacho recuperável | matar `gestao-trabalhos` depois do commit e observar publicação posterior pela outbox |
-| duplicidade sob `at-least-once` | entregar duas vezes o mesmo `messageId/attemptId` e observar um resultado visível |
-| conclusão prematura | impedir object storage e garantir que não exista `CONCLUÍDO` sem manifesto e ZIP |
-| acesso cruzado | dois usuários do Keycloak; A nunca lista nem baixa trabalho de B |
-| retry decidido pelo processador | regra de dependência/contrato impede `producao-resultados` de alterar estado ou criar tentativa |
-| falha do canal afetar trabalho | indisponibilizar provedor e preservar o estado `FALHOU` |
-| terceiro quantum desproporcional | medir backlog, recursos, cadência e esforço do `notificador` e reabrir a topologia se não houver benefício |
-| fronteiras virarem apenas encaminhamento | ArchUnit e revisão de responsabilidades; unir somente com evidência de ausência de política própria |
+| outro componente alterar estado ou criar tentativa | regra estática e teste garantem que apenas `CMP-20` escreve o ciclo |
+| identidade decidir propriedade genericamente | testes demonstram que `CMP-18` só valida identidade e que o componente do recurso autoriza |
+| Submissão conhecer consequências a jusante | regra de dependência impede `CMP-19` de depender de Processamento ou Comunicação |
+| reentrega da mesma tentativa duplicar o resultado visível | contrato e teste garantem execução/publicação idempotentes pela identidade da tentativa; o mecanismo físico pertence à `DEC-0003` |
+| Processamento ou Publicação decidir retry | contratos permitem apenas fatos técnicos; a política pertence a `CMP-20` |
+| Publicação e Acesso voltarem a compartilhar autoridade | revisão e dependências impedem escrita do resultado por `CMP-24` e autorização por `CMP-22` |
+| componente virar simples encaminhamento | ArchUnit, `CA/CE` e revisão de responsabilidades motivam nova evidência antes de unir fronteiras |
 
-O [roadmap ativo](../acompanhamento/roadmap.md) é a única fonte do próximo trabalho. A sequência vigente executa primeiro o [threat modeling de `WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial), usa seus riscos para fechar as decisões de [`WORK-012`](../acompanhamento/roadmap.md#work-012--registrar-as-primeiras-decis%C3%B5es-arquiteturais), ativa [`WORK-013`](../acompanhamento/roadmap.md#work-013--ativar-especialista-java-e-quarkus) somente se a stack correspondente for aceita e então implementa a fatia de [`WORK-014`](../acompanhamento/roadmap.md#work-014--construir-a-primeira-fatia-de-risco-com-feedback-determin%C3%ADstico). As evidências da fatia confrontam [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md) e as condições de revisão de [`DEC-0002`](decisoes/0002-topologia-kubernetes.md), sem alterar silenciosamente o estado dessas decisões.
+Testes físicos de falha, duplicidade, recuperação, topologia e canal pertencem às validações de [`DEC-0002`](decisoes/0002-topologia-kubernetes.md), [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md) e [`DEC-0005`](decisoes/0005-keycloak-no-ambiente-de-validacao.md). O [roadmap ativo](../acompanhamento/roadmap.md) é a única fonte do próximo trabalho.
