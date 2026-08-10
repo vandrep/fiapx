@@ -13,7 +13,7 @@ O repositório ainda não contém a aplicação-alvo. O único código de aplica
 | Topologia de validação | três quanta Kubernetes e Keycloak autocontido aceitos, ainda não implementados | [DEC-0002](docs/arquitetura/decisoes/0002-topologia-kubernetes.md) e [DEC-0005](docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) |
 | Em análise | aceite durável, persistência, mensageria e armazenamento | [DEC-0003](docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md) |
 | Preferência a decidir | Java com Quarkus, ainda sem ADR nem build da aplicação | [contexto do projeto](docs/contexto-projeto.md#preferências-declaradas) e [roadmap](docs/acompanhamento/roadmap.md) |
-| Próximo trabalho | executar o threat modeling inicial; depois fechar as decisões necessárias antes da primeira fatia vertical | [roadmap ativo](docs/acompanhamento/roadmap.md) |
+| Trabalho em andamento | `WORK-011` possui fluxo, ativos, dez fronteiras e a primeira onda de vinte ameaças priorizadas; os testes `P0` e as fronteiras restantes são o próximo incremento | [modelo `CTX-THREAT-001`](docs/arquitetura/modelo-ameacas.md) e [roadmap ativo](docs/acompanhamento/roadmap.md) |
 
 Uma recomendação ou um documento `em_analise` não descreve implementação existente. Modelos marcados como históricos continuam disponíveis para explicar a evolução, mas não substituem as fontes ativas.
 

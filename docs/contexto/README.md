@@ -122,6 +122,9 @@ Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos hi
 | `CTX-CMP-002` | Modelo histórico de componentes modulares | [`docs/arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md`](../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md) |
 | `CTX-CMP-003` | Modelo ativo de componentes coesos | [`docs/arquitetura/componentes-coesos.md`](../arquitetura/componentes-coesos.md) |
 | `CTX-EVD-CMP-003` | Evidência histórica do ciclo que produziu o modelo coeso | [`docs/arquitetura/historico/componentes/ctx-cmp-003-refinamento.md`](../arquitetura/historico/componentes/ctx-cmp-003-refinamento.md) |
+| `CTX-THREAT-001` | Modelo de ameaças inicial em análise | [`docs/arquitetura/modelo-ameacas.md`](../arquitetura/modelo-ameacas.md) |
+| `TB-01` a `TB-10` | Fronteiras de confiança do modelo de ameaças | [`CTX-THREAT-001`](../arquitetura/modelo-ameacas.md#fronteiras-de-confian%C3%A7a) |
+| `THR-001` a `THR-020` | Ameaças priorizadas e rastreáveis | [`CTX-THREAT-001`](../arquitetura/modelo-ameacas.md#amea%C3%A7as-priorizadas) |
 | `DEC-0001` | Decisão sobre granularidade e ciclo de componentes | [`docs/arquitetura/decisoes/0001-refinamento-de-componentes.md`](../arquitetura/decisoes/0001-refinamento-de-componentes.md) |
 | `CTX-ARCH-001` | Comparação e arquitetura recomendada em análise | [`docs/arquitetura/comparacao-e-arquitetura-recomendada.md`](../arquitetura/comparacao-e-arquitetura-recomendada.md) |
 | `DEC-0002` | Decisão aceita sobre topologia Kubernetes | [`docs/arquitetura/decisoes/0002-topologia-kubernetes.md`](../arquitetura/decisoes/0002-topologia-kubernetes.md) |

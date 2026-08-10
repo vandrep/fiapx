@@ -27,6 +27,7 @@ Para saber **o que vale hoje**, leia somente `CTX-CMP-003` e os ADRs citados por
 | Por que oito componentes foram aceitos? | [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md) e [`CTX-EVD-CMP-003`](historico/componentes/ctx-cmp-003-refinamento.md) |
 | Como os componentes são implantados para validação? | [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) |
 | Como persistência e mensageria podem ser realizadas? | [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md), ainda `em_analise` |
+| Onde estão ativos, fluxos, fronteiras e ameaças? | [`CTX-THREAT-001`](modelo-ameacas.md), ainda `em_analise` |
 | Qual é o próximo trabalho? | [roadmap ativo](../acompanhamento/roadmap.md) |
 
 ## Artefatos mantidos
@@ -35,6 +36,7 @@ Para saber **o que vale hoje**, leia somente `CTX-CMP-003` e os ADRs citados por
 - [características arquiteturais](caracteristicas.md) priorizadas, com escopo e forma de verificação;
 - [modelo ativo de oito componentes coesos](componentes-coesos.md), sua [evidência de refinamento](historico/componentes/ctx-cmp-003-refinamento.md) e os modelos [modular de treze componentes](historico/componentes/ctx-cmp-002-componentes-modulares.md) e [macro](historico/componentes/ctx-cmp-001-componentes-macro.md) preservados como históricos;
 - [comparação histórica e definição física em análise](comparacao-e-arquitetura-recomendada.md), mantendo explícita a diferença entre componentes, quanta e topologia Kubernetes;
+- [modelo de ameaças inicial](modelo-ameacas.md), com ativos, fluxos, fronteiras de confiança e vinte ameaças priorizadas e rastreáveis;
 - [decisões duráveis](decisoes/README.md);
 - mecanismos de validação e sinais que indiquem quando uma decisão deve ser revista.
 

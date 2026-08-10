@@ -42,12 +42,13 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 
 ### WORK-011 — Executar Threat Modeling inicial
 
-- **Estado:** `a_fazer`.
+- **Estado:** `em_andamento`.
 - **Dependência:** fronteiras candidatas de [`WORK-010`](realizacoes.md#work-010--refinar-componentes-e-delimitar-quanta-arquiteturais), concluído.
 - **Objetivo:** identificar ativos, fronteiras de confiança, ameaças, histórias de abuso, controles e riscos residuais do fluxo.
 - **Resultado verificável:** ameaças priorizadas ligadas a histórias, características, componentes ou quanta; mitigação e forma de teste para os riscos relevantes.
 - **Escopo inicial:** Keycloak/OIDC e autorização por proprietário, bootstrap sem segredo no Git, upload não confiável com validação progressiva, execução do FFmpeg, novas submissões sem cota acumulada, limites operacionais, retentativas automáticas limitadas, reprocessamento, isolamento de trabalhos, consumo de recursos, retenção sem prazo, download e comunicação de falha.
-- **Próxima ação:** desenhar o fluxo de dados e marcar onde dados ou identidades cruzam uma fronteira de confiança.
+- **Progresso:** o [`CTX-THREAT-001`](../arquitetura/modelo-ameacas.md) registrou o fluxo, doze ativos, dez fronteiras e a primeira onda de vinte ameaças rastreáveis: nove `P0`, dez `P1` e uma `P2` condicional. Controles decididos, mitigações propostas, testes e risco residual provisório permanecem separados.
+- **Próxima ação:** transformar os testes das ameaças `P0` em gates da primeira fatia e entradas para as decisões afetadas; enumerar a onda restante de `TB-07..10` antes de concluir o modelo.
 
 ### WORK-012 — Registrar as primeiras decisões arquiteturais
 
