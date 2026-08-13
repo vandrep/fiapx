@@ -122,6 +122,7 @@ Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos hi
 | `CTX-CMP-002` | Modelo histórico de componentes modulares | [`docs/arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md`](../arquitetura/historico/componentes/ctx-cmp-002-componentes-modulares.md) |
 | `CTX-CMP-003` | Modelo ativo de componentes coesos | [`docs/arquitetura/componentes-coesos.md`](../arquitetura/componentes-coesos.md) |
 | `CTX-EVD-CMP-003` | Evidência histórica do ciclo que produziu o modelo coeso | [`docs/arquitetura/historico/componentes/ctx-cmp-003-refinamento.md`](../arquitetura/historico/componentes/ctx-cmp-003-refinamento.md) |
+| `CTX-EVD-HARNESS-001` | Evidência e contrato da baseline do harness | [`docs/avaliacoes/harness/README.md`](../avaliacoes/harness/README.md) |
 | `CTX-THREAT-001` | Modelo de ameaças inicial em análise | [`docs/arquitetura/modelo-ameacas.md`](../arquitetura/modelo-ameacas.md) |
 | `TB-01` a `TB-10` | Fronteiras de confiança do modelo de ameaças | [`CTX-THREAT-001`](../arquitetura/modelo-ameacas.md#fronteiras-de-confian%C3%A7a) |
 | `THR-001` a `THR-020` | Ameaças priorizadas e rastreáveis | [`CTX-THREAT-001`](../arquitetura/modelo-ameacas.md#amea%C3%A7as-priorizadas) |
@@ -133,7 +134,8 @@ Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos hi
 | `DEC-0005` | Decisão aceita sobre Keycloak no ambiente de validação | [`docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) |
 | `CTX-ROADMAP-001` | Roadmap ativo | [`docs/acompanhamento/roadmap.md`](../acompanhamento/roadmap.md) |
 | `CTX-OUTCOME-001` | Registro de realizações | [`docs/acompanhamento/realizacoes.md`](../acompanhamento/realizacoes.md) |
-| `WORK-001` a `WORK-016` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
+| `WORK-001` a `WORK-018` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
+| `EVAL-HARNESS-TM-001`, `EVAL-HARNESS-ADR-001`, `EVAL-HARNESS-GRAPH-001` | Cenários da baseline do harness | [`CTX-EVD-HARNESS-001`](../avaliacoes/harness/README.md#or%C3%A1culos-congelados) |
 | `REQ-CHG-0001` a `REQ-CHG-0003` | Mudanças de requisitos | [Índice de refinamentos](../requisitos/refinamentos/README.md) |
 | `CMP-01` a `CMP-04` | Componentes lógicos históricos | Inventário macro de `CTX-CMP-001` |
 | `CMP-05` a `CMP-17` | Componentes lógicos históricos | Inventário de `CTX-CMP-002` |

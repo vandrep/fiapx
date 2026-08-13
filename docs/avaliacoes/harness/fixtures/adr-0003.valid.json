@@ -1,0 +1,22 @@
+{
+  "scenario_id": "EVAL-HARNESS-ADR-001",
+  "sources_consulted": [
+    "docs/contexto/roteador.md",
+    "docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md",
+    "docs/arquitetura/modelo-ameacas.md"
+  ],
+  "decision_id": "DEC-0003",
+  "decision_status": "em_analise",
+  "recommendation": "manter a recomendação condicionada até produzir as evidências",
+  "risks": [
+    {"threat_id": "THR-013", "impact": "efeito duplicado", "unresolved_evidence": "teste de reentrega"},
+    {"threat_id": "THR-014", "impact": "trabalho perdido", "unresolved_evidence": "teste de recuperação"},
+    {"threat_id": "THR-015", "impact": "resultado incorreto", "unresolved_evidence": "teste de integridade"}
+  ],
+  "accepted_technologies": [],
+  "candidate_technologies": ["PostgreSQL", "RabbitMQ", "outbox/inbox", "object storage"],
+  "verification_gaps": ["resultados das verificações", "alvos operacionais acordados"],
+  "java_quarkus_status": "preferencia",
+  "meta_pdca": {"failure_found": false, "result": "nenhuma falha do artefato foi encontrada"},
+  "next_step": "executar as verificações antes do aceite"
+}

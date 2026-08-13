@@ -17,6 +17,7 @@ entities:
   - WORK-010
   - WORK-015
   - WORK-016
+  - WORK-017
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -146,6 +147,18 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Informação relevante:** histórias continuam agregadas; eventos imutáveis fornecem o histórico por arestas `affects` e links recíprocos. Glossário, Event Storming, características, componentes, agentes e políticas adotarão o mecanismo somente diante de uma nova mudança semântica material.
 - **Validação:** os controles rejeitam registro sem ator, confirmação sem data, alvo que não seja história, arquivo divergente, link de retorno ausente e backlink ausente; autoria histórica desconhecida permanece explícita em vez de ser inferida do Git.
 - **Limite:** a evidência de `WORK-009` anteriormente revertida não foi alterada; este trabalho valida apenas os links e âncoras que introduziu.
+
+### WORK-017 — Estabelecer baseline e contrato de avaliação do harness
+
+- **Estado:** `concluido`.
+- **Concluído em:** 2026-08-13.
+- **Resultado:** três cenários repetíveis — Threat Modeling, ADR e Context Graph — foram congelados com prompts, schemas, oráculos semânticos e limite de duas rodadas de correção. A baseline executada sem modificar o harness aprovou os três cenários na primeira tentativa, sem retrabalho.
+- **Evidência:** contrato, comandos, critérios e análise em [`CTX-EVD-HARNESS-001`](../avaliacoes/harness/README.md), resultado normalizado em [`baseline-2026-08-13.json`](../avaliacoes/harness/resultados/baseline-2026-08-13.json) e executor em [`avaliar-harness.sh`](../../scripts/avaliar-harness.sh).
+- **Medições:** 407.429 tokens de entrada, dos quais 292.864 em cache, 7.260 tokens de saída e 1.692 tokens de raciocínio; três tentativas no total e zero rodadas de correção. Threat Modeling, ADR e Context Graph carregaram, respectivamente, 14, 5 e 13 fontes.
+- **Relações:** produz `CTX-EVD-HARNESS-001` e informa [`WORK-018`](../acompanhamento/roadmap.md#work-018--adotar-harness-spec-driven-enxuto); os cenários preservam a semântica ainda pendente de [`WORK-011`](../acompanhamento/roadmap.md#work-011--executar-threat-modeling-inicial) e [`WORK-012`](../acompanhamento/roadmap.md#work-012--registrar-as-primeiras-decisões-arquiteturais).
+- **Informação relevante:** os cenários de Threat Modeling e Context Graph carregaram mais fontes que o cenário de ADR. Isso é uma hipótese mensurável de simplificação para `WORK-018`, não uma falha da baseline.
+- **Validação:** o executor verificou schemas, oráculos, métricas e imutabilidade do harness antes e depois da execução; a evidência normalizada registra os hashes do contrato. O autoteste cobriu respostas válidas, omissão de gate `P0`, binário ou resposta ausentes, consistência do resultado registrado e incompatibilidades conhecidas com o subconjunto de JSON Schema aceito pelo Codex.
+- **Meta-PDCA aplicado:** falhas de ambiente, tratamento de saída e compatibilidade de schema encontradas durante a preparação passaram a produzir diagnóstico explícito e falha antecipada no próprio executor. Casos contrafactuais foram incorporados ao autoteste para impedir recorrência antes de consumir uma nova execução de modelo.
 
 ## Manutenção
 

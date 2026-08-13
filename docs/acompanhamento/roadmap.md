@@ -9,6 +9,7 @@ entities:
   - WORK-012
   - WORK-013
   - WORK-014
+  - WORK-018
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -38,7 +39,15 @@ Estados permitidos:
 
 Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo ID, para o [registro de realizações](realizacoes.md).
 
-## Agora — confrontar riscos e registrar escolhas
+## Agora — estabilizar o harness, confrontar riscos e registrar escolhas
+
+### WORK-018 — Adotar harness spec-driven enxuto
+
+- **Estado:** `a_fazer`.
+- **Dependência:** baseline e contrato de avaliação de [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness), concluído.
+- **Objetivo:** tornar explícitas as fontes de verdade e reduzir contexto repetido, mantendo instruções globais, instruções locais, templates, scripts e skills nas menores fronteiras reutilizáveis.
+- **Resultado verificável:** os cenários da baseline continuam aprovados sem perda de rastreabilidade ou governança e demonstram redução mensurável de contexto ou tokens; instruções não são duplicadas e tecnologias ainda candidatas não se tornam obrigações do harness.
+- **Próxima ação:** inventariar sobreposições entre `AGENTS.md`, `.codex/instructions.md`, agentes e skills; escolher uma categoria por vez para simplificar e reexecutar os mesmos cenários após cada mudança.
 
 ### WORK-011 — Executar Threat Modeling inicial
 
@@ -48,6 +57,7 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Resultado verificável:** ameaças priorizadas ligadas a histórias, características, componentes ou quanta; mitigação e forma de teste para os riscos relevantes.
 - **Escopo inicial:** Keycloak/OIDC e autorização por proprietário, bootstrap sem segredo no Git, upload não confiável com validação progressiva, execução do FFmpeg, novas submissões sem cota acumulada, limites operacionais, retentativas automáticas limitadas, reprocessamento, isolamento de trabalhos, consumo de recursos, retenção sem prazo, download e comunicação de falha.
 - **Progresso:** o [`CTX-THREAT-001`](../arquitetura/modelo-ameacas.md) registrou o fluxo, doze ativos, dez fronteiras e a primeira onda de vinte ameaças rastreáveis: nove `P0`, dez `P1` e uma `P2` condicional. Controles decididos, mitigações propostas, testes e risco residual provisório permanecem separados.
+- **Condição de encerramento:** preservar a baseline concluída em [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness) e concluir [`WORK-018`](#work-018--adotar-harness-spec-driven-enxuto), sem alterar a semântica das ameaças para atender ao harness.
 - **Próxima ação:** transformar os testes das ameaças `P0` em gates da primeira fatia e entradas para as decisões afetadas; enumerar a onda restante de `TB-07..10` antes de concluir o modelo.
 
 ### WORK-012 — Registrar as primeiras decisões arquiteturais
@@ -58,6 +68,7 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Resultado verificável:** ADRs graph-ready com trade-offs, consequências, validação e sinais de revisão.
 - **Decisões aceitas:** [`DEC-0002`](../arquitetura/decisoes/0002-topologia-kubernetes.md), três quanta Kubernetes; [`DEC-0004`](../arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md), oito componentes; [`DEC-0005`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md), Keycloak autocontido.
 - **Decisão em análise:** [`DEC-0003`](../arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md), sobre aceite, RabbitMQ, outbox/inbox, PostgreSQL e object storage. Java com Quarkus continua apenas preferência.
+- **Condição de encerramento:** preservar a baseline concluída em [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness) e concluir [`WORK-018`](#work-018--adotar-harness-spec-driven-enxuto), mantendo como candidatas as escolhas ainda `em_analise`.
 - **Próxima ação:** usar os riscos de [`WORK-011`](#work-011--executar-threat-modeling-inicial) e a primeira fatia executável para confrontar `DEC-0003` e registrar a escolha de Java/Quarkus separadamente.
 
 ## Depois — preparar e validar a implementação

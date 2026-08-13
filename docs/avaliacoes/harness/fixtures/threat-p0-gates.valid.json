@@ -1,0 +1,19 @@
+{
+  "scenario_id": "EVAL-HARNESS-TM-001",
+  "sources_consulted": ["docs/contexto/roteador.md", "docs/arquitetura/modelo-ameacas.md"],
+  "gates": [
+    {"threat_id": "THR-001", "control_state": "C1", "gate": "rejeitar JWT inválido", "expected_evidence": "teste automatizado", "open_gap": "perfil JWT"},
+    {"threat_id": "THR-002", "control_state": "C1", "gate": "impedir identidade injetada", "expected_evidence": "teste estrutural", "open_gap": "framework"},
+    {"threat_id": "THR-003", "control_state": "C1", "gate": "impedir acesso cruzado", "expected_evidence": "teste com dois usuários", "open_gap": "semântica de resposta"},
+    {"threat_id": "THR-008", "control_state": "C1", "gate": "conter upload abusivo", "expected_evidence": "teste de limites", "open_gap": "valores"},
+    {"threat_id": "THR-009", "control_state": "C1", "gate": "confinar FFmpeg", "expected_evidence": "teste de contenção", "open_gap": "build"},
+    {"threat_id": "THR-010", "control_state": "C1", "gate": "limitar recursos", "expected_evidence": "teste sob orçamento", "open_gap": "orçamentos"},
+    {"threat_id": "THR-013", "control_state": "C1", "gate": "deduplicar efeitos", "expected_evidence": "teste de reentrega", "open_gap": "mecanismo físico"},
+    {"threat_id": "THR-014", "control_state": "C1", "gate": "recuperar aceitos", "expected_evidence": "teste de falhas", "open_gap": "RTO"},
+    {"threat_id": "THR-015", "control_state": "C1", "gate": "publicar resultado íntegro", "expected_evidence": "teste de adulteração", "open_gap": "storage"}
+  ],
+  "implemented_controls_claimed": false,
+  "risk_reduced_claimed": false,
+  "meta_pdca": {"failure_found": false, "result": "nenhuma falha do artefato foi encontrada"},
+  "next_step": "materializar os gates na primeira fatia"
+}

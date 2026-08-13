@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scenario_id", "sources_consulted", "evidence_metadata", "work_transition", "references_to_update", "validations", "risks_to_preserve", "meta_pdca", "next_step"],
+  "properties": {
+    "scenario_id": {"type": "string", "const": "EVAL-HARNESS-GRAPH-001"},
+    "sources_consulted": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+    "evidence_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_id", "context_type", "status_after_collection", "required_relations"],
+      "properties": {
+        "context_id": {"type": "string", "const": "CTX-EVD-HARNESS-001"},
+        "context_type": {"type": "string", "const": "evidence"},
+        "status_after_collection": {"type": "string", "const": "registrado"},
+        "required_relations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "work_transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["remove_from_roadmap", "add_to_outcomes", "allow_duplicate"],
+      "properties": {
+        "remove_from_roadmap": {"type": "boolean", "const": true},
+        "add_to_outcomes": {"type": "boolean", "const": true},
+        "allow_duplicate": {"type": "boolean", "const": false}
+      }
+    },
+    "references_to_update": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "validations": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "risks_to_preserve": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "meta_pdca": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failure_found", "result"],
+      "properties": {
+        "failure_found": {"type": "boolean"},
+        "result": {"type": "string"}
+      }
+    },
+    "next_step": {"type": "string"}
+  }
+}

@@ -27,6 +27,7 @@ Este é o catálogo dos documentos mantidos no repositório. Os índices por ár
 
 - [Instruções compartilhadas](../AGENTS.md) e [instruções operacionais do Codex](../.codex/instructions.md).
 - [Skill de refinamento de componentes](../.agents/skills/refinar-componentes-arquiteturais/SKILL.md).
+- [Baseline e contrato de avaliação do harness](avaliacoes/harness/README.md) — cenários, oráculos e métricas para mudanças nas instruções e ferramentas.
 - [Validação da documentação](../scripts/validar-documentacao.sh) e [validação do Context Graph](../scripts/validar-contexto.sh).
 
 Use o [roteador de contexto](contexto/roteador.md) para selecionar somente os documentos necessários a uma tarefa.

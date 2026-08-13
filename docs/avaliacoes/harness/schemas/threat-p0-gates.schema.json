@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scenario_id", "sources_consulted", "gates", "implemented_controls_claimed", "risk_reduced_claimed", "meta_pdca", "next_step"],
+  "properties": {
+    "scenario_id": {"type": "string", "const": "EVAL-HARNESS-TM-001"},
+    "sources_consulted": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "gates": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["threat_id", "control_state", "gate", "expected_evidence", "open_gap"],
+        "properties": {
+          "threat_id": {"type": "string", "enum": ["THR-001", "THR-002", "THR-003", "THR-008", "THR-009", "THR-010", "THR-013", "THR-014", "THR-015"]},
+          "control_state": {"type": "string", "const": "C1"},
+          "gate": {"type": "string"},
+          "expected_evidence": {"type": "string"},
+          "open_gap": {"type": "string"}
+        }
+      }
+    },
+    "implemented_controls_claimed": {"type": "boolean", "const": false},
+    "risk_reduced_claimed": {"type": "boolean", "const": false},
+    "meta_pdca": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failure_found", "result"],
+      "properties": {
+        "failure_found": {"type": "boolean"},
+        "result": {"type": "string"}
+      }
+    },
+    "next_step": {"type": "string"}
+  }
+}
