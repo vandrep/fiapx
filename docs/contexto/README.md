@@ -134,8 +134,8 @@ Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos hi
 | `DEC-0005` | Decisão aceita sobre Keycloak no ambiente de validação | [`docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) |
 | `CTX-ROADMAP-001` | Roadmap ativo | [`docs/acompanhamento/roadmap.md`](../acompanhamento/roadmap.md) |
 | `CTX-OUTCOME-001` | Registro de realizações | [`docs/acompanhamento/realizacoes.md`](../acompanhamento/realizacoes.md) |
-| `WORK-001` a `WORK-018` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
-| `EVAL-HARNESS-TM-001`, `EVAL-HARNESS-ADR-001`, `EVAL-HARNESS-GRAPH-001` | Cenários da baseline do harness | [`CTX-EVD-HARNESS-001`](../avaliacoes/harness/README.md#or%C3%A1culos-congelados) |
+| `WORK-001` a `WORK-026` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
+| `EVAL-HARNESS-TM-001`, `EVAL-HARNESS-ADR-001`, `EVAL-HARNESS-GRAPH-001`, `EVAL-HARNESS-ARCH-001` | Cenários versionados do harness | [`CTX-EVD-HARNESS-001`](../avaliacoes/harness/README.md#or%C3%A1culos-congelados) |
 | `REQ-CHG-0001` a `REQ-CHG-0003` | Mudanças de requisitos | [Índice de refinamentos](../requisitos/refinamentos/README.md) |
 | `CMP-01` a `CMP-04` | Componentes lógicos históricos | Inventário macro de `CTX-CMP-001` |
 | `CMP-05` a `CMP-17` | Componentes lógicos históricos | Inventário de `CTX-CMP-002` |
@@ -155,4 +155,4 @@ Itens de trabalho preservam o ID quando migram do roadmap para o registro de rea
 
 ## Validação
 
-Execute [`scripts/validar-documentacao.sh`](../../scripts/validar-documentacao.sh) para verificar links, âncoras e alcançabilidade a partir do README principal. Depois de alterar metadados, execute também [`scripts/validar-contexto.sh`](../../scripts/validar-contexto.sh). A segunda verificação analisa o YAML, campos obrigatórios, IDs duplicados e alvos locais ou contextuais sem resolução, além de chamar os validadores do modelo ativo, da arquitetura recomendada e do pacote R6 histórico. Esses controles são fitness functions estruturais e não substituem a revisão do raciocínio registrado.
+Execute [`scripts/validar-documentacao.sh`](../../scripts/validar-documentacao.sh) para links, âncoras e alcançabilidade e [`scripts/validar-contexto.sh`](../../scripts/validar-contexto.sh) para YAML, IDs, relações e fitness functions arquiteturais. [`scripts/validar-harness.sh check`](../../scripts/validar-harness.sh) agrega ambos, o mapa, os contratos e seus contrafactuais para uso local e em CI. Os caminhos individuais continuam sendo os identificadores canônicos exigidos pelo contrato v1; esses controles não substituem a revisão do raciocínio.

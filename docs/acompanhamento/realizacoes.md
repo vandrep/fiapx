@@ -18,6 +18,9 @@ entities:
   - WORK-015
   - WORK-016
   - WORK-017
+  - WORK-019
+  - WORK-020
+  - WORK-021
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -159,6 +162,31 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Informação relevante:** os cenários de Threat Modeling e Context Graph carregaram mais fontes que o cenário de ADR. Isso é uma hipótese mensurável de simplificação para `WORK-018`, não uma falha da baseline.
 - **Validação:** o executor verificou schemas, oráculos, métricas e imutabilidade do harness antes e depois da execução; a evidência normalizada registra os hashes do contrato. O autoteste cobriu respostas válidas, omissão de gate `P0`, binário ou resposta ausentes, consistência do resultado registrado e incompatibilidades conhecidas com o subconjunto de JSON Schema aceito pelo Codex.
 - **Meta-PDCA aplicado:** falhas de ambiente, tratamento de saída e compatibilidade de schema encontradas durante a preparação passaram a produzir diagnóstico explícito e falha antecipada no próprio executor. Casos contrafactuais foram incorporados ao autoteste para impedir recorrência antes de consumir uma nova execução de modelo.
+
+### WORK-019 — Formalizar o contrato das fontes
+
+- **Estado:** `concluido`.
+- **Concluído em:** 2026-08-15.
+- **Resultado:** ficaram explícitos os papéis não sobrepostos de `README.md`, `AGENTS.md`, `ARCHITECTURE.md`, `docs/` e `.codex/`; instruções específicas do Codex deixaram de repetir regras globais.
+- **Evidência:** [`../../AGENTS.md`](../../AGENTS.md), [`../../.codex/instructions.md`](../../.codex/instructions.md) e [catálogo documental](../README.md).
+- **Informação relevante:** o mapa arquitetural é carregado somente quando a tarefa exige visão sistêmica; não se tornou contexto obrigatório para todo trabalho.
+
+### WORK-020 — Criar o mapa arquitetural da raiz
+
+- **Estado:** `concluido`.
+- **Concluído em:** 2026-08-15.
+- **Resultado:** [`ARCHITECTURE.md`](../../ARCHITECTURE.md) passou a distinguir estado observado, decisões aceitas, alternativas em análise, oito componentes, três quanta, invariantes e autoridades documentais sem duplicar contratos detalhados.
+- **Evidência:** mapa da raiz, [catálogo de arquitetura](../arquitetura/README.md) e [`scripts/validar-mapa-arquitetural.sh`](../../scripts/validar-mapa-arquitetural.sh).
+- **Informação relevante:** a árvore de código permanece ausente e não foi inventada; será registrada quando a primeira fatia existir.
+
+### WORK-021 — Transformar validadores em gates de CI
+
+- **Estado:** `concluido`.
+- **Concluído em:** 2026-08-15.
+- **Resultado:** um comando agrega mapa, contratos v1/v2, Context Graph, documentação, fitness functions e contrafactuais; um workflow executa os mesmos gates em PR e `main` sem invocar avaliação viva paga.
+- **Evidência:** [`scripts/validar-harness.sh`](../../scripts/validar-harness.sh) e [workflow de validação](../../.github/workflows/validar-harness.yml).
+- **Informação relevante:** a primeira execução no GitHub depende de publicar esta mudança; localmente, os gates determinísticos passam.
+- **Meta-PDCA aplicado:** a primeira varredura rejeitou um link do novo prompt com profundidade incorreta; o link foi corrigido e o validador focal do mapa passou a conferir essa referência antes da varredura documental completa. O lint também tornou explícito que backticks pesquisados são literais Markdown. Nas coletas vivas, o novo comando agregado tornou ambíguo o formato dos dois validadores exigidos pelo oráculo v1; a documentação passou a preservar seus caminhos literais. A variância de fontes revelou ainda que o manifesto não cobria toda a base consultável; ele passou a hashear Markdown mantido, e o self-test exige uma fonte semântica dos cenários.
 
 ## Manutenção
 

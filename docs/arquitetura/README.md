@@ -1,8 +1,8 @@
 # Arquitetura
 
-> Navegação: [documentação](../README.md) · [README principal](../../README.md)
+> Navegação: [mapa da raiz](../../ARCHITECTURE.md) · [documentação](../README.md) · [README principal](../../README.md)
 
-Este diretório guarda artefatos específicos da arquitetura do projeto. As instruções agnósticas permanecem na [configuração do agente de arquitetura](../../.codex/agents/arquiteto.toml), e o estado do FIAP X está no [contexto do projeto](../contexto-projeto.md).
+Este diretório guarda as fontes arquiteturais detalhadas do projeto. O [`ARCHITECTURE.md`](../../ARCHITECTURE.md) resume o estado corrente e aponta para estas autoridades sem duplicá-las. As instruções agnósticas permanecem na [configuração do agente de arquitetura](../../.codex/agents/arquiteto.toml), e o estado do FIAP X está no [contexto do projeto](../contexto-projeto.md).
 
 Identidade, relações, procedência e validade temporal seguem a [convenção de contexto](../contexto/README.md).
 

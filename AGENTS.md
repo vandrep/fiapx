@@ -21,13 +21,15 @@ Leia somente o contexto necessário para a tarefa, nesta ordem:
 4. os arquivos indicados pela rota escolhida e diretamente relacionados ao escopo;
 5. relações adicionais somente quando uma lacuna concreta exigir segui-las.
 
+Use [`ARCHITECTURE.md`](ARCHITECTURE.md) como mapa para visão sistêmica, limites ou topologia; não é leitura obrigatória para tarefas sem impacto arquitetural. Aprofunde somente nas fontes que ele e o roteador indicarem.
+
 Não copie o enunciado, o contexto do projeto ou detalhes da stack para instruções de agentes reutilizáveis. Prefira referências precisas a uma segunda fonte de verdade. Ao encontrar divergências entre documentação e implementação, registre ambas e trate o comportamento verificado como evidência, não como decisão automática.
 
-Não carregue por padrão o enunciado completo, todo o código-base, todos os documentos de arquitetura, todas as decisões ou o histórico de realizações. Pare de buscar contexto quando as fontes reunidas forem suficientes para formular o objetivo, distinguir fatos de hipóteses e validar a entrega.
+Não carregue por padrão o enunciado, todo o código-base, toda a arquitetura, todas as decisões ou o histórico. Pare quando houver contexto suficiente para formular o objetivo, separar fatos de hipóteses e validar a entrega.
 
-Artefatos contextuais e decisões seguem `docs/contexto/README.md`. Preserve IDs, procedência e validade temporal: quando algo deixar de valer, encerre sua validade ou crie um nó sucessor conectado; não apague nem reescreva silenciosamente o raciocínio anterior.
+Artefatos contextuais e decisões seguem `docs/contexto/README.md`. Preserve IDs, procedência e validade: encerre o que deixou de valer ou conecte um sucessor; não apague nem reescreva o raciocínio anterior.
 
-Em documentos Markdown, torne navegável a primeira referência útil a outro item de trabalho, nó contextual, decisão, evidência ou seção: preserve o ID ou nome visível e use um link para o arquivo ou âncora de origem. Em metadados YAML, preserve o alvo como ID, caminho ou URI simples exigido pelo Context Graph; links de navegação no corpo complementam, mas não substituem, as relações estruturadas.
+Em Markdown, ligue a primeira referência útil a outro trabalho, nó, decisão, evidência ou seção, preservando o ID ou nome visível. Em YAML, mantenha o alvo como ID, caminho ou URI exigido pelo Context Graph; links no corpo não substituem relações estruturadas.
 
 ## Melhoria contínua
 

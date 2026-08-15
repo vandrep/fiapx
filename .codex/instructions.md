@@ -1,16 +1,12 @@
 # Instruções operacionais do Codex
 
-Use [`AGENTS.md`](../AGENTS.md) como fonte principal de regras compartilhadas e [`docs/contexto-projeto.md`](../docs/contexto-projeto.md) apenas quando a tarefa exigir contexto específico deste projeto.
+Use [`AGENTS.md`](../AGENTS.md) como fonte de regras compartilhadas. Siga os mapas e rotas indicados ali; não replique essas regras nesta configuração específica do Codex.
 
 ## Agentes especializados
 
-- `arquiteto`: consultor somente leitura para análise estrutural e decisões arquiteturais.
 - Consulte [`docs/agentes.md`](../docs/agentes.md) para o registro de agentes ativos, candidatos e seus gatilhos de criação.
 - Novos agentes devem ter responsabilidade estreita, permissões mínimas e contrato de entrega explícito.
-- Mantenha instruções reutilizáveis em `.codex/agents/` e conhecimento específico do projeto em `docs/`.
 
 ## Operação
 
-- Antes de editar, inspecione `git status --short` e preserve mudanças fora do escopo.
 - Não faça commit, push, publicação ou alteração em serviços externos sem solicitação explícita.
-- Use comandos de validação proporcionais à mudança e relate qualquer verificação que não tenha sido possível executar.

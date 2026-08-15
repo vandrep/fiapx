@@ -22,14 +22,16 @@ Uma recomendação ou um documento `em_analise` não descreve implementação ex
 O [índice completo da documentação](docs/README.md) conecta todos os documentos mantidos no repositório. Para uma primeira leitura:
 
 1. entenda o objetivo e o estado observado no [contexto do projeto](docs/contexto-projeto.md);
-2. consulte as [histórias, o glossário e a descoberta do domínio](docs/requisitos/README.md);
-3. leia o [índice de arquitetura](docs/arquitetura/README.md), começando pelo modelo ativo e pelas decisões;
-4. acompanhe o que está em andamento no [roadmap](docs/acompanhamento/README.md);
-5. use o [roteador de contexto](docs/contexto/roteador.md) ao executar uma tarefa específica.
+2. use o [mapa arquitetural da raiz](ARCHITECTURE.md) para distinguir limites vigentes, topologia aceita e decisões em análise;
+3. consulte as [histórias, o glossário e a descoberta do domínio](docs/requisitos/README.md);
+4. aprofunde a arquitetura no [catálogo detalhado](docs/arquitetura/README.md), começando pelo modelo ativo e pelas decisões;
+5. acompanhe o que está em andamento no [roadmap](docs/acompanhamento/README.md);
+6. use o [roteador de contexto](docs/contexto/roteador.md) ao executar uma tarefa específica.
 
 | Área | Ponto de entrada |
 |---|---|
 | Documentação completa | [`docs/README.md`](docs/README.md) |
+| Mapa arquitetural de alto nível | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
 | Requisitos e domínio | [`docs/requisitos/README.md`](docs/requisitos/README.md) |
 | Arquitetura e decisões | [`docs/arquitetura/README.md`](docs/arquitetura/README.md) |
 | Trabalho atual e resultados | [`docs/acompanhamento/README.md`](docs/acompanhamento/README.md) |
@@ -43,8 +45,7 @@ O [índice completo da documentação](docs/README.md) conecta todos os document
 Na raiz do repositório, execute:
 
 ```bash
-bash scripts/validar-documentacao.sh
-bash scripts/validar-contexto.sh
+bash scripts/validar-harness.sh check
 ```
 
-O primeiro comando verifica destinos locais, links de saída e alcançabilidade de todos os documentos a partir deste README. O segundo valida metadados, relações e fitness functions arquiteturais.
+O comando agrega o mapa arquitetural, os contratos de avaliação, a documentação, os metadados de contexto, as fitness functions arquiteturais e contrafactuais seguros. Os validadores individuais continuam disponíveis para diagnóstico localizado.

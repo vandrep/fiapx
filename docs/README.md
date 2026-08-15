@@ -13,6 +13,7 @@ Este é o catálogo dos documentos mantidos no repositório. Os índices por ár
 
 ## Fontes ativas
 
+- [Mapa arquitetural da raiz](../ARCHITECTURE.md) — estado corrente, limites, invariantes e caminhos para as autoridades detalhadas.
 - [Requisitos e domínio](requisitos/README.md) — histórias, vocabulário, Event Storming e histórico de refinamentos.
 - [Arquitetura](arquitetura/README.md) — características, modelo ativo, comparação física e ADRs.
 - [Acompanhamento](acompanhamento/README.md) — trabalho corrente e realizações concluídas.
@@ -28,6 +29,6 @@ Este é o catálogo dos documentos mantidos no repositório. Os índices por ár
 - [Instruções compartilhadas](../AGENTS.md) e [instruções operacionais do Codex](../.codex/instructions.md).
 - [Skill de refinamento de componentes](../.agents/skills/refinar-componentes-arquiteturais/SKILL.md).
 - [Baseline e contrato de avaliação do harness](avaliacoes/harness/README.md) — cenários, oráculos e métricas para mudanças nas instruções e ferramentas.
-- [Validação da documentação](../scripts/validar-documentacao.sh) e [validação do Context Graph](../scripts/validar-contexto.sh).
+- [Validação agregada do harness](../scripts/validar-harness.sh), [validação da documentação](../scripts/validar-documentacao.sh) e [validação do Context Graph](../scripts/validar-contexto.sh).
 
 Use o [roteador de contexto](contexto/roteador.md) para selecionar somente os documentos necessários a uma tarefa.

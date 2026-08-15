@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scenario_id",
+    "sources_consulted",
+    "application_state",
+    "logical_model_id",
+    "component_ids",
+    "topology_decision_id",
+    "application_quanta",
+    "keycloak_role",
+    "durability_decision_status",
+    "java_quarkus_status",
+    "implementation_claimed",
+    "historical_model_used_as_current",
+    "meta_pdca",
+    "next_step"
+  ],
+  "properties": {
+    "scenario_id": {"type": "string", "const": "EVAL-HARNESS-ARCH-001"},
+    "sources_consulted": {"type": "array", "minItems": 3, "maxItems": 7, "items": {"type": "string"}},
+    "application_state": {"type": "string", "const": "target_absent"},
+    "logical_model_id": {"type": "string", "const": "CTX-CMP-003"},
+    "component_ids": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"type": "string", "enum": ["CMP-18", "CMP-19", "CMP-20", "CMP-21", "CMP-22", "CMP-23", "CMP-24", "CMP-25"]}
+    },
+    "topology_decision_id": {"type": "string", "const": "DEC-0002"},
+    "application_quanta": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "string", "enum": ["gestao-trabalhos", "producao-resultados", "notificador"]}
+    },
+    "keycloak_role": {"type": "string", "const": "plataforma"},
+    "durability_decision_status": {"type": "string", "const": "em_analise"},
+    "java_quarkus_status": {"type": "string", "const": "preferencia"},
+    "implementation_claimed": {"type": "boolean", "const": false},
+    "historical_model_used_as_current": {"type": "boolean", "const": false},
+    "meta_pdca": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failure_found", "result"],
+      "properties": {
+        "failure_found": {"type": "boolean"},
+        "result": {"type": "string"}
+      }
+    },
+    "next_step": {"type": "string"}
+  }
+}

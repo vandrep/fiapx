@@ -8,6 +8,7 @@ entities:
   - EVAL-HARNESS-TM-001
   - EVAL-HARNESS-ADR-001
   - EVAL-HARNESS-GRAPH-001
+  - EVAL-HARNESS-ARCH-001
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -43,7 +44,9 @@ A baseline usa uma execução inicial por cenário e até dois turnos de correç
 | Saída | JSON validado por schema e eventos JSONL |
 | Contexto auxiliar | itens e caracteres de `codex debug prompt-input`; não substituem tokens reais |
 
-O contrato executável está em [`scenarios.json`](scenarios.json); os prompts cobrem [gates P0](prompts/threat-p0-gates.md), [DEC-0003](prompts/adr-0003.md) e [Context Graph](prompts/context-graph-work-017.md); os schemas ficam em [`schemas/`](schemas/). O runner [`scripts/avaliar-harness.sh`](../../../scripts/avaliar-harness.sh) registra tokens de `turn.completed`, fontes declaradas, comandos observados, hashes e resultado das rubricas. Logs completos ficam em diretório externo ao repositório e não integram esta evidência.
+O contrato congelado da baseline está em [`scenarios.json`](scenarios.json); os prompts cobrem [gates P0](prompts/threat-p0-gates.md), [DEC-0003](prompts/adr-0003.md) e [Context Graph](prompts/context-graph-work-017.md); os schemas ficam em [`schemas/`](schemas/). O runner [`scripts/avaliar-harness.sh`](../../../scripts/avaliar-harness.sh) registra tokens de `turn.completed`, fontes declaradas, comandos observados, hashes e resultado das rubricas. Logs completos ficam em diretório externo ao repositório e não integram esta evidência.
+
+A [evolução v2 e seus comandos](v2.md) ficam separados desta evidência congelada.
 
 ## Oráculos congelados
 
@@ -60,12 +63,14 @@ O contrato executável está em [`scenarios.json`](scenarios.json); os prompts c
 - Deve confrontar ao menos `THR-013/014/015`, registrar evidências ausentes e deixar a lista de tecnologias aceitas vazia.
 - RabbitMQ, outbox/inbox, PostgreSQL e object storage permanecem recomendação ou realização candidata até as verificações e o aceite.
 - Fontes mínimas: roteador, `DEC-0003` e `CTX-THREAT-001`; enunciado e protótipo Go são contexto vedado.
+- Pacote suficiente: `AGENTS.md`, roteador, este contrato, `DEC-0003` e `CTX-THREAT-001`; schema, fixture, arquivo de cenários e roadmap não respondem à decisão e só devem ser consultados diante de lacuna concreta.
 
 ### EVAL-HARNESS-GRAPH-001 — Registro da evidência e transição do trabalho
 
 - Deve propor `CTX-EVD-HARNESS-001` como nó `evidence` com status `registrado` depois da coleta.
 - Deve migrar `WORK-017` do roadmap para realizações sem duplicação e atualizar referências remanescentes.
 - Deve exigir `scripts/validar-documentacao.sh` e `scripts/validar-contexto.sh`.
+- No campo `validations`, esses dois identificadores são caminhos literais, sem prefixo `bash`, argumentos ou descrição; o comando agregado não os substitui no contrato v1.
 - Fontes mínimas: roteador, política do Context Graph, roadmap e realizações; enunciado e protótipo Go são contexto vedado.
 
 ## Baseline registrada
@@ -90,4 +95,4 @@ A revisão observou contexto além do pacote mínimo nos cenários de Threat Mod
 
 ## Critério para comparações futuras
 
-Uma execução candidata só pode ser comparada com esta baseline quando reutilizar os mesmos prompts, schemas, oráculos, modelo, esforço e sandbox. Mudança de versão do CLI, falha de preflight ou alteração semântica das fontes invalida comparação direta e deve ser registrada, não ocultada.
+Uma execução candidata só pode ser comparada com esta baseline quando reutilizar os mesmos prompts, schemas, oráculos, modelo, esforço e sandbox. O manifesto candidato inclui a base Markdown consultável, além de instruções, contratos e fixtures, para tornar mudanças semânticas visíveis. Mudança de versão do CLI, falha de preflight ou alteração das fontes invalida comparação direta e deve ser registrada, não ocultada.

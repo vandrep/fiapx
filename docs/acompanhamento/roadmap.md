@@ -10,6 +10,11 @@ entities:
   - WORK-013
   - WORK-014
   - WORK-018
+  - WORK-022
+  - WORK-023
+  - WORK-024
+  - WORK-025
+  - WORK-026
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -43,11 +48,14 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 
 ### WORK-018 — Adotar harness spec-driven enxuto
 
-- **Estado:** `a_fazer`.
+- **Estado:** `em_andamento`.
 - **Dependência:** baseline e contrato de avaliação de [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness), concluído.
 - **Objetivo:** tornar explícitas as fontes de verdade e reduzir contexto repetido, mantendo instruções globais, instruções locais, templates, scripts e skills nas menores fronteiras reutilizáveis.
 - **Resultado verificável:** os cenários da baseline continuam aprovados sem perda de rastreabilidade ou governança e demonstram redução mensurável de contexto ou tokens; instruções não são duplicadas e tecnologias ainda candidatas não se tornam obrigações do harness.
-- **Próxima ação:** inventariar sobreposições entre `AGENTS.md`, `.codex/instructions.md`, agentes e skills; escolher uma categoria por vez para simplificar e reexecutar os mesmos cenários após cada mudança.
+- **Desdobramento:** [`WORK-019`](realizacoes.md#work-019--formalizar-o-contrato-das-fontes), [`WORK-020`](realizacoes.md#work-020--criar-o-mapa-arquitetural-da-raiz) e [`WORK-021`](realizacoes.md#work-021--transformar-validadores-em-gates-de-ci) concluídos; `WORK-022..26` preservam avaliação viva, enforcement no código, legibilidade do runtime, autonomia e coleta de lixo.
+- **Progresso:** `AGENTS.md`, `ARCHITECTURE.md`, `docs/`, `.codex/` e `README.md` possuem papéis não sobrepostos; contratos v1/v2, mapa e contrafactuais passam localmente. A comparação viva de fontes e métricas ainda depende do Codex CLI congelado.
+- **Condição de encerramento:** concluir `WORK-022..26`, preservando evidências históricas e promovendo autonomia somente depois dos gates correspondentes.
+- **Próxima ação:** congelar a baseline multiexecução de `WORK-022` com o manifesto Markdown ampliado; manter `WORK-023/24` condicionados à primeira fatia de aplicação.
 
 ### WORK-011 — Executar Threat Modeling inicial
 
@@ -89,6 +97,50 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Resultado verificável:** cluster criado do zero com Keycloak e três deployments de aplicação; dois usuários autenticados; trabalho sintético aceito e persistido; repetição/reinício, acesso cruzado, ZIP e falha do notificador exercitados por verificações automatizadas.
 - **Sinais mínimos:** compilação, testes, formatação/análise estática e teste de dependência arquitetural proporcional à estrutura escolhida.
 - **Próxima ação:** transformar os cenários de aceitação e falha do primeiro ADR em testes executáveis.
+
+### WORK-022 — Avaliar a navegação arquitetural do harness
+
+- **Estado:** `em_andamento`.
+- **Dependências:** contrato v1 de [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness) e mapa de [`WORK-020`](realizacoes.md#work-020--criar-o-mapa-arquitetural-da-raiz), concluídos.
+- **Objetivo:** medir se o novo mapa permite recuperar o estado arquitetural vigente com contexto mínimo, sem alterar retroativamente a baseline.
+- **Progresso:** `EVAL-HARNESS-ARCH-001` passou três vezes na primeira tentativa, sempre com quatro fontes; três rodadas v1 passaram sem retrabalho e reduziram o agregado determinístico de `61.634` para `61.502` caracteres. As medianas de fontes de Threat Modeling e Context Graph caíram de `14/13` para `12/12`; ADR variou e não sustentou comparação contra a única observação histórica de cinco fontes.
+- **Evidência de processo:** uma rodada preliminar revelou ambiguidade no formato de validadores e ganhou esclarecimento sem alterar o oráculo; execuções dirigidas do ADR retornaram `5/6/24` fontes, demonstrando que uma amostra histórica única não é baseline estatística suficiente. O manifesto passou a incluir toda a base Markdown consultável.
+- **Resultado verificável:** contratos e cenário arquitetural passam; caracteres ficam abaixo de `61.634`; a próxima comparação de fontes usará baseline multiexecução e manifesto semântico idêntico, em vez de exigir mediana contra uma amostra única.
+- **Próxima ação:** congelar uma baseline multiexecução com o manifesto ampliado e registrar seu resultado normalizado; somente então concluir a hipótese de redução de fontes.
+
+### WORK-023 — Aplicar as fronteiras arquiteturais ao código
+
+- **Estado:** `a_fazer`.
+- **Dependências:** stack aceita em `WORK-012`, agente de stack de `WORK-013` quando aplicável e início de `WORK-014`.
+- **Objetivo:** codificar direções de dependência, autoridades de dados e arestas permitidas em testes estruturais da stack escolhida.
+- **Resultado verificável:** uma dependência proibida falha com mensagem de correção; módulos válidos, contratos de borda e invariantes de autoridade passam no build.
+- **Próxima ação:** depois do esqueleto da aplicação, mapear diretórios reais em `ARCHITECTURE.md` e criar o primeiro contrafactual estrutural.
+
+### WORK-024 — Tornar o runtime legível e isolado para agentes
+
+- **Estado:** `a_fazer`.
+- **Dependência:** primeira fatia executável de `WORK-014`.
+- **Objetivo:** oferecer bootstrap e teardown isolados por worktree, dados sintéticos, jornadas reproduzíveis e consultas locais de logs, métricas e traces.
+- **Resultado verificável:** um agente reproduz uma falha, observa sua evidência e valida a correção sem contexto externo nem colisão com outra worktree.
+- **Próxima ação:** definir comandos e isolamento a partir do runtime real, sem antecipar portas, namespaces ou ferramentas ainda não escolhidas.
+
+## Depois da primeira evidência operacional
+
+### WORK-025 — Definir autonomia progressiva
+
+- **Estado:** `a_fazer`.
+- **Dependências:** gates de `WORK-021`, avaliação de `WORK-022` e repositório remoto com fluxo de PR disponível.
+- **Objetivo:** explicitar níveis de leitura, edição local validada, PR draft, resposta a revisão e merge, com escalonamento humano e trilha de auditoria.
+- **Resultado verificável:** um piloto chega até PR draft e responde a falhas dos gates; merge autônomo permanece desabilitado até existir evidência específica para promovê-lo.
+- **Próxima ação:** após a coleta viva, definir o piloto de menor risco e registrar seus limites de permissão.
+
+### WORK-026 — Instituir coleta de lixo incremental do harness
+
+- **Estado:** `a_fazer`.
+- **Dependências:** início do desenvolvimento da aplicação e gates de `WORK-021`.
+- **Objetivo:** auditar duplicações, documentos obsoletos, divergências de estado e dívida arquitetural em correções pequenas e revisáveis.
+- **Resultado verificável:** achados registram evidência, idade e ação; decisões e históricos nunca são apagados silenciosamente; falhas recorrentes ganham contrafactual no controle mais próximo.
+- **Próxima ação:** executar a primeira auditoria manual após dez PRs ou antes do próximo marco acadêmico, o que ocorrer primeiro.
 
 ## Regra de atualização
 

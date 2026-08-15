@@ -3,20 +3,23 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-contract_file="$repo_root/docs/avaliacoes/harness/scenarios.json"
-fixtures_dir="$repo_root/docs/avaliacoes/harness/fixtures"
-recorded_evidence="$repo_root/docs/avaliacoes/harness/resultados/baseline-2026-08-13.json"
+harness_dir="$repo_root/docs/avaliacoes/harness"
+default_contract_file="$harness_dir/scenarios.json"
+contract_file="$default_contract_file"
+fixtures_dir="$harness_dir/fixtures"
+recorded_evidence="$harness_dir/resultados/baseline-2026-08-13.json"
 
 usage() {
     cat <<'EOF'
 Uso:
-  scripts/avaliar-harness.sh self-test
-  scripts/avaliar-harness.sh run --label NOME --output-dir DIRETORIO [--scenario ID]
+  scripts/avaliar-harness.sh self-test [--contract ARQUIVO]
+  scripts/avaliar-harness.sh run --label NOME --output-dir DIRETORIO [--contract ARQUIVO] [--scenario ID]
 
 Variável opcional:
   HARNESS_CODEX_BIN  Caminho explícito para o executável codex quando ele não está no PATH.
 
 O diretório de saída deve ficar fora do repositório porque contém eventos e respostas brutas.
+O contrato padrão é docs/avaliacoes/harness/scenarios.json; caminhos relativos são resolvidos nesse diretório.
 EOF
 }
 
@@ -27,6 +30,28 @@ fail() {
 
 require_command() {
     command -v "$1" >/dev/null 2>&1 || fail "$1 é necessário para avaliar o harness."
+}
+
+select_contract() {
+    local requested=$1
+    local resolved
+
+    command -v realpath >/dev/null 2>&1 || fail "realpath é necessário para selecionar o contrato."
+    if [[ "$requested" == /* ]]; then
+        resolved=$(realpath -e -- "$requested") || fail "contrato inexistente: $requested."
+    else
+        resolved=$(realpath -e -- "$harness_dir/$requested") || fail "contrato inexistente: $requested."
+    fi
+
+    case "$resolved" in
+        "$harness_dir"/*)
+            ;;
+        *)
+            fail "o contrato deve ficar em docs/avaliacoes/harness/."
+            ;;
+    esac
+    [[ -f "$resolved" ]] || fail "contrato não é arquivo regular: $requested."
+    contract_file=$resolved
 }
 
 resolve_codex() {
@@ -44,13 +69,17 @@ resolve_codex() {
 }
 
 harness_manifest() {
+    local contract_relative
+    contract_relative=$(realpath --relative-to="$repo_root" "$contract_file")
     {
         printf '%s\0' \
             AGENTS.md \
+            ARCHITECTURE.md \
             .codex/instructions.md \
             scripts/avaliar-harness.sh \
-            docs/avaliacoes/harness/scenarios.json
-        git -C "$repo_root" ls-files -z -- .codex/agents .agents/skills
+            "$contract_relative"
+        git -C "$repo_root" ls-files -z --cached --others --exclude-standard -- \
+            '*.md' .codex/agents .agents/skills
         find \
             "$repo_root/docs/avaliacoes/harness/prompts" \
             "$repo_root/docs/avaliacoes/harness/schemas" \
@@ -199,7 +228,12 @@ grade_output() {
             ' "${event_files[@]}" >/dev/null; then
             printf 'COMMAND-FORBIDDEN:%s\n' "$forbidden" >>"$failures_file"
         fi
-    done < <(jq -r '.forbidden_source_fragments[]' "$contract_file")
+    done < <(
+        {
+            jq -r '.forbidden_source_fragments[]?' "$contract_file"
+            jq -r '.forbidden_source_fragments[]?' <<<"$scenario_json"
+        } | LC_ALL=C sort -u
+    )
 
     [[ ! -s "$failures_file" ]]
 }
@@ -403,7 +437,11 @@ self_test() {
     # shellcheck disable=SC2064  # Expande agora: a variável é local e não existe no trap EXIT.
     trap "rm -rf -- '$test_tmp'" EXIT
 
-    jq -e '.contract_version == 1 and (.scenarios | length) == 3' "$contract_file" >/dev/null
+    jq -e '
+        (.contract_version == 1 or .contract_version == 2)
+        and (.scenarios | length) >= 3
+        and ([.scenarios[].id] | length) == ([.scenarios[].id] | unique | length)
+    ' "$contract_file" >/dev/null || fail "contrato possui versão, quantidade ou IDs inválidos."
     while IFS= read -r scenario_json; do
         fixture_relative=$(jq -r '.valid_fixture' <<<"$scenario_json")
         fixture_file="$repo_root/docs/avaliacoes/harness/$fixture_relative"
@@ -436,6 +474,16 @@ self_test() {
     jq 'del(.gates[-1])' "$fixtures_dir/threat-p0-gates.valid.json" >"$test_tmp/threat-invalid.json"
     if grade_output "$scenario_json" "$test_tmp/threat-invalid.json" "$test_tmp/threat-invalid.failures" "$fixtures_dir/turn-completed.jsonl"; then
         fail "rubrica aceitou uma ameaça P0 ausente."
+    fi
+
+    scenario_json=$(jq -c '.scenarios[] | select(.id == "EVAL-HARNESS-ARCH-001")' "$contract_file")
+    if [[ -n "$scenario_json" ]]; then
+        jq '.application_state = "implemented"' \
+            "$fixtures_dir/architecture-map.valid.json" >"$test_tmp/architecture-invalid.json"
+        if grade_output "$scenario_json" "$test_tmp/architecture-invalid.json" \
+            "$test_tmp/architecture-invalid.failures" "$fixtures_dir/turn-completed.jsonl"; then
+            fail "rubrica arquitetural aceitou uma aplicação inexistente como implementada."
+        fi
     fi
 
     if HARNESS_CODEX_BIN="$test_tmp/codex-ausente" resolve_codex >/dev/null 2>&1; then
@@ -476,7 +524,14 @@ self_test() {
         and ([.scenarios[] | select((.prompt_sha256 | length) != 64 or (.schema_sha256 | length) != 64 or (.response_sha256 | length) != 64)] | length) == 0
     ' "$recorded_evidence" >/dev/null || fail "evidência normalizada da baseline está inconsistente."
 
-    echo "Harness self-test válido: 3 fixtures e a evidência normalizada aprovadas; parser de tokens e casos contrafactuais verificados."
+    local manifest_snapshot
+    manifest_snapshot=$(harness_manifest)
+    grep -Fq '  ARCHITECTURE.md' <<<"$manifest_snapshot" \
+        || fail "manifesto não inclui o mapa arquitetural."
+    grep -Fq '  docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md' <<<"$manifest_snapshot" \
+        || fail "manifesto não inclui uma fonte semântica consultada pelos cenários."
+
+    echo "Harness self-test válido: $scenario_count fixtures e a evidência normalizada aprovadas; parser de tokens e casos contrafactuais verificados."
 }
 
 run_baseline() {
@@ -516,6 +571,11 @@ run_baseline() {
             --scenario)
                 [[ $# -ge 2 ]] || fail "--scenario exige valor."
                 selected_scenario=$2
+                shift 2
+                ;;
+            --contract)
+                [[ $# -ge 2 ]] || fail "--contract exige valor."
+                select_contract "$2"
                 shift 2
                 ;;
             *)
@@ -634,7 +694,10 @@ main() {
     case "$1" in
         self-test)
             shift
-            [[ $# -eq 0 ]] || fail "self-test não aceita argumentos."
+            if [[ $# -gt 0 ]]; then
+                [[ $# -eq 2 && "$1" == "--contract" ]] || fail "self-test aceita somente --contract ARQUIVO."
+                select_contract "$2"
+            fi
             self_test
             ;;
         run)
