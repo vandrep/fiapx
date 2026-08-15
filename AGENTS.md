@@ -70,3 +70,10 @@ Não crie documentação de retrospectiva para mudanças triviais. Atualize o co
 - Para código, execute os testes e verificações relevantes ao escopo. Se ainda não existirem, declare a lacuna e proponha o menor mecanismo de verificação adequado.
 - Se uma validação falhar, preserve a evidência, corrija a causa no produto e no processo e execute novamente tanto a validação original quanto a prevenção ou detecção acrescentada.
 - Na entrega, informe o que mudou, como foi validado, limitações conhecidas e o próximo passo somente quando ele for útil.
+
+## Métricas da execução
+
+- O recibo pós-execução do runtime é a autoridade sobre tempo e tokens do agente principal; o modelo não deve estimar, repetir nem somar esses valores por conta própria.
+- Na entrega, relate somente tempos observados de etapas, validações, tentativas, retrabalho e processos Codex filhos que não pertençam ao recibo do agente principal, sempre com a origem da medição.
+- Separe métricas do agente principal das pertencentes a processos Codex filhos; nunca as some nem atribua implicitamente umas às outras.
+- Se o runtime não anexar o recibo, registre o estado `não instrumentado` ou a telemetria `não disponível`; nunca estime tokens pela duração nem substitua o recibo pelo uso de um único turno.

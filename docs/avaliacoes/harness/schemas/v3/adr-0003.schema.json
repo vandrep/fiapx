@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scenario_id", "sources_consulted", "decision_id", "decision_status", "recommendation", "risks", "accepted_technologies", "candidate_technologies", "verification_gaps", "java_quarkus_status", "meta_pdca", "next_step"],
+  "properties": {
+    "scenario_id": {"type": "string"},
+    "sources_consulted": {"type": "array", "items": {"type": "string"}},
+    "decision_id": {"type": "string"},
+    "decision_status": {"type": "string"},
+    "recommendation": {"type": "string"},
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["threat_id", "impact", "unresolved_evidence"],
+        "properties": {
+          "threat_id": {"type": "string"},
+          "impact": {"type": "string"},
+          "unresolved_evidence": {"type": "string"}
+        }
+      }
+    },
+    "accepted_technologies": {"type": "array", "items": {"type": "string"}},
+    "candidate_technologies": {"type": "array", "items": {"type": "string"}},
+    "verification_gaps": {"type": "array", "items": {"type": "string"}},
+    "java_quarkus_status": {"type": "string"},
+    "meta_pdca": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failure_found", "result"],
+      "properties": {"failure_found": {"type": "boolean"}, "result": {"type": "string"}}
+    },
+    "next_step": {"type": "string"}
+  }
+}

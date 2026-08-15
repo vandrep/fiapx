@@ -27,6 +27,8 @@ Para saber **o que vale hoje**, leia somente `CTX-CMP-003` e os ADRs citados por
 | Por que oito componentes foram aceitos? | [`DEC-0004`](decisoes/0004-componentes-coesos-do-nucleo.md) e [`CTX-EVD-CMP-003`](historico/componentes/ctx-cmp-003-refinamento.md) |
 | Como os componentes são implantados para validação? | [`DEC-0002`](decisoes/0002-topologia-kubernetes.md) |
 | Como persistência e mensageria podem ser realizadas? | [`DEC-0003`](decisoes/0003-entrega-duravel-e-persistencia.md), ainda `em_analise` |
+| Como o harness separa entrada pública e resposta esperada? | [`DEC-0006`](decisoes/0006-separacao-do-oraculo-do-harness.md), ainda `em_analise` |
+| Como tempo e tokens do agente principal são coletados? | [`DEC-0007`](decisoes/0007-recibo-pos-execucao-do-agente-principal.md), ainda `em_analise` |
 | Onde estão ativos, fluxos, fronteiras e ameaças? | [`CTX-THREAT-001`](modelo-ameacas.md), ainda `em_analise` |
 | Qual é o próximo trabalho? | [roadmap ativo](../acompanhamento/roadmap.md) |
 

@@ -31,4 +31,6 @@ Quando uma decisão for substituída:
 - [`DEC-0002`](0002-topologia-kubernetes.md) — três quanta Kubernetes, aceita;
 - [`DEC-0003`](0003-entrega-duravel-e-persistencia.md) — aceite e entrega durável, em análise;
 - [`DEC-0004`](0004-componentes-coesos-do-nucleo.md) — oito componentes do núcleo, aceita;
-- [`DEC-0005`](0005-keycloak-no-ambiente-de-validacao.md) — Keycloak autocontido em Kubernetes, aceita.
+- [`DEC-0005`](0005-keycloak-no-ambiente-de-validacao.md) — Keycloak autocontido em Kubernetes, aceita;
+- [`DEC-0006`](0006-separacao-do-oraculo-do-harness.md) — separação entre especificação pública e oráculo do harness, em análise.
+- [`DEC-0007`](0007-recibo-pos-execucao-do-agente-principal.md) — recibo pós-execução autoritativo do agente principal, em análise.

@@ -46,7 +46,9 @@ A baseline usa uma execução inicial por cenário e até dois turnos de correç
 
 O contrato congelado da baseline está em [`scenarios.json`](scenarios.json); os prompts cobrem [gates P0](prompts/threat-p0-gates.md), [DEC-0003](prompts/adr-0003.md) e [Context Graph](prompts/context-graph-work-017.md); os schemas ficam em [`schemas/`](schemas/). O runner [`scripts/avaliar-harness.sh`](../../../scripts/avaliar-harness.sh) registra tokens de `turn.completed`, fontes declaradas, comandos observados, hashes e resultado das rubricas. Logs completos ficam em diretório externo ao repositório e não integram esta evidência.
 
-A [evolução v2 e seus comandos](v2.md) ficam separados desta evidência congelada.
+As evoluções [v2](v2.md) e [v3](v3.md) ficam separadas desta evidência congelada; v3 experimenta eficiência e isolamento do oráculo sem alterar os contratos históricos. O primeiro resultado de eficiência está em [`CTX-EVD-HARNESS-003`](resultados/eficiencia-v3-2026-08-15.json) e preserva v1/v2 como padrão.
+
+A [telemetria opt-in do agente principal](../../../tools/codex-telemetry/README.md), definida pela [`DEC-0007`](../../arquitetura/decisoes/0007-recibo-pos-execucao-do-agente-principal.md), mede a execução interativa na fronteira do App Server. Seus recibos não substituem as métricas congeladas de uma avaliação nem misturam threads filhas ao agente principal.
 
 ## Oráculos congelados
 

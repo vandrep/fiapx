@@ -21,6 +21,7 @@ entities:
   - WORK-019
   - WORK-020
   - WORK-021
+  - WORK-028
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -187,6 +188,18 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Evidência:** [`scripts/validar-harness.sh`](../../scripts/validar-harness.sh) e [workflow de validação](../../.github/workflows/validar-harness.yml).
 - **Informação relevante:** a primeira execução no GitHub depende de publicar esta mudança; localmente, os gates determinísticos passam.
 - **Meta-PDCA aplicado:** a primeira varredura rejeitou um link do novo prompt com profundidade incorreta; o link foi corrigido e o validador focal do mapa passou a conferir essa referência antes da varredura documental completa. O lint também tornou explícito que backticks pesquisados são literais Markdown. Nas coletas vivas, o novo comando agregado tornou ambíguo o formato dos dois validadores exigidos pelo oráculo v1; a documentação passou a preservar seus caminhos literais. A variância de fontes revelou ainda que o manifesto não cobria toda a base consultável; ele passou a hashear Markdown mantido, e o self-test exige uma fonte semântica dos cenários.
+
+### WORK-028 — Instrumentar telemetria autoritativa do agente principal
+
+- **Estado:** `concluido`.
+- **Concluído em:** 2026-08-15.
+- **Resultado:** um agente ACP local opt-in passou a observar os eventos do App Server, agregar somente turnos raiz, persistir recibos mínimos e anexar tempo/tokens depois da resposta do modelo. O agente padrão permanece disponível e o modelo deixou de ser autoridade sobre a própria telemetria.
+- **Evidência:** [`DEC-0007`](../arquitetura/decisoes/0007-recibo-pos-execucao-do-agente-principal.md), [proxy e contrato operacional](../../tools/codex-telemetry/README.md), testes do pacote e integração no [`validar-harness.sh`](../../scripts/validar-harness.sh).
+- **Medição focal:** o smoke real corrigido terminou em `6.434 ms`, com um turno raiz e `17.165` tokens exatos (`17.160` de entrada, `6.912` em cache e `5` de saída); o rodapé foi emitido exatamente uma vez antes do terminal ACP.
+- **Configuração local:** o IntelliJ recarregou `~/.jetbrains/acp.json`, registrou `Codex FIAPX (métricas)` e preservou o agente de registry; o arquivo anterior foi salvo como backup local com permissão restrita.
+- **Validação:** doze testes cobriram agregação multturno, exclusão de filhos, interrupção, uso ausente, duplicata, persistência indisponível, framing e dados sensíveis; o handshake e um turno reais passaram, além de documentação, contexto e contratos v1/v2/v3.
+- **Meta-PDCA aplicado:** o teardown inicial deixou uma thread de entrada no buffer global e ganhou encerramento limpo com contrafactual de `SIGINT`. O primeiro cliente de smoke combinou `select` com buffering de texto e expirou embora o recibo já estivesse pronto; o cliente reutilizável passou a drenar JSONL binário e o caso foi automatizado.
+- **Limite:** a [`DEC-0007`](../arquitetura/decisoes/0007-recibo-pos-execucao-do-agente-principal.md) permanece `em_analise` até existirem observações interativas com ferramenta, subagente e interrupção; testes determinísticos já impedem somar filhos ou inventar tokens.
 
 ## Manutenção
 

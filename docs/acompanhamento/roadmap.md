@@ -15,6 +15,7 @@ entities:
   - WORK-024
   - WORK-025
   - WORK-026
+  - WORK-027
 relations:
   - type: governed_by
     target: CTX-GOV-001
@@ -52,9 +53,9 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Dependência:** baseline e contrato de avaliação de [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness), concluído.
 - **Objetivo:** tornar explícitas as fontes de verdade e reduzir contexto repetido, mantendo instruções globais, instruções locais, templates, scripts e skills nas menores fronteiras reutilizáveis.
 - **Resultado verificável:** os cenários da baseline continuam aprovados sem perda de rastreabilidade ou governança e demonstram redução mensurável de contexto ou tokens; instruções não são duplicadas e tecnologias ainda candidatas não se tornam obrigações do harness.
-- **Desdobramento:** [`WORK-019`](realizacoes.md#work-019--formalizar-o-contrato-das-fontes), [`WORK-020`](realizacoes.md#work-020--criar-o-mapa-arquitetural-da-raiz) e [`WORK-021`](realizacoes.md#work-021--transformar-validadores-em-gates-de-ci) concluídos; `WORK-022..26` preservam avaliação viva, enforcement no código, legibilidade do runtime, autonomia e coleta de lixo.
+- **Desdobramento:** [`WORK-019`](realizacoes.md#work-019--formalizar-o-contrato-das-fontes), [`WORK-020`](realizacoes.md#work-020--criar-o-mapa-arquitetural-da-raiz) e [`WORK-021`](realizacoes.md#work-021--transformar-validadores-em-gates-de-ci) concluídos; `WORK-022..27` preservam avaliação viva, enforcement no código, legibilidade do runtime, autonomia, coleta de lixo e eficiência mensurável.
 - **Progresso:** `AGENTS.md`, `ARCHITECTURE.md`, `docs/`, `.codex/` e `README.md` possuem papéis não sobrepostos; contratos v1/v2, mapa e contrafactuais passam localmente. A comparação viva de fontes e métricas ainda depende do Codex CLI congelado.
-- **Condição de encerramento:** concluir `WORK-022..26`, preservando evidências históricas e promovendo autonomia somente depois dos gates correspondentes.
+- **Condição de encerramento:** concluir `WORK-022..27`, preservando evidências históricas e promovendo autonomia somente depois dos gates correspondentes.
 - **Próxima ação:** congelar a baseline multiexecução de `WORK-022` com o manifesto Markdown ampliado; manter `WORK-023/24` condicionados à primeira fatia de aplicação.
 
 ### WORK-011 — Executar Threat Modeling inicial
@@ -107,6 +108,15 @@ Itens concluídos não permanecem neste arquivo. Eles são migrados, com o mesmo
 - **Evidência de processo:** uma rodada preliminar revelou ambiguidade no formato de validadores e ganhou esclarecimento sem alterar o oráculo; execuções dirigidas do ADR retornaram `5/6/24` fontes, demonstrando que uma amostra histórica única não é baseline estatística suficiente. O manifesto passou a incluir toda a base Markdown consultável.
 - **Resultado verificável:** contratos e cenário arquitetural passam; caracteres ficam abaixo de `61.634`; a próxima comparação de fontes usará baseline multiexecução e manifesto semântico idêntico, em vez de exigir mediana contra uma amostra única.
 - **Próxima ação:** congelar uma baseline multiexecução com o manifesto ampliado e registrar seu resultado normalizado; somente então concluir a hipótese de redução de fontes.
+
+### WORK-027 — Otimizar custo e relato da avaliação do harness
+
+- **Estado:** `em_andamento`.
+- **Dependências:** runner e baseline de [`WORK-017`](realizacoes.md#work-017--estabelecer-baseline-e-contrato-de-avalia%C3%A7%C3%A3o-do-harness); medições e manifesto ampliado de [`WORK-022`](#work-022--avaliar-a-navega%C3%A7%C3%A3o-arquitetural-do-harness).
+- **Objetivo:** ordenar feedback por custo, eliminar preflight redundante, medir tempo/tokens/tool output e relatar o consumo ao concluir cada execução sem confundir telemetria do agente principal com processos filhos.
+- **Progresso:** contrato de relato, preflight único, `--fail-fast`, `--repeat`, telemetria por fase e contrato v3 estrutural foram implementados. A coleta focal [`CTX-EVD-HARNESS-003`](../avaliacoes/harness/resultados/eficiencia-v3-2026-08-15.json) confirmou o lote v2 em `3/3` sem retrabalho e reprovou a promoção v3 por piora de tokens, tempo e saída de ferramentas; v1/v2 permanecem como padrão. A [`WORK-028`](realizacoes.md#work-028--instrumentar-telemetria-autoritativa-do-agente-principal) separou o recibo autoritativo do agente principal do relato de processos filhos.
+- **Resultado verificável:** v1/v2 permanecem aprovados; três execuções completas produzem estatísticas sem amostras herdadas ou censuradas; v3 só é promovido se cumprir os limites documentados sem perda semântica.
+- **Próxima ação:** após consolidar as mudanças em um commit limpo, executar e normalizar três repetições completas v1 no mesmo estado da baseline arquitetural. Não executar três suítes v3 até que uma hipótese nova reduza primeiro o custo no cenário focal.
 
 ### WORK-023 — Aplicar as fronteiras arquiteturais ao código
 

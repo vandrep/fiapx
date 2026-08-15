@@ -29,6 +29,39 @@ expect_failure() {
     fi
 }
 
+validate_reporting_contract() {
+    local validation_root=${1:-$repo_root}
+    local agents="$validation_root/AGENTS.md"
+
+    [[ -f "$agents" ]] || fail "AGENTS.md ausente para validar o contrato de relato."
+    grep -Fq '## Métricas da execução' "$agents" \
+        || fail "AGENTS.md deve exigir métricas na entrega final."
+    grep -Fq 'recibo pós-execução do runtime é a autoridade' "$agents" \
+        || fail "AGENTS.md deve atribuir a telemetria principal ao runtime."
+    grep -Fq 'não deve estimar, repetir nem somar' "$agents" \
+        || fail "AGENTS.md deve impedir autorrelato duplicado do modelo."
+    grep -Fq 'processos Codex filhos' "$agents" \
+        || fail "AGENTS.md deve separar métricas do agente principal e de processos filhos."
+    grep -Fq 'nunca estime tokens pela duração' "$agents" \
+        || fail "AGENTS.md deve proibir estimativas de tokens sem telemetria."
+    if ! grep -Fq 'não instrumentado' "$agents" \
+        || ! grep -Fq 'não disponível' "$agents"; then
+        fail "AGENTS.md deve explicitar telemetria indisponível."
+    fi
+}
+
+validate_telemetry_contract() {
+    local tool_root="$repo_root/tools/codex-telemetry"
+
+    [[ -f "$tool_root/package-lock.json" ]] \
+        || fail "lockfile da telemetria ausente."
+    python3 -m unittest discover -s "$tool_root/tests" -p 'test_*.py' -q
+}
+
+validate_reporting_contract_isolated() (
+    validate_reporting_contract "$@"
+)
+
 knowledge_self_test() (
     local test_tmp
     test_tmp=$(mktemp -d)
@@ -42,6 +75,11 @@ knowledge_self_test() (
         "$test_tmp/docs/avaliacoes/harness/prompts/architecture-map.md"
 
     "$repo_root/scripts/validar-mapa-arquitetural.sh" "$test_tmp" >/dev/null
+    validate_reporting_contract "$test_tmp"
+
+    sed -i 's/## Métricas da execução/## Relato opcional/' "$test_tmp/AGENTS.md"
+    expect_failure "contrato de métricas ausente" validate_reporting_contract_isolated "$test_tmp"
+    cp "$repo_root/AGENTS.md" "$test_tmp/AGENTS.md"
 
     rm -- "$test_tmp/ARCHITECTURE.md"
     expect_failure "mapa raiz ausente" "$repo_root/scripts/validar-mapa-arquitetural.sh" "$test_tmp"
@@ -60,16 +98,19 @@ knowledge_self_test() (
     expect_failure "link do cenário com profundidade incorreta" \
         "$repo_root/scripts/validar-mapa-arquitetural.sh" "$test_tmp"
 
-    echo "Contrafactuais do conhecimento válidos: ausência, links quebrados e promoção indevida foram rejeitados."
+    echo "Contrafactuais do conhecimento válidos: ausência, links quebrados, promoção indevida e perda do relato foram rejeitados."
 )
 
 run_checks() {
+    validate_reporting_contract
     bash "$repo_root/scripts/validar-mapa-arquitetural.sh"
     bash "$repo_root/scripts/avaliar-harness.sh" self-test
     bash "$repo_root/scripts/avaliar-harness.sh" self-test --contract scenarios-v2.json
+    bash "$repo_root/scripts/avaliar-harness.sh" self-test --contract scenarios-v3.json
     bash "$repo_root/scripts/validar-contexto.sh"
+    validate_telemetry_contract
     knowledge_self_test
-    echo "Harness válido: mapa, contratos v1/v2, documentação, contexto e contrafactuais aprovados."
+    echo "Harness válido: mapa, contratos v1/v2/v3, telemetria, documentação, contexto e contrafactuais aprovados."
 }
 
 main() {

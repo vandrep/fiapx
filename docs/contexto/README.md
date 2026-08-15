@@ -132,9 +132,11 @@ Esta tabela orienta a navegação pelas autoridades canônicas e pelos grupos hi
 | `DEC-0003` | Decisão em análise sobre aceite, entrega durável e persistência | [`docs/arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md`](../arquitetura/decisoes/0003-entrega-duravel-e-persistencia.md) |
 | `DEC-0004` | Decisão aceita sobre oito componentes do núcleo | [`docs/arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md`](../arquitetura/decisoes/0004-componentes-coesos-do-nucleo.md) |
 | `DEC-0005` | Decisão aceita sobre Keycloak no ambiente de validação | [`docs/arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md`](../arquitetura/decisoes/0005-keycloak-no-ambiente-de-validacao.md) |
+| `DEC-0006` | Decisão em análise sobre separação do oráculo do harness | [`docs/arquitetura/decisoes/0006-separacao-do-oraculo-do-harness.md`](../arquitetura/decisoes/0006-separacao-do-oraculo-do-harness.md) |
+| `DEC-0007` | Decisão em análise sobre recibo pós-execução do agente principal | [`docs/arquitetura/decisoes/0007-recibo-pos-execucao-do-agente-principal.md`](../arquitetura/decisoes/0007-recibo-pos-execucao-do-agente-principal.md) |
 | `CTX-ROADMAP-001` | Roadmap ativo | [`docs/acompanhamento/roadmap.md`](../acompanhamento/roadmap.md) |
 | `CTX-OUTCOME-001` | Registro de realizações | [`docs/acompanhamento/realizacoes.md`](../acompanhamento/realizacoes.md) |
-| `WORK-001` a `WORK-026` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
+| `WORK-001` a `WORK-028` | Itens de trabalho | [Roadmap](../acompanhamento/roadmap.md) ou [realizações](../acompanhamento/realizacoes.md), conforme o estado |
 | `EVAL-HARNESS-TM-001`, `EVAL-HARNESS-ADR-001`, `EVAL-HARNESS-GRAPH-001`, `EVAL-HARNESS-ARCH-001` | Cenários versionados do harness | [`CTX-EVD-HARNESS-001`](../avaliacoes/harness/README.md#or%C3%A1culos-congelados) |
 | `REQ-CHG-0001` a `REQ-CHG-0003` | Mudanças de requisitos | [Índice de refinamentos](../requisitos/refinamentos/README.md) |
 | `CMP-01` a `CMP-04` | Componentes lógicos históricos | Inventário macro de `CTX-CMP-001` |
