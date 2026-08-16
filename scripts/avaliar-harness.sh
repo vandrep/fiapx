@@ -8,6 +8,7 @@ default_contract_file="$harness_dir/scenarios.json"
 contract_file="$default_contract_file"
 fixtures_dir="$harness_dir/fixtures"
 recorded_evidence="$harness_dir/resultados/baseline-2026-08-13.json"
+recorded_multirun_evidence="$harness_dir/resultados/baseline-multiexecucao-v1-2026-08-16.json"
 
 usage() {
     cat <<'EOF'
@@ -485,6 +486,7 @@ self_test() {
     local fixture_file
     local failures_file
     local totals
+    local multirun_evidence_id
     local scenario_count=0
 
     require_command jq
@@ -626,6 +628,29 @@ self_test() {
         and ([.scenarios[] | select((.prompt_sha256 | length) != 64 or (.schema_sha256 | length) != 64 or (.response_sha256 | length) != 64)] | length) == 0
     ' "$recorded_evidence" >/dev/null || fail "evidência normalizada da baseline está inconsistente."
 
+    jq -e '
+        .evidence_id == "CTX-EVD-HARNESS-004"
+        and .planned_repetitions == 3
+        and .executed_repetitions == 3
+        and .automatic_status == "passed"
+        and .semantic_status == "passed"
+        and .censored == false
+        and .rework_turns == 0
+        and (.runs | length) == 3
+        and ([.scenarios[].automatic_status] | all(. == "passed"))
+        and ([.scenarios[].semantic_status] | all(. == "passed"))
+        and ([.scenarios[].attempts.median] | all(. == 1))
+        and ([.scenarios[].rework_turns.median] | all(. == 0))
+        and (.contract_sha256 | length) == 64
+        and (.manifest_sha256 | length) == 64
+        and (.raw_batch_summary_sha256 | length) == 64
+        and ([.scenarios[].response_sha256[] | select(length != 64)] | length) == 0
+    ' "$recorded_multirun_evidence" >/dev/null \
+        || fail "evidência normalizada da baseline multiexecução está inconsistente."
+    multirun_evidence_id=$(jq -r '.evidence_id' "$recorded_multirun_evidence")
+    grep -Fqx "  - $multirun_evidence_id" "$harness_dir/README.md" \
+        || fail "evidência normalizada da baseline multiexecução não está registrada no Context Graph."
+
     local manifest_snapshot
     manifest_snapshot=$(harness_manifest)
     grep -Fq '  ARCHITECTURE.md' <<<"$manifest_snapshot" \
@@ -649,7 +674,7 @@ self_test() {
     ' "$test_tmp/batch-summary.json" >/dev/null \
         || fail "resumo multiexecução perdeu status ou estatísticas."
 
-    echo "Harness self-test válido: $scenario_count fixtures e a evidência normalizada aprovadas; parser de tokens e casos contrafactuais verificados."
+    echo "Harness self-test válido: $scenario_count fixtures e as evidências normalizadas aprovadas; parser de tokens e casos contrafactuais verificados."
 }
 
 write_preflight_result() {

@@ -5,6 +5,7 @@ status: registrado
 recorded_at: 2026-08-13
 valid_from: 2026-08-13
 entities:
+  - CTX-EVD-HARNESS-004
   - EVAL-HARNESS-TM-001
   - EVAL-HARNESS-ADR-001
   - EVAL-HARNESS-GRAPH-001
@@ -20,6 +21,10 @@ relations:
     target: DEC-0003
   - type: informs
     target: WORK-018
+  - type: informs
+    target: WORK-022
+  - type: informs
+    target: WORK-027
 ---
 
 # Baseline e contrato de avaliação do harness
@@ -87,6 +92,20 @@ A coleta de 2026-08-13 está preservada em [`resultados/baseline-2026-08-13.json
 | **Total** | — | — | **407.429** | **292.864** | **7.260** | **1.692** | **0** |
 
 A revisão observou contexto além do pacote mínimo nos cenários de Threat Modeling e Context Graph. Isso não invalidou as respostas, mas fornece uma hipótese mensurável para [`WORK-018`](../../acompanhamento/roadmap.md#work-018--adotar-harness-spec-driven-enxuto): reduzir fontes carregadas e tokens sem perder aprovação ou rastreabilidade. A comparação deve usar o arquivo normalizado para confrontar métricas e hashes, não os logs brutos.
+
+## Baseline multiexecução com manifesto ampliado
+
+A coleta de 2026-08-16 está normalizada em [`CTX-EVD-HARNESS-004`](resultados/baseline-multiexecucao-v1-2026-08-16.json). No commit limpo `aa1df32`, três suítes v1 completas passaram automática e semanticamente na primeira tentativa, sem censura nem retrabalho.
+
+| Cenário | Fontes mín. | Fontes mediana | Fontes máx. | Entrada mediana | Entrada não cacheada mediana | Saída de comandos mediana |
+|---|---:|---:|---:|---:|---:|---:|
+| `EVAL-HARNESS-TM-001` | 5 | 13 | 19 | 131.071 | 46.079 | 104.666 |
+| `EVAL-HARNESS-ADR-001` | 5 | 6 | 7 | 89.381 | 34.170 | 60.178 |
+| `EVAL-HARNESS-GRAPH-001` | 7 | 10 | 17 | 92.483 | 34.883 | 96.037 |
+
+A suíte teve medianas de `158 s`, `299.560` tokens de entrada, `113.448` não cacheados e `245.965` caracteres devolvidos por comandos. A amplitude de fontes confirma variabilidade relevante de navegação. A observação histórica única permanece preservada, mas não é usada para concluir causalmente redução; essa hipótese exige controle v1 e candidato v2 pareados no mesmo estado e com manifesto semanticamente idêntico.
+
+A comparação seguinte foi congelada antes da coleta em [`CTX-EXP-HARNESS-001`](experimentos/comparacao-pareada-v1-v2-2026-08-16.md). Ela compara somente os cenários compartilhados e separa estabilidade v1/v2 da evidência específica do cenário arquitetural.
 
 ## Meta-PDCA da avaliação
 
