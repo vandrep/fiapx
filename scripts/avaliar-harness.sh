@@ -9,6 +9,7 @@ contract_file="$default_contract_file"
 fixtures_dir="$harness_dir/fixtures"
 recorded_evidence="$harness_dir/resultados/baseline-2026-08-13.json"
 recorded_multirun_evidence="$harness_dir/resultados/baseline-multiexecucao-v1-2026-08-16.json"
+recorded_paired_evidence="$harness_dir/resultados/comparacao-pareada-v1-v2-2026-08-16.json"
 
 usage() {
     cat <<'EOF'
@@ -717,6 +718,28 @@ self_test() {
     multirun_evidence_id=$(jq -r '.evidence_id' "$recorded_multirun_evidence")
     grep -Fqx "  - $multirun_evidence_id" "$harness_dir/README.md" \
         || fail "evidência normalizada da baseline multiexecução não está registrada no Context Graph."
+    jq -e '
+        .evidence_id == "CTX-EVD-HARNESS-005"
+        and .experiment_id == "CTX-EXP-HARNESS-003"
+        and .eligible == true
+        and .automatic_status == "passed"
+        and .semantic_status == "passed"
+        and .censored == false
+        and .rework_turns == 0
+        and .control_v1.executed_repetitions == 3
+        and .candidate_v2.executed_repetitions == 3
+        and ([
+            .candidate_v2.scenarios[]
+            | select(
+                .scenario_id == "EVAL-HARNESS-ARCH-001"
+                and .sources_consulted.min == 4
+                and .sources_consulted.max == 4
+            )
+        ] | length) == 1
+    ' "$recorded_paired_evidence" >/dev/null \
+        || fail "evidência normalizada da comparação pareada está inconsistente."
+    grep -Fqx "  - $(jq -r '.evidence_id' "$recorded_paired_evidence")" "$harness_dir/README.md" \
+        || fail "evidência normalizada da comparação pareada não está registrada no Context Graph."
 
     local manifest_snapshot
     manifest_snapshot=$(harness_manifest)

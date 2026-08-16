@@ -21,6 +21,7 @@ entities:
   - WORK-019
   - WORK-020
   - WORK-021
+  - WORK-022
   - WORK-028
 relations:
   - type: governed_by
@@ -188,6 +189,17 @@ Cada realização mantém o ID estável do trabalho, data, resultado, evidência
 - **Evidência:** [`scripts/validar-harness.sh`](../../scripts/validar-harness.sh) e [workflow de validação](../../.github/workflows/validar-harness.yml).
 - **Informação relevante:** a primeira execução no GitHub depende de publicar esta mudança; localmente, os gates determinísticos passam.
 - **Meta-PDCA aplicado:** a primeira varredura rejeitou um link do novo prompt com profundidade incorreta; o link foi corrigido e o validador focal do mapa passou a conferir essa referência antes da varredura documental completa. O lint também tornou explícito que backticks pesquisados são literais Markdown. Nas coletas vivas, o novo comando agregado tornou ambíguo o formato dos dois validadores exigidos pelo oráculo v1; a documentação passou a preservar seus caminhos literais. A variância de fontes revelou ainda que o manifesto não cobria toda a base consultável; ele passou a hashear Markdown mantido, e o self-test exige uma fonte semântica dos cenários.
+
+### WORK-022 — Avaliar a navegação arquitetural do harness
+
+- **Estado:** `concluido`.
+- **Concluído em:** 2026-08-16.
+- **Resultado:** o cenário arquitetural recuperou o estado vigente em `3/3` execuções, sempre na primeira tentativa e com quatro fontes. A comparação pareada v1/v2 também passou `3/3` em ambos os contratos, sem censura ou retrabalho; as medianas dos cenários compartilhados variaram em direções opostas, portanto a hipótese ampla de redução de fontes não foi demonstrada.
+- **Evidência:** baseline ampliada [`CTX-EVD-HARNESS-004`](../avaliacoes/harness/resultados/baseline-multiexecucao-v1-2026-08-16.json), protocolo final [`CTX-EXP-HARNESS-003`](../avaliacoes/harness/experimentos/comparacao-pareada-v1-v2-2026-08-16-v3.md) e resultado normalizado [`CTX-EVD-HARNESS-005`](../avaliacoes/harness/resultados/comparacao-pareada-v1-v2-2026-08-16.json).
+- **Medições:** nos cenários compartilhados, v1/v2 tiveram medianas agregadas de `26/28` fontes, `405.438/361.935` tokens de entrada, `124.829/123.933` não cacheados, `206/177 s` e `265.952/290.728` caracteres de ferramentas. `EVAL-HARNESS-ARCH-001` teve mediana de `25 s`, `37.706` tokens de entrada, `22.602` não cacheados e `22.822` caracteres de ferramentas.
+- **Informação relevante:** o mapa sustenta navegação arquitetural enxuta, mas v1 e v2 não aplicam intervenção distinta aos prompts, schemas ou assertions compartilhados; suas diferenças não isolam efeito causal do mapa. V3 permanece opt-in e não promovida.
+- **Meta-PDCA aplicado:** uma espera sem término revelou ausência de timeout e continuidade indevida do lote após falha de infraestrutura; o runner ganhou limite por tentativa, códigos específicos e interrupção do lote. A coleta seguinte revelou falso positivo para `--glob '!CAMINHO_VEDADO/**'`; a fiscalização passou a distinguir exclusão de acesso e ganhou contrafactuais para ambos. As duas coletas inelegíveis foram preservadas fora do repositório e não forneceram amostras ao resultado final.
+- **Validação:** contratos v1/v2/v3, documentação, Context Graph, fitness functions e contrafactuais passaram; hashes do commit, contratos, manifests, lotes e respostas foram normalizados.
 
 ### WORK-028 — Instrumentar telemetria autoritativa do agente principal
 

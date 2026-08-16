@@ -9,6 +9,8 @@ relations:
     target: https://developers.openai.com/api/docs/guides/latest-model
   - type: informed_by
     target: CTX-EVD-HARNESS-001
+  - type: informed_by
+    target: CTX-EVD-HARNESS-005
   - type: affects
     target: WORK-018
   - type: affects
@@ -36,6 +38,12 @@ Preservar v1/v2 como evidência histórica e experimentar em v3 três fronteiras
 - eventos registram tentativas de acesso aos artefatos vedados e tornam a amostra inelegível.
 
 V3 permanece opt-in. A fiscalização de comandos e saídas detecta acesso depois do fato, mas não fornece isolamento de filesystem; por isso ainda não sustenta aceitar a decisão.
+
+## Evidência de 2026-08-16
+
+A comparação pareada [`CTX-EVD-HARNESS-005`](../../avaliacoes/harness/resultados/comparacao-pareada-v1-v2-2026-08-16.json) confirmou `3/3` suítes v1 e v2 sem retrabalho. O cenário arquitetural recuperou o estado vigente três vezes com quatro fontes, mas os cenários compartilhados não demonstraram redução geral de fontes.
+
+A fiscalização também produziu o falso positivo previsto nas condições de revisão: `--glob '!CAMINHO_VEDADO/**'` foi interpretado como acesso. O runner passou a distinguir exclusão literal de leitura e preservou um contrafactual que ainda reprova acesso direto. Essa correção melhora a detecção, mas não cria isolamento de filesystem nem reverte o resultado de custo da v3; a decisão permanece `em_analise` e v3 continua opt-in.
 
 ## Alternativas e trade-offs
 

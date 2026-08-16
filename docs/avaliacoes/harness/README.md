@@ -6,6 +6,7 @@ recorded_at: 2026-08-13
 valid_from: 2026-08-13
 entities:
   - CTX-EVD-HARNESS-004
+  - CTX-EVD-HARNESS-005
   - EVAL-HARNESS-TM-001
   - EVAL-HARNESS-ADR-001
   - EVAL-HARNESS-GRAPH-001
@@ -106,6 +107,16 @@ A coleta de 2026-08-16 está normalizada em [`CTX-EVD-HARNESS-004`](resultados/b
 A suíte teve medianas de `158 s`, `299.560` tokens de entrada, `113.448` não cacheados e `245.965` caracteres devolvidos por comandos. A amplitude de fontes confirma variabilidade relevante de navegação. A observação histórica única permanece preservada, mas não é usada para concluir causalmente redução; essa hipótese exige controle v1 e candidato v2 pareados no mesmo estado e com manifesto semanticamente idêntico.
 
 A comparação foi congelada antes da coleta em [`CTX-EXP-HARNESS-001`](experimentos/comparacao-pareada-v1-v2-2026-08-16.md). Uma espera indefinida tornou a primeira tentativa inelegível e originou o protocolo com timeout [`CTX-EXP-HARNESS-002`](experimentos/comparacao-pareada-v1-v2-2026-08-16-v2.md). A segunda coleta revelou um falso positivo da fiscalização e foi sucedida por [`CTX-EXP-HARNESS-003`](experimentos/comparacao-pareada-v1-v2-2026-08-16-v3.md). O experimento compara somente os cenários compartilhados e separa estabilidade v1/v2 da evidência específica do cenário arquitetural.
+
+O resultado elegível está normalizado em [`CTX-EVD-HARNESS-005`](resultados/comparacao-pareada-v1-v2-2026-08-16.json). V1 e v2 passaram `3/3`, automática e semanticamente, sem censura ou retrabalho. O cenário arquitetural de v2 passou sempre na primeira tentativa com exatamente quatro fontes.
+
+| Cenário compartilhado | Fontes v1 | Fontes v2 | Entrada v1 | Entrada v2 | Não cacheada v1 | Não cacheada v2 |
+|---|---:|---:|---:|---:|---:|---:|
+| `EVAL-HARNESS-TM-001` | 5 | 13 | 134.531 | 126.203 | 43.064 | 39.163 |
+| `EVAL-HARNESS-ADR-001` | 8 | 5 | 160.965 | 114.563 | 42.674 | 44.675 |
+| `EVAL-HARNESS-GRAPH-001` | 11 | 12 | 97.417 | 114.283 | 38.793 | 41.323 |
+
+As medianas variaram em direções opostas: v2 reduziu fontes somente no ADR e aumentou em Threat Modeling e Context Graph. A hipótese ampla de redução de fontes não foi demonstrada; o resultado positivo sustentado é a recuperação arquitetural consistente e enxuta.
 
 ## Meta-PDCA da avaliação
 
