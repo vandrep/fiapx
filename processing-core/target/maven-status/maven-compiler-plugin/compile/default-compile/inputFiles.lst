@@ -1,0 +1,11 @@
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/contract/ProcessingJobView.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/contract/SubmitVideoSubmission.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/in/ListProcessingJobs.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/in/RegisterVideoSubmission.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/usecase/InMemoryVideoSubmissionService.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ImageArchive.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ProcessingJob.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ProcessingJobId.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ProcessingStatus.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/UserId.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/VideoSubmissionId.java

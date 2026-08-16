@@ -1,0 +1,11 @@
+br/com/fiapx/processing/application/port/in/RegisterVideoSubmission.class
+br/com/fiapx/processing/domain/VideoSubmissionId.class
+br/com/fiapx/processing/application/contract/ProcessingJobView.class
+br/com/fiapx/processing/domain/UserId.class
+br/com/fiapx/processing/domain/ProcessingJobId.class
+br/com/fiapx/processing/domain/ProcessingJob.class
+br/com/fiapx/processing/application/contract/SubmitVideoSubmission.class
+br/com/fiapx/processing/application/usecase/InMemoryVideoSubmissionService.class
+br/com/fiapx/processing/domain/ProcessingStatus.class
+br/com/fiapx/processing/domain/ImageArchive.class
+br/com/fiapx/processing/application/port/in/ListProcessingJobs.class
