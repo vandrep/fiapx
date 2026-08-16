@@ -105,7 +105,7 @@ A coleta de 2026-08-16 está normalizada em [`CTX-EVD-HARNESS-004`](resultados/b
 
 A suíte teve medianas de `158 s`, `299.560` tokens de entrada, `113.448` não cacheados e `245.965` caracteres devolvidos por comandos. A amplitude de fontes confirma variabilidade relevante de navegação. A observação histórica única permanece preservada, mas não é usada para concluir causalmente redução; essa hipótese exige controle v1 e candidato v2 pareados no mesmo estado e com manifesto semanticamente idêntico.
 
-A comparação foi congelada antes da coleta em [`CTX-EXP-HARNESS-001`](experimentos/comparacao-pareada-v1-v2-2026-08-16.md). Uma espera indefinida tornou a primeira tentativa inelegível; o protocolo operacional corrigido a sucede em [`CTX-EXP-HARNESS-002`](experimentos/comparacao-pareada-v1-v2-2026-08-16-v2.md). Ele compara somente os cenários compartilhados e separa estabilidade v1/v2 da evidência específica do cenário arquitetural.
+A comparação foi congelada antes da coleta em [`CTX-EXP-HARNESS-001`](experimentos/comparacao-pareada-v1-v2-2026-08-16.md). Uma espera indefinida tornou a primeira tentativa inelegível e originou o protocolo com timeout [`CTX-EXP-HARNESS-002`](experimentos/comparacao-pareada-v1-v2-2026-08-16-v2.md). A segunda coleta revelou um falso positivo da fiscalização e foi sucedida por [`CTX-EXP-HARNESS-003`](experimentos/comparacao-pareada-v1-v2-2026-08-16-v3.md). O experimento compara somente os cenários compartilhados e separa estabilidade v1/v2 da evidência específica do cenário arquitetural.
 
 ## Meta-PDCA da avaliação
 

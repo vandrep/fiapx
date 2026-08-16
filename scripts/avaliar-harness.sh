@@ -278,7 +278,10 @@ grade_output() {
         fi
         if [[ ${#event_files[@]} -gt 0 ]] \
             && jq -s -e --arg forbidden "$forbidden" '
-                any(.[].item.command? // ""; contains($forbidden))
+                any(
+                    .[].item.command? // "";
+                    (split("!" + $forbidden) | join("")) | contains($forbidden)
+                )
             ' "${event_files[@]}" >/dev/null; then
             printf 'COMMAND-FORBIDDEN:%s\n' "$forbidden" >>"$failures_file"
         fi
@@ -597,6 +600,19 @@ self_test() {
     if grade_output "$scenario_json" "$test_tmp/threat-invalid.json" "$test_tmp/threat-invalid.failures" "$fixtures_dir/turn-completed.jsonl"; then
         fail "rubrica aceitou uma ameaça P0 ausente."
     fi
+    printf '%s\n' \
+        '{"type":"item.completed","item":{"type":"command_execution","command":"sed -n 1,10p docs/referencia/projeto-original/main.go","aggregated_output":""}}' \
+        >"$test_tmp/forbidden-access.events.jsonl"
+    if grade_output "$scenario_json" "$fixtures_dir/threat-p0-gates.valid.json" \
+        "$test_tmp/forbidden-access.failures" "$test_tmp/forbidden-access.events.jsonl"; then
+        fail "rubrica aceitou acesso direto a fonte vedada."
+    fi
+    printf '%s\n' \
+        '{"type":"item.completed","item":{"type":"command_execution","command":"rg termo . --glob !docs/referencia/projeto-original/**","aggregated_output":""}}' \
+        >"$test_tmp/forbidden-exclusion.events.jsonl"
+    grade_output "$scenario_json" "$fixtures_dir/threat-p0-gates.valid.json" \
+        "$test_tmp/forbidden-exclusion.failures" "$test_tmp/forbidden-exclusion.events.jsonl" \
+        || fail "rubrica confundiu exclusão explícita com acesso a fonte vedada."
 
     scenario_json=$(jq -c '.scenarios[] | select(.id == "EVAL-HARNESS-ARCH-001")' "$contract_file")
     if [[ -n "$scenario_json" ]]; then
