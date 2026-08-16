@@ -14,7 +14,7 @@ usage() {
     cat <<'EOF'
 Uso:
   scripts/avaliar-harness.sh self-test [--contract ARQUIVO]
-  scripts/avaliar-harness.sh run --label NOME --output-dir DIRETORIO [--contract ARQUIVO] [--scenario ID] [--repeat N] [--fail-fast]
+  scripts/avaliar-harness.sh run --label NOME --output-dir DIRETORIO [--contract ARQUIVO] [--scenario ID] [--repeat N] [--attempt-timeout-seconds N] [--fail-fast]
 
 Variável opcional:
   HARNESS_CODEX_BIN  Caminho explícito para o executável codex quando ele não está no PATH.
@@ -99,6 +99,26 @@ can_retry() {
     local max_rework=$2
 
     ((current_attempt < max_rework))
+}
+
+runtime_failure_code() {
+    local exit_code=$1
+    local prefix=$2
+
+    if [[ $exit_code -eq 124 ]]; then
+        printf '%s-TIMEOUT\n' "$prefix"
+    else
+        printf '%s-EXIT\n' "$prefix"
+    fi
+}
+
+should_stop_batch() {
+    local iteration_exit=$1
+    local summary_file=$2
+
+    [[ $iteration_exit -ne 0 ]] \
+        && jq -e '.stop_reason == "infrastructure_failed" or .stop_reason == "harness_changed"' \
+            "$summary_file" >/dev/null
 }
 
 usage_from_events() {
@@ -314,6 +334,7 @@ run_scenario() {
     local reasoning=$5
     local sandbox=$6
     local max_rework=$7
+    local attempt_timeout_seconds=$8
     local scenario_id
     local prompt_relative
     local schema_relative
@@ -334,6 +355,8 @@ run_scenario() {
     local event_files=()
     local final_response=''
     local final_failures=''
+    local codex_exit
+    local failure_code
 
     scenario_id=$(jq -r '.id' <<<"$scenario_json")
     prompt_relative=$(jq -r '.prompt' <<<"$scenario_json")
@@ -362,7 +385,8 @@ run_scenario() {
         event_files+=("$events_file")
 
         if [[ $attempt -eq 0 ]]; then
-            if ! "$codex_bin" exec \
+            if timeout --foreground --signal=TERM --kill-after=10s "$attempt_timeout_seconds" \
+                "$codex_bin" exec \
                 --model "$model" \
                 -c "model_reasoning_effort=\"$reasoning\"" \
                 --sandbox "$sandbox" \
@@ -371,8 +395,12 @@ run_scenario() {
                 --output-last-message "$response_file" \
                 --cd "$repo_root" \
                 - <"$prompt_file" >"$events_file" 2>"$scenario_dir/attempt-$attempt.stderr"; then
+                :
+            else
+                codex_exit=$?
+                failure_code=$(runtime_failure_code "$codex_exit" 'RUNTIME-CODEX')
                 record_runtime_failure "$scenario_id" "$scenario_dir" "$started_at" "$started_epoch" \
-                    'RUNTIME-CODEX-EXIT' "${event_files[@]}"
+                    "$failure_code" "${event_files[@]}"
                 annotate_contract_hashes "$scenario_dir/result.json" "$prompt_file" "$schema_file"
                 return 2
             fi
@@ -397,7 +425,8 @@ run_scenario() {
                 echo
                 echo "Corrija somente essas violações, preserve as restrições do cenário e devolva novamente apenas JSON compatível com o mesmo schema."
             } >"$feedback_file"
-            if ! "$codex_bin" exec resume \
+            if timeout --foreground --signal=TERM --kill-after=10s "$attempt_timeout_seconds" \
+                "$codex_bin" exec resume \
                 --model "$model" \
                 -c "model_reasoning_effort=\"$reasoning\"" \
                 -c "sandbox_mode=\"$sandbox\"" \
@@ -406,8 +435,12 @@ run_scenario() {
                 --output-last-message "$response_file" \
                 "$thread_id" \
                 - <"$feedback_file" >"$events_file" 2>"$scenario_dir/attempt-$attempt.stderr"; then
+                :
+            else
+                codex_exit=$?
+                failure_code=$(runtime_failure_code "$codex_exit" 'RUNTIME-CODEX-RESUME')
                 record_runtime_failure "$scenario_id" "$scenario_dir" "$started_at" "$started_epoch" \
-                    'RUNTIME-CODEX-RESUME-EXIT' "${event_files[@]}"
+                    "$failure_code" "${event_files[@]}"
                 annotate_contract_hashes "$scenario_dir/result.json" "$prompt_file" "$schema_file"
                 return 2
             fi
@@ -487,11 +520,13 @@ self_test() {
     local failures_file
     local totals
     local multirun_evidence_id
+    local timeout_exit
     local scenario_count=0
 
     require_command jq
     require_command git
     require_command sha256sum
+    require_command timeout
     test_tmp=$(mktemp -d)
     # shellcheck disable=SC2064  # Expande agora: a variável é local e não existe no trap EXIT.
     trap "rm -rf -- '$test_tmp'" EXIT
@@ -601,6 +636,22 @@ self_test() {
     can_retry 1 2 || fail "limite rejeitou a última correção permitida."
     if can_retry 2 2; then
         fail "limite aceitou uma correção além do máximo."
+    fi
+    if timeout --foreground --signal=TERM --kill-after=1s 0.01s sleep 1; then
+        fail "contrafactual de timeout terminou sem expirar."
+    else
+        timeout_exit=$?
+    fi
+    [[ $timeout_exit -eq 124 ]] || fail "contrafactual de timeout retornou código inesperado: $timeout_exit."
+    [[ $(runtime_failure_code "$timeout_exit" RUNTIME-CODEX) == 'RUNTIME-CODEX-TIMEOUT' ]] \
+        || fail "timeout do Codex não recebeu código específico."
+    [[ $(runtime_failure_code 1 RUNTIME-CODEX) == 'RUNTIME-CODEX-EXIT' ]] \
+        || fail "falha comum do Codex foi classificada como timeout."
+    echo '{"stop_reason":"infrastructure_failed"}' >"$test_tmp/infrastructure-summary.json"
+    should_stop_batch 1 "$test_tmp/infrastructure-summary.json" \
+        || fail "lote continuaria após falha de infraestrutura."
+    if should_stop_batch 0 "$test_tmp/infrastructure-summary.json"; then
+        fail "lote aprovado seria interrompido indevidamente."
     fi
     cp "$fixtures_dir/adr-0003.valid.json" "$test_tmp/result.json"
     annotate_contract_hashes \
@@ -722,6 +773,7 @@ run_iteration() {
     local preflight_file=${11}
     local before_manifest=${12}
     local git_status_file=${13}
+    local attempt_timeout_seconds=${14}
     local scenario_json
     local scenario_id
     local scenario_exit
@@ -745,7 +797,7 @@ run_iteration() {
         fi
         echo "Executando $scenario_id em $iteration_label..."
         if run_scenario "$codex_bin" "$output_root" "$scenario_json" \
-            "$model" "$reasoning" "$sandbox" "$max_rework"; then
+            "$model" "$reasoning" "$sandbox" "$max_rework" "$attempt_timeout_seconds"; then
             scenario_exit=0
         else
             scenario_exit=$?
@@ -787,6 +839,7 @@ run_iteration() {
         --arg model "$model" \
         --arg reasoning_effort "$reasoning" \
         --arg sandbox "$sandbox" \
+        --argjson attempt_timeout_seconds "$attempt_timeout_seconds" \
         --arg automatic_status "$overall_status" \
         --arg selected_scenario "$selected_scenario" \
         --arg stop_reason "$stop_reason" \
@@ -810,6 +863,7 @@ run_iteration() {
             model: $model,
             reasoning_effort: $reasoning_effort,
             sandbox: $sandbox,
+            attempt_timeout_seconds: $attempt_timeout_seconds,
             automatic_status: $automatic_status,
             censored_by_fail_fast: ($stop_reason == "fail_fast"),
             stop_reason: (if $stop_reason == "" then null else $stop_reason end),
@@ -891,6 +945,7 @@ run_baseline() {
     local output_dir=''
     local selected_scenario=''
     local repeat=1
+    local attempt_timeout_seconds=600
     local fail_fast='false'
     local codex_bin=''
     local actual_version=''
@@ -935,6 +990,11 @@ run_baseline() {
                 repeat=$2
                 shift 2
                 ;;
+            --attempt-timeout-seconds)
+                [[ $# -ge 2 ]] || fail "--attempt-timeout-seconds exige valor."
+                attempt_timeout_seconds=$2
+                shift 2
+                ;;
             --fail-fast)
                 fail_fast='true'
                 shift
@@ -955,11 +1015,14 @@ run_baseline() {
     [[ -n "$output_dir" ]] || fail "--output-dir é obrigatório."
     [[ "$repeat" =~ ^[1-9][0-9]*$ && $repeat -le 20 ]] \
         || fail "--repeat deve ser inteiro entre 1 e 20."
+    [[ "$attempt_timeout_seconds" =~ ^[1-9][0-9]*$ && $attempt_timeout_seconds -ge 30 && $attempt_timeout_seconds -le 3600 ]] \
+        || fail "--attempt-timeout-seconds deve ser inteiro entre 30 e 3600."
 
     require_command jq
     require_command git
     require_command sha256sum
     require_command realpath
+    require_command timeout
     mkdir -p "$output_dir"
     output_real=$(realpath -m -- "$output_dir")
     case "$output_real" in
@@ -1027,13 +1090,17 @@ run_baseline() {
         fi
         if run_iteration "$codex_bin" "$iteration_root" "$iteration_label" "$selected_scenario" \
             "$model" "$reasoning" "$sandbox" "$max_rework" "$fail_fast" "$actual_version" \
-            "$preflight_file" "$before_manifest" "$output_real/git-status-before.txt"; then
+            "$preflight_file" "$before_manifest" "$output_real/git-status-before.txt" \
+            "$attempt_timeout_seconds"; then
             iteration_exit=0
         else
             iteration_exit=$?
             overall_status='failed'
         fi
         summary_files+=("$iteration_root/summary.json")
+        if should_stop_batch "$iteration_exit" "$iteration_root/summary.json"; then
+            break
+        fi
         if [[ $iteration_exit -ne 0 && "$fail_fast" == 'true' ]]; then
             break
         fi
