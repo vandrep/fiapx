@@ -1,1 +1,4 @@
+br/com/fiapx/processing/application/usecase/RegisterVideoSubmissionTest.class
 br/com/fiapx/processing/domain/ProcessingJobTest.class
+br/com/fiapx/processing/application/usecase/RegisterVideoSubmissionTest$CapturingRepository.class
+br/com/fiapx/processing/application/usecase/RegisterVideoSubmissionTest$CapturingWorkPublisher.class

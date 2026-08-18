@@ -1,2 +1,5 @@
 /home/vandrep/projetos/fiapx/api-service/src/main/java/br/com/fiapx/processing/adapter/in/http/ProcessingJobsResource.java
+/home/vandrep/projetos/fiapx/api-service/src/main/java/br/com/fiapx/processing/adapter/out/memory/InMemoryProcessingJobRepository.java
+/home/vandrep/projetos/fiapx/api-service/src/main/java/br/com/fiapx/processing/adapter/out/messaging/RabbitMqProcessingJobWorkPublisher.java
+/home/vandrep/projetos/fiapx/api-service/src/main/java/br/com/fiapx/processing/adapter/out/minio/MinioVideoSubmissionStorage.java
 /home/vandrep/projetos/fiapx/api-service/src/main/java/br/com/fiapx/processing/bootstrap/ProcessingConfiguration.java

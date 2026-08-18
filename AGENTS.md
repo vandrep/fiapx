@@ -11,3 +11,7 @@ A triagem usa os cinco rótulos canônicos padrão. Consulte `docs/agents/triage
 ### Domain docs
 
 A documentação de domínio usa o layout single-context. Consulte `docs/agents/domain.md`.
+
+### Arquitetura da aplicação
+
+Ao iniciar ou alterar a aplicação-alvo, seu build, configuração, módulos, dependências, integrações ou testes, siga `docs/agents/architecture.md`.

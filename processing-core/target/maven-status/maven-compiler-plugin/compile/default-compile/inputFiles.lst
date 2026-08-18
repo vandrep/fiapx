@@ -1,8 +1,15 @@
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/contract/ProcessingJobAccepted.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/contract/ProcessingJobView.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/contract/StoreVideoSubmission.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/contract/SubmitVideoSubmission.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/in/ListProcessingJobs.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/in/RegisterVideoSubmission.java
-/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/usecase/InMemoryVideoSubmissionService.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/in/StoreVideoSubmission.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/out/ProcessingJobIdGenerator.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/out/ProcessingJobRepository.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/out/ProcessingJobWorkPublisher.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/port/out/VideoSubmissionStorage.java
+/home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/application/usecase/VideoSubmissionService.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ImageArchive.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ProcessingJob.java
 /home/vandrep/projetos/fiapx/processing-core/src/main/java/br/com/fiapx/processing/domain/ProcessingJobId.java

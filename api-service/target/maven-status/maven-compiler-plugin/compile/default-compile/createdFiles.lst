@@ -1,2 +1,5 @@
 br/com/fiapx/processing/adapter/in/http/ProcessingJobsResource.class
+br/com/fiapx/processing/adapter/out/memory/InMemoryProcessingJobRepository.class
+br/com/fiapx/processing/adapter/out/messaging/RabbitMqProcessingJobWorkPublisher.class
 br/com/fiapx/processing/bootstrap/ProcessingConfiguration.class
+br/com/fiapx/processing/adapter/out/minio/MinioVideoSubmissionStorage.class
