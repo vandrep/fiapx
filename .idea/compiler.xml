@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="api-service" target="25" />
+      <module name="fiapx" target="1.5" />
+      <module name="notification-service" target="25" />
+      <module name="processing-core" target="25" />
+      <module name="worker-service" target="25" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
